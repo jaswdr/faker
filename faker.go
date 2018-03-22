@@ -124,6 +124,10 @@ func (f Faker) Lorem() (Lorem) {
     return Lorem{&f}
 }
 
+func (f Faker) Person() (Person) {
+    return Person{&f}
+}
+
 func New() (f Faker) {
 	seed := rand.NewSource(time.Now().Unix())
 	f = NewWithSeed(seed)
