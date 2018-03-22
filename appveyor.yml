@@ -6,8 +6,5 @@ init:
 # clones and cd's to path
 clone_folder: C:\GOPATH\src\github.com\jaschweder\faker
 
-install:
-  - go get
-
 build_script:
   - go test -v -cover
