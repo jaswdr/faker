@@ -4,7 +4,7 @@ Faker is a Go library that generates fake data for you. Whether you need to boot
 
 Faker is heavily inspired by PHP"s [Faker](https://github.com/fzaninotto/Faker)
 
-Faker requires Go >= 1.4.
+Faker requires Go >= 1.9.4.
 
 [![GoDoc](https://godoc.org/github.com/jaschweder/faker?status.svg)](https://godoc.org/github.com/jaschweder/faker)
 [![Linux and macOS Build Status](https://api.travis-ci.org/jaschweder/faker.svg?branch=master&label=Linux+and+macOS+build "Linux and macOS Build Status")](https://travis-ci.org/jaschweder/faker)
