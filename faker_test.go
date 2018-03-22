@@ -2,8 +2,8 @@ package faker
 
 import (
 	"fmt"
-    "strings"
 	"math/rand"
+	"strings"
 	"testing"
 )
 
@@ -74,48 +74,48 @@ func TestRandomLetter(t *testing.T) {
 }
 
 func TestShuffleString(t *testing.T) {
-    f := New()
-    orig := "foo bar"
-    returned := f.ShuffleString("foo bar")
-    Expect(t, len(orig), len(returned))
-    for _, s := range strings.Split(returned, "") {
-        Expect(t, true, strings.Contains(orig, s))
-    }
+	f := New()
+	orig := "foo bar"
+	returned := f.ShuffleString("foo bar")
+	Expect(t, len(orig), len(returned))
+	for _, s := range strings.Split(returned, "") {
+		Expect(t, true, strings.Contains(orig, s))
+	}
 }
 
 func TestNumerify(t *testing.T) {
-    f := New()
-    value := f.Numerify("Hello ##?#")
-    Expect(t, 10, len(value))
-    Expect(t, true, strings.Contains(value, "Hello"))
-    Expect(t, true, strings.Contains(value, "?"))
-    Expect(t, false, strings.Contains(value, "#"))
+	f := New()
+	value := f.Numerify("Hello ##?#")
+	Expect(t, 10, len(value))
+	Expect(t, true, strings.Contains(value, "Hello"))
+	Expect(t, true, strings.Contains(value, "?"))
+	Expect(t, false, strings.Contains(value, "#"))
 }
 
 func TestLexify(t *testing.T) {
-    f := New()
-    value := f.Lexify("Hello ??#?")
-    Expect(t, 10, len(value))
-    Expect(t, true, strings.Contains(value, "Hello"))
-    Expect(t, true, strings.Contains(value, "#"))
-    Expect(t, false, strings.Contains(value, "?"))
+	f := New()
+	value := f.Lexify("Hello ??#?")
+	Expect(t, 10, len(value))
+	Expect(t, true, strings.Contains(value, "Hello"))
+	Expect(t, true, strings.Contains(value, "#"))
+	Expect(t, false, strings.Contains(value, "?"))
 }
 
 func TestBothify(t *testing.T) {
-    f := New()
-    value := f.Bothify("Hello ??#?")
-    Expect(t, 10, len(value))
-    Expect(t, true, strings.Contains(value, "Hello"))
-    Expect(t, false, strings.Contains(value, "#"))
-    Expect(t, false, strings.Contains(value, "?"))
+	f := New()
+	value := f.Bothify("Hello ??#?")
+	Expect(t, 10, len(value))
+	Expect(t, true, strings.Contains(value, "Hello"))
+	Expect(t, false, strings.Contains(value, "#"))
+	Expect(t, false, strings.Contains(value, "?"))
 }
 
 func TestAsciify(t *testing.T) {
-    f := New()
-    value := f.Asciify("Hello ??#?****")
-    Expect(t, 14, len(value))
-    Expect(t, true, strings.Contains(value, "Hello"))
-    Expect(t, true, strings.Contains(value, "#"))
-    Expect(t, true, strings.Contains(value, "?"))
-    Expect(t, false, strings.Contains(value, "*"))
+	f := New()
+	value := f.Asciify("Hello ??#?****")
+	Expect(t, 14, len(value))
+	Expect(t, true, strings.Contains(value, "Hello"))
+	Expect(t, true, strings.Contains(value, "#"))
+	Expect(t, true, strings.Contains(value, "?"))
+	Expect(t, false, strings.Contains(value, "*"))
 }

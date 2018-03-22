@@ -5,7 +5,7 @@ import (
 	"math"
 	"math/rand"
 	"strconv"
-    "strings"
+	"strings"
 	"time"
 )
 
@@ -68,64 +68,64 @@ func (f Faker) RandomElement(s interface{}) interface{} {
 }
 
 func (f Faker) ShuffleString(s string) string {
-    orig := strings.Split(s, "")
-    dest := make([]string, len(orig))
+	orig := strings.Split(s, "")
+	dest := make([]string, len(orig))
 
-    for i:=0; i<len(orig); i++ {
-        dest[i] = orig[len(orig) - i - 1]
-    }
+	for i := 0; i < len(orig); i++ {
+		dest[i] = orig[len(orig)-i-1]
+	}
 
-    return strings.Join(dest, "")
+	return strings.Join(dest, "")
 }
 
 func (f Faker) Numerify(in string) (out string) {
-    for _, c := range strings.Split(in, "") {
-        if c == "#" {
-            c = strconv.Itoa(f.RandomDigit())
-        }
+	for _, c := range strings.Split(in, "") {
+		if c == "#" {
+			c = strconv.Itoa(f.RandomDigit())
+		}
 
-        out = out + c
-    }
+		out = out + c
+	}
 
-    return
+	return
 }
 
 func (f Faker) Lexify(in string) (out string) {
-    for _, c := range strings.Split(in, "") {
-        if c == "?" {
-            c = f.RandomLetter()
-        }
+	for _, c := range strings.Split(in, "") {
+		if c == "?" {
+			c = f.RandomLetter()
+		}
 
-        out = out + c
-    }
+		out = out + c
+	}
 
-    return
+	return
 }
 
 func (f Faker) Bothify(in string) (out string) {
-    out = f.Lexify(in)
-    out = f.Numerify(out)
-    return
+	out = f.Lexify(in)
+	out = f.Numerify(out)
+	return
 }
 
 func (f Faker) Asciify(in string) (out string) {
-    for _, c := range strings.Split(in, "") {
-        if c == "*" {
-            c = string(f.NumberBetween(33, 126))
-        }
+	for _, c := range strings.Split(in, "") {
+		if c == "*" {
+			c = string(f.NumberBetween(33, 126))
+		}
 
-        out = out + c
-    }
+		out = out + c
+	}
 
-    return
+	return
 }
 
-func (f Faker) Lorem() (Lorem) {
-    return Lorem{&f}
+func (f Faker) Lorem() Lorem {
+	return Lorem{&f}
 }
 
-func (f Faker) Person() (Person) {
-    return Person{&f}
+func (f Faker) Person() Person {
+	return Person{&f}
 }
 
 func New() (f Faker) {
@@ -136,6 +136,6 @@ func New() (f Faker) {
 
 func NewWithSeed(src rand.Source) (f Faker) {
 	generator := rand.New(src)
-    f = Faker{Generator: generator}
+	f = Faker{Generator: generator}
 	return
 }
