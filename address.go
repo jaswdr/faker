@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	CityPrefix = []string{"North", "East", "West", "South", "New", "Lake", "Port"}
+	cityPrefix = []string{"North", "East", "West", "South", "New", "Lake", "Port"}
 
 	citySuffix = []string{"town", "ton", "land", "ville", "berg", "burgh", "borough", "bury", "view", "port", "mouth", "stad", "furt", "chester", "mouth", "fort", "haven", "side", "shire"}
 
@@ -88,7 +88,7 @@ type Address struct {
 }
 
 func (a *Address) CityPrefix() string {
-	return a.Faker.RandomStringElement(CityPrefix)
+	return a.Faker.RandomStringElement(cityPrefix)
 }
 
 func (a *Address) SecondaryAddress() string {
