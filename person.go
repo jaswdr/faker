@@ -135,6 +135,11 @@ func (p *Person) FirstNameFemale() string {
 	return firstNameFemale[index]
 }
 
+func (p *Person) FirstName() string {
+	names := append(firstNameMale, firstNameFemale...)
+	return p.Faker.RandomStringElement(names)
+}
+
 func (p *Person) LastName() string {
 	index := p.Faker.NumberBetween(0, len(lastName)-1)
 	return lastName[index]

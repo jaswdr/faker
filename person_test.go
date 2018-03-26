@@ -38,6 +38,12 @@ func TestFirstNameFemale(t *testing.T) {
 	Expect(t, true, len(firstName) > 0)
 }
 
+func TestFirstName(t *testing.T) {
+	p := New().Person()
+	firstName := p.FirstName()
+	Expect(t, true, len(firstName) > 0)
+}
+
 func TestLastName(t *testing.T) {
 	p := New().Person()
 	lastName := p.LastName()
