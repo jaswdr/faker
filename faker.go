@@ -57,14 +57,9 @@ func (f Faker) RandomLetter() string {
 	return string(f.NumberBetween(97, 122))
 }
 
-func (f Faker) RandomElements(s interface{}, count int) interface{} {
-	//@TODO
-	return s
-}
-
-func (f Faker) RandomElement(s interface{}) interface{} {
-	//@TODO
-	return s
+func (f Faker) RandomStringElement(s []string) string {
+	i := f.NumberBetween(0, len(s)-1)
+	return s[i]
 }
 
 func (f Faker) ShuffleString(s string) string {
@@ -126,6 +121,10 @@ func (f Faker) Lorem() Lorem {
 
 func (f Faker) Person() Person {
 	return Person{&f}
+}
+
+func (f Faker) Address() Address {
+	return Address{&f}
 }
 
 func New() (f Faker) {

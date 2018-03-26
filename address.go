@@ -1,13 +1,18 @@
 package faker
 
+import (
+	"strconv"
+	"strings"
+)
+
 var (
-	cityPrefix = []string{"North", "East", "West", "South", "New", "Lake", "Port"}
+	CityPrefix = []string{"North", "East", "West", "South", "New", "Lake", "Port"}
 
 	citySuffix = []string{"town", "ton", "land", "ville", "berg", "burgh", "borough", "bury", "view", "port", "mouth", "stad", "furt", "chester", "mouth", "fort", "haven", "side", "shire"}
 
 	buildingNumber = []string{"%####", "%###", "%##"}
 
-	streetSuffix = []string{"Alley", "Avenue",
+	StreetSuffix = []string{"Alley", "Avenue",
 		"Branch", "Bridge", "Brook", "Brooks", "Burg", "Burgs", "Bypass",
 		"Camp", "Canyon", "Cape", "Causeway", "Center", "Centers", "Circle", "Circles", "Cliff", "Cliffs", "Club", "Common", "Corner", "Corners", "Course", "Court", "Courts", "Cove", "Coves", "Creek", "Crescent", "Crest", "Crossing", "Crossroad", "Curve",
 		"Dale", "Dam", "Divide", "Drive", "Drive", "Drives",
@@ -62,20 +67,173 @@ var (
 		"Yemen",
 		"Zambia", "Zimbabwe"}
 
-	cityFormats = []string{"{{CityPrefix}} {{FirstName}}{{CitySuffix}}",
-		"{{CityPrefix}} {{FirstName}}",
-		"{{FirstName}}{{CitySuffix}}",
-		"{{LastName}}{{CitySuffix}}"}
+	cityFormats = []string{"{{cityPrefix}} {{firstName}}{{citySuffix}}",
+		"{{cityPrefix}} {{firstName}}",
+		"{{firstName}}{{citySuffix}}",
+		"{{lastName}}{{citySuffix}}"}
 
-	streetNameFormats = []string{"{{FirstName}} {{StreetSuffix}}",
-		"{{LastName}} {{StreetSuffix}}"}
+	streetNameFormats = []string{"{{firstName}} {{streetSuffix}}",
+		"{{lastName}} {{streetSuffix}}"}
 
-	streetAddressFormats = []string{"{{BuildingNumber}} {{StreetName}}",
-		"{{BuildingNumber}} {{StreetName}} {{SecondaryAddress}}"}
+	streetAddressFormats = []string{"{{buildingNumber}} {{streetName}}",
+		"{{buildingNumber}} {{streetName}} {{secondaryAddress}}"}
 
-	addressFormats = []string{"{{streetAddress}}\n{{city}}, {{stateAbbr}} {{postcode}}"}
+	addressFormats = []string{"{{streetAddress}}\n{{city}}, {{stateAbbr}} {{postCode}}"}
 
 	secondaryAddressFormats = []string{"Apt. ###", "Suite ###"}
 )
 
-type Address struct{}
+type Address struct {
+	Faker *Faker
+}
+
+func (a *Address) CityPrefix() string {
+	return a.Faker.RandomStringElement(CityPrefix)
+}
+
+func (a *Address) SecondaryAddress() string {
+	format := a.Faker.RandomStringElement(secondaryAddressFormats)
+	return a.Faker.Bothify(format)
+}
+
+func (a *Address) State() string {
+	return a.Faker.RandomStringElement(state)
+}
+
+func (a *Address) StateAbbr() string {
+	return a.Faker.RandomStringElement(stateAbbr)
+}
+
+func (a *Address) CitySuffix() string {
+	return a.Faker.RandomStringElement(citySuffix)
+}
+
+func (a *Address) StreetSuffix() string {
+	return a.Faker.RandomStringElement(StreetSuffix)
+}
+
+func (a *Address) BuildingNumber() (bn string) {
+	t := a.Faker.NumberBetween(1, 6)
+	for i := 0; i < t; i++ {
+		bn = bn + strconv.Itoa(a.Faker.RandomDigitNotNull())
+	}
+
+	return
+}
+
+func (a *Address) City() string {
+	city := a.Faker.RandomStringElement(cityFormats)
+
+	// {{cityPrefix}}
+	if strings.Contains(city, "{{cityPrefix}}") {
+		city = strings.Replace(city, "{{cityPrefix}}", a.CityPrefix(), 1)
+	}
+
+	var p Person = a.Faker.Person()
+
+	// {{firstName}}
+	if strings.Contains(city, "{{firstName}}") {
+		city = strings.Replace(city, "{{firstName}}", p.FirstName(), 1)
+	}
+
+	// {{lastName}}
+	if strings.Contains(city, "{{lastName}}") {
+		city = strings.Replace(city, "{{lastName}}", p.LastName(), 1)
+	}
+
+	// {{citySuffix}}
+	if strings.Contains(city, "{{citySuffix}}") {
+		city = strings.Replace(city, "{{citySuffix}}", a.CitySuffix(), 1)
+	}
+
+	return city
+}
+
+func (a *Address) StreetName() string {
+	street := a.Faker.RandomStringElement(streetNameFormats)
+
+	var p Person = a.Faker.Person()
+
+	// {{firstName}}
+	if strings.Contains(street, "{{firstName}}") {
+		street = strings.Replace(street, "{{firstName}}", p.FirstName(), 1)
+	}
+
+	// {{lastName}}
+	if strings.Contains(street, "{{lastName}}") {
+		street = strings.Replace(street, "{{lastName}}", p.LastName(), 1)
+	}
+
+	// {{streetSuffix}}
+	if strings.Contains(street, "{{streetSuffix}}") {
+		street = strings.Replace(street, "{{streetSuffix}}", a.StreetSuffix(), 1)
+	}
+
+	return street
+}
+
+func (a *Address) StreetAddress() string {
+	streetAddress := a.Faker.RandomStringElement(streetAddressFormats)
+
+	// {{buildingNumber}}
+	if strings.Contains(streetAddress, "{{buildingNumber}}") {
+		streetAddress = strings.Replace(streetAddress, "{{buildingNumber}}", a.BuildingNumber(), 1)
+	}
+
+	// {{streetName}}
+	if strings.Contains(streetAddress, "{{streetName}}") {
+		streetAddress = strings.Replace(streetAddress, "{{streetName}}", a.StreetName(), 1)
+	}
+
+	// {{secondaryAddress}}
+	if strings.Contains(streetAddress, "{{secondaryAddress}}") {
+		streetAddress = strings.Replace(streetAddress, "{{secondaryAddress}}", a.SecondaryAddress(), 1)
+	}
+
+	return streetAddress
+}
+
+func (a *Address) PostCode() string {
+	format := a.Faker.RandomStringElement(postCode)
+	return a.Faker.Bothify(format)
+}
+
+func (a *Address) Address() string {
+	address := a.Faker.RandomStringElement(addressFormats)
+
+	// {{streetAddress}}
+	if strings.Contains(address, "{{streetAddress}}") {
+		address = strings.Replace(address, "{{streetAddress}}", a.StreetAddress(), 1)
+	}
+
+	// {{city}}
+	if strings.Contains(address, "{{city}}") {
+		address = strings.Replace(address, "{{city}}", a.City(), 1)
+	}
+
+	// {{stateAbbr}}
+	if strings.Contains(address, "{{stateAbbr}}") {
+		address = strings.Replace(address, "{{stateAbbr}}", a.StateAbbr(), 1)
+	}
+
+	// {{postCode}}
+	if strings.Contains(address, "{{postCode}}") {
+		address = strings.Replace(address, "{{postCode}}", a.PostCode(), 1)
+	}
+
+	return address
+}
+
+func (a *Address) Country() string {
+	return a.Faker.RandomStringElement(country)
+}
+
+func (a *Address) Latitude() (latitude float64) {
+	latitude, _ = strconv.ParseFloat(a.Faker.Numerify("##.######"), 64)
+	return
+}
+
+func (a *Address) Longitude() (latitude float64) {
+	latitude, _ = strconv.ParseFloat(a.Faker.Numerify("##.######"), 64)
+	return
+}
