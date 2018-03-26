@@ -34,6 +34,13 @@ func TestRandomDigit(t *testing.T) {
 	Expect(t, true, value < 10)
 }
 
+func TestRandomDigitNot(t *testing.T) {
+	f := New()
+	value := f.RandomDigitNot(1)
+	Expect(t, fmt.Sprintf("%T", value), "int")
+	Expect(t, true, value != 1)
+}
+
 func TestRandomDigitNotNull(t *testing.T) {
 	f := New()
 	value := f.RandomDigitNotNull()

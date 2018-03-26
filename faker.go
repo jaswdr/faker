@@ -17,6 +17,25 @@ func (f Faker) RandomDigit() int {
 	return f.Generator.Int() % 10
 }
 
+func (f Faker) RandomDigitNot(ignore ...int) int {
+	inSlice := func(el int, list []int) bool {
+		for i := range list {
+			if i == el {
+				return true
+			}
+		}
+
+		return false
+	}
+
+	for {
+		current := f.RandomDigit()
+		if inSlice(current, ignore) {
+			return current
+		}
+	}
+}
+
 func (f Faker) RandomDigitNotNull() int {
 	return f.Generator.Int()%8 + 1
 }
