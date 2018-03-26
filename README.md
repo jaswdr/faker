@@ -16,11 +16,11 @@ Faker requires Go >= 1.9.4.
 - [Installation](#installation)
 - [Basic Usage](#basic-usage)
 - [Formatters](#formatters)
-	- :ballot_box_with_check: [Base](#fakerproviderbase)
-	- :ballot_box_with_check: [Lorem Ipsum Text](#fakerproviderlorem)
-	- :ballot_box_with_check: [Person](#fakerprovideren_usperson)
-	- :ballot_box_with_check: [Address](#fakerprovideren_usaddress)
-	- :black_square_button: [Phone Number](#fakerprovideren_usphonenumber)
+	- :ballot_box_with_check: [Base](#base)
+	- :ballot_box_with_check: [Lorem Ipsum Text](#lorem)
+	- :ballot_box_with_check: [Person](#person)
+	- :ballot_box_with_check: [Address](#address)
+	- :ballot_box_with_check: [Phone](#phone)
 	- :black_square_button: [Company](#fakerprovideren_uscompany)
 	- :black_square_button: [Real Text](#fakerprovideren_ustext)
 	- :black_square_button: [Date and Time](#fakerprovidertime.Time)
@@ -96,24 +96,24 @@ for i:=0; i < 10; i++ {
 
 Each of the generator properties (like `name`, `address`, and `lorem`) are called "formatters". A faker generator has many of them, packaged in "providers". Here is a list of the bundled formatters in the default locale.
 
-### `faker.*`
+### Base (`faker.*`)
 
-    RandomDigit()                            // 7
-    RandomDigitNotNull()                     // 5
-    RandomNumber(8)                          // 79907610
-    RandomFloat(4, 0, 5)                     // 48.8932
-    NumberBetween(1000, 9000)                // 8567
-    RandomLetter()                           // "b"
-    RandomElements([]string("a","b","c"), 1) // []string("c")
-    RandomElement([]string("a","b","c"))     // "b"
-    ShuffleString("hello, world")            // "rlo,h eoldlw"
-    Numerify("Hello ###")                    // "Hello 609"
-    Lexify("Hello ???")                      // "Hello wgt"
-    Bothify("Hello ##??")                    // "Hello 42jz"
-    Asciify("Hello ***")                     // "Hello R6+"
+    RandomDigit()                              // 7
+    RandomDigitNot(1,2,3)                      // 5
+    RandomDigitNotNull()                       // 5
+    RandomNumber(8)                            // 79907610
+    RandomFloat(4, 0, 5)                       // 48.8932
+    NumberBetween(1000, 9000)                  // 8567
+    RandomLetter()                             // "b"
+    RandomStringElement([]string("a","b","c")) // "b"
+    ShuffleString("hello, world")              // "rlo,h eoldlw"
+    Numerify("Hello ###")                      // "Hello 609"
+    Lexify("Hello ???")                        // "Hello wgt"
+    Bothify("Hello ##??")                      // "Hello 42jz"
+    Asciify("Hello ***")                       // "Hello R6+"
     Regexify("[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}"); // sm0@y8k96a.ej
 
-### `faker.Lorem().*`
+### Lorem (`faker.Lorem().*`)
     Word()               // "aut"
     Words(3)             // array("porro", "sed", "magni")
     Sentence(6)          // "Sit vitae voluptas sint non voluptates."
@@ -122,7 +122,7 @@ Each of the generator properties (like `name`, `address`, and `lorem`) are calle
     Paragraphs(3)        // []string{Quidem ut sunt et quidem est accusamus aut. Fuga est placeat rerum ut. Enim ex eveniet facere sunt.", "Aut nam et eum architecto fugit repellendus illo. Qui ex esse veritatis.", "Possimus omnis aut incidunt sunt. Asperiores incidunt iure sequi cum culpa rem. Rerum exercitationem est rem."}
     Text(200)            // "Fuga totam reiciendis qui architecto fugiat nemo. Consequatur recusandae qui cupiditate eos quod."
 
-### `faker.Person().*`
+### Person (`faker.Person().*`)
 
     Title()           // "Ms."
     TitleMale()       // "Mr."
@@ -134,7 +134,7 @@ Each of the generator properties (like `name`, `address`, and `lorem`) are calle
     FirstNameFemale() // "Rachel"
     LastName()        // "Zulauf"
 
-### `faker.Address().*`
+### Address (`faker.Address().*`)
 
     CityPrefix()                     // "Lake"
     SecondaryAddress()               // "Suite 961"
@@ -152,7 +152,7 @@ Each of the generator properties (like `name`, `address`, and `lorem`) are calle
     Latitude(min = -90, max = 90)    // 77.147489
     Longitude(min = -180, max = 180) // 86.211205
 
-### `faker.Phone().*`
+### Phone (`faker.Phone().*`)
 
     Number()              // "201-886-0269 x3767"
     TollFreePhoneNumber() // "(888) 937-7238"
