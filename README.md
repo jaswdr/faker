@@ -19,7 +19,7 @@ Faker requires Go >= 1.9.4.
 	- :ballot_box_with_check: [Base](#fakerproviderbase)
 	- :ballot_box_with_check: [Lorem Ipsum Text](#fakerproviderlorem)
 	- :ballot_box_with_check: [Person](#fakerprovideren_usperson)
-	- :black_square_button: [Address](#fakerprovideren_usaddress)
+	- :ballot_box_with_check: [Address](#fakerprovideren_usaddress)
 	- :black_square_button: [Phone Number](#fakerprovideren_usphonenumber)
 	- :black_square_button: [Company](#fakerprovideren_uscompany)
 	- :black_square_button: [Real Text](#fakerprovideren_ustext)
