@@ -165,10 +165,6 @@ Each of the generator properties (like `name`, `address`, and `lorem`) are calle
     CompanySuffix() // "and Sons"
     JobTitle()      // "Cashier"
 
-### `faker.Text().*`
-
-    realText(maxNbChars = 200, indexSize = 2) // "And yet I wish you could manage it?) "And what are they made of?" Alice asked in a shrill, passionate voice. "Would YOU like cats if you were never even spoke to Time!" "Perhaps not," Alice replied."
-
 ### `faker.Time().*`
 
     unixTime(max = "now")                    // 58781813
