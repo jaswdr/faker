@@ -150,6 +150,10 @@ func (f Faker) Phone() Phone {
 	return Phone{&f}
 }
 
+func (f Faker) Company() Company {
+	return Company{&f}
+}
+
 func New() (f Faker) {
 	seed := rand.NewSource(time.Now().Unix())
 	f = NewWithSeed(seed)
