@@ -22,7 +22,6 @@ Faker requires Go >= 1.9.4.
 	- :ballot_box_with_check: [Address](#address-fakeraddress)
 	- :ballot_box_with_check: [Phone](#phone-fakerphone)
 	- :ballot_box_with_check: [Company](#fakerprovideren_uscompany)
-	- :black_square_button: [Real Text](#fakerprovideren_ustext)
 	- :black_square_button: [Date and Time](#fakerprovidertime.Time)
 	- :black_square_button: [Internet](#fakerproviderinternet)
 	- :black_square_button: [User Agent](#fakerprovideruseragent)
