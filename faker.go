@@ -48,16 +48,16 @@ func (f Faker) RandomNumber(size int) int {
 	var min int = int(math.Pow10(size - 1))
 	var max int = int(math.Pow10(size)) - 1
 
-	return f.NumberBetween(min, max)
+	return f.IntBetween(min, max)
 }
 
 func (f Faker) RandomFloat(maxDecimals, min, max int) float64 {
-	s := fmt.Sprintf("%d.%d", f.NumberBetween(min, max-1), f.NumberBetween(1, maxDecimals))
+	s := fmt.Sprintf("%d.%d", f.IntBetween(min, max-1), f.IntBetween(1, maxDecimals))
 	value, _ := strconv.ParseFloat(s, 10)
 	return value
 }
 
-func (f Faker) NumberBetween(min, max int) int {
+func (f Faker) IntBetween(min, max int) int {
 	step := 1
 	for i := 0; i < f.RandomDigitNotNull(); i++ {
 		step = step * f.RandomDigitNotNull()
@@ -72,12 +72,20 @@ func (f Faker) NumberBetween(min, max int) int {
 	return value
 }
 
+func (f Faker) Int64Between(min, max int64) int64 {
+	return int64(f.IntBetween(int(min), int(max)))
+}
+
+func (f Faker) Int32Between(min, max int32) int32 {
+	return int32(f.IntBetween(int(min), int(max)))
+}
+
 func (f Faker) RandomLetter() string {
-	return string(f.NumberBetween(97, 122))
+	return string(f.IntBetween(97, 122))
 }
 
 func (f Faker) RandomStringElement(s []string) string {
-	i := f.NumberBetween(0, len(s)-1)
+	i := f.IntBetween(0, len(s)-1)
 	return s[i]
 }
 
@@ -125,7 +133,7 @@ func (f Faker) Bothify(in string) (out string) {
 func (f Faker) Asciify(in string) (out string) {
 	for _, c := range strings.Split(in, "") {
 		if c == "*" {
-			c = string(f.NumberBetween(33, 126))
+			c = string(f.IntBetween(33, 126))
 		}
 
 		out = out + c
@@ -152,6 +160,10 @@ func (f Faker) Phone() Phone {
 
 func (f Faker) Company() Company {
 	return Company{&f}
+}
+
+func (f Faker) Time() Time {
+	return Time{&f}
 }
 
 func New() (f Faker) {
