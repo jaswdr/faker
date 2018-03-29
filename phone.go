@@ -50,14 +50,14 @@ type Phone struct {
 }
 
 func (p *Phone) AreaCode() (code string) {
-	number1 := p.Faker.NumberBetween(2, 9)
+	number1 := p.Faker.IntBetween(2, 9)
 	number2 := p.Faker.RandomDigit()
 	number3 := p.Faker.RandomDigitNot(number2)
 	return fmt.Sprintf("%d%d%d", number1, number2, number3)
 }
 
 func (p *Phone) ExchangeCode() (code string) {
-	number1 := p.Faker.NumberBetween(2, 9)
+	number1 := p.Faker.IntBetween(2, 9)
 	number2 := p.Faker.RandomDigit()
 	number3 := p.Faker.RandomDigit()
 

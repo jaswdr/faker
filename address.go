@@ -113,7 +113,7 @@ func (a *Address) StreetSuffix() string {
 }
 
 func (a *Address) BuildingNumber() (bn string) {
-	t := a.Faker.NumberBetween(1, 6)
+	t := a.Faker.IntBetween(1, 6)
 	for i := 0; i < t; i++ {
 		bn = bn + strconv.Itoa(a.Faker.RandomDigitNotNull())
 	}

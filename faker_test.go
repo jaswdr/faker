@@ -57,9 +57,9 @@ func TestRandomNumber(t *testing.T) {
 	Expect(t, true, value <= 9999)
 }
 
-func TestNumberBetween(t *testing.T) {
+func TestIntBetween(t *testing.T) {
 	f := New()
-	value := f.NumberBetween(1, 100)
+	value := f.IntBetween(1, 100)
 	Expect(t, fmt.Sprintf("%T", value), "int")
 	Expect(t, true, value >= 1)
 	Expect(t, true, value <= 100)

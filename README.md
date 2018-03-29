@@ -102,7 +102,7 @@ Each of the generator properties (like `name`, `address`, and `lorem`) are calle
     RandomDigitNotNull()                       // 5
     RandomNumber(8)                            // 79907610
     RandomFloat(4, 0, 5)                       // 48.8932
-    NumberBetween(1000, 9000)                  // 8567
+    IntBetween(1000, 9000)                  // 8567
     RandomLetter()                             // "b"
     RandomStringElement([]string("a","b","c")) // "b"
     ShuffleString("hello, world")              // "rlo,h eoldlw"
@@ -288,7 +288,7 @@ Methods accepting a `timezone` argument default to `date_default_timezone_get()`
 
     // get a random number between 10 and 20,
     // with more chances to be close to 20
-    BiasedNumberBetween(min = 10, max = 20, function = "sqrt")
+    BiasedIntBetween(min = 10, max = 20, function = "sqrt")
 
 ### `faker.HTML().*`
 

@@ -13,7 +13,7 @@ type Lorem struct {
 }
 
 func (l Lorem) Word() string {
-	index := l.Faker.NumberBetween(0, len(wordsList)-1)
+	index := l.Faker.IntBetween(0, len(wordsList)-1)
 	return wordsList[index]
 }
 

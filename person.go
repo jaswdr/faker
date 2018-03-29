@@ -106,7 +106,7 @@ type Person struct {
 }
 
 func (p *Person) Suffix() string {
-	return suffix[p.Faker.NumberBetween(0, len(suffix)-1)]
+	return suffix[p.Faker.IntBetween(0, len(suffix)-1)]
 }
 
 func (p *Person) TitleMale() string {
@@ -118,7 +118,7 @@ func (p *Person) TitleFemale() string {
 }
 
 func (p *Person) Title() string {
-	if p.Faker.NumberBetween(0, 1) == 0 {
+	if p.Faker.IntBetween(0, 1) == 0 {
 		return p.TitleMale()
 	}
 
@@ -126,12 +126,12 @@ func (p *Person) Title() string {
 }
 
 func (p *Person) FirstNameMale() string {
-	index := p.Faker.NumberBetween(0, len(firstNameMale)-1)
+	index := p.Faker.IntBetween(0, len(firstNameMale)-1)
 	return firstNameMale[index]
 }
 
 func (p *Person) FirstNameFemale() string {
-	index := p.Faker.NumberBetween(0, len(firstNameFemale)-1)
+	index := p.Faker.IntBetween(0, len(firstNameFemale)-1)
 	return firstNameFemale[index]
 }
 
@@ -141,13 +141,13 @@ func (p *Person) FirstName() string {
 }
 
 func (p *Person) LastName() string {
-	index := p.Faker.NumberBetween(0, len(lastName)-1)
+	index := p.Faker.IntBetween(0, len(lastName)-1)
 	return lastName[index]
 }
 
 func (p *Person) Name() string {
 	formats := append(maleNameFormats, femaleNameFormats...)
-	name := formats[p.Faker.NumberBetween(0, len(formats)-1)]
+	name := formats[p.Faker.IntBetween(0, len(formats)-1)]
 
 	// {{titleMale}}
 	if strings.Contains(name, "{{titleMale}}") {
