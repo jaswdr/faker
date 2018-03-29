@@ -58,18 +58,7 @@ func (f Faker) RandomFloat(maxDecimals, min, max int) float64 {
 }
 
 func (f Faker) IntBetween(min, max int) int {
-	step := 1
-	for i := 0; i < f.RandomDigitNotNull(); i++ {
-		step = step * f.RandomDigitNotNull()
-	}
-
-	var value int = min + step
-
-	if value > max {
-		return max
-	}
-
-	return value
+	return min + (f.Generator.Int() % (max - min))
 }
 
 func (f Faker) Int64Between(min, max int64) int64 {
@@ -164,6 +153,10 @@ func (f Faker) Company() Company {
 
 func (f Faker) Time() Time {
 	return Time{&f}
+}
+
+func (f Faker) Internet() Internet {
+	return Internet{&f}
 }
 
 func New() (f Faker) {
