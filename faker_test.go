@@ -124,7 +124,6 @@ func TestBothify(t *testing.T) {
 func TestAsciify(t *testing.T) {
 	f := New()
 	value := f.Asciify("Hello ??#?****")
-	t.Log(value)
 	Expect(t, 14, len(value))
 	Expect(t, true, strings.Contains(value, "Hello"))
 	Expect(t, true, strings.Contains(value, "#"))

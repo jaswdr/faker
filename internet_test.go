@@ -9,7 +9,6 @@ func TestUser(t *testing.T) {
 	i := New().Internet()
 
 	user := i.User()
-	t.Log(user)
 	Expect(t, true, len(user) > 0)
 	Expect(t, false, strings.Contains(user, " "))
 }
@@ -118,6 +117,5 @@ func TestIpv6(t *testing.T) {
 func TestMacAddress(t *testing.T) {
 	i := New().Internet()
 
-	t.Log(i.MacAddress())
 	Expect(t, 17, len(i.MacAddress()))
 }
