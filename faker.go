@@ -58,7 +58,13 @@ func (f Faker) RandomFloat(maxDecimals, min, max int) float64 {
 }
 
 func (f Faker) IntBetween(min, max int) int {
-	return min + (f.Generator.Int() % (max - min))
+	diff := max - min
+
+	if diff == 0 {
+		return min
+	}
+
+	return min + (f.Generator.Int() % diff)
 }
 
 func (f Faker) Int64Between(min, max int64) int64 {
@@ -74,7 +80,7 @@ func (f Faker) RandomLetter() string {
 }
 
 func (f Faker) RandomStringElement(s []string) string {
-	i := f.IntBetween(0, len(s)-1)
+	i := f.IntBetween(0, len(s) - 1)
 	return s[i]
 }
 
@@ -122,7 +128,7 @@ func (f Faker) Bothify(in string) (out string) {
 func (f Faker) Asciify(in string) (out string) {
 	for _, c := range strings.Split(in, "") {
 		if c == "*" {
-			c = string(f.IntBetween(33, 126))
+			c = string(f.IntBetween(97, 126))
 		}
 
 		out = out + c
