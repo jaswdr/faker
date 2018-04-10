@@ -12,7 +12,7 @@ var (
 
 	buildingNumber = []string{"%####", "%###", "%##"}
 
-	StreetSuffix = []string{"Alley", "Avenue",
+	streetSuffix = []string{"Alley", "Avenue",
 		"Branch", "Bridge", "Brook", "Brooks", "Burg", "Burgs", "Bypass",
 		"Camp", "Canyon", "Cape", "Causeway", "Center", "Centers", "Circle", "Circles", "Cliff", "Cliffs", "Club", "Common", "Corner", "Corners", "Course", "Court", "Courts", "Cove", "Coves", "Creek", "Crescent", "Crest", "Crossing", "Crossroad", "Curve",
 		"Dale", "Dam", "Divide", "Drive", "Drive", "Drives",
@@ -109,7 +109,7 @@ func (a *Address) CitySuffix() string {
 }
 
 func (a *Address) StreetSuffix() string {
-	return a.Faker.RandomStringElement(StreetSuffix)
+	return a.Faker.RandomStringElement(streetSuffix)
 }
 
 func (a *Address) BuildingNumber() (bn string) {

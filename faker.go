@@ -80,7 +80,7 @@ func (f Faker) RandomLetter() string {
 }
 
 func (f Faker) RandomStringElement(s []string) string {
-	i := f.IntBetween(0, len(s) - 1)
+	i := f.IntBetween(0, len(s)-1)
 	return s[i]
 }
 

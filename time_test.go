@@ -83,13 +83,13 @@ func TestRFC1123Z(t *testing.T) {
 func TestRFC3339(t *testing.T) {
 	tf := New().Time()
 	t1, _ := time.Parse("2006-01-02T15:04:05+000", "2017-01-02T15:04:05+000")
-	Expect(t, 20, len(tf.RFC3339(t1)))
+	Expect(t, true, len(tf.RFC3339(t1)) > 0)
 }
 
 func TestRFC3339Nano(t *testing.T) {
 	tf := New().Time()
 	t1, _ := time.Parse("2006-01-02T15:04:05+000", "2017-01-02T15:04:05+000")
-	Expect(t, 20, len(tf.RFC3339Nano(t1)))
+	Expect(t, true, len(tf.RFC3339Nano(t1)) > 0)
 }
 
 func TestKitchen(t *testing.T) {
