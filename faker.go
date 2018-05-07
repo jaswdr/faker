@@ -169,6 +169,10 @@ func (f Faker) UserAgent() UserAgent {
 	return UserAgent{&f}
 }
 
+func (f Faker) Payment() Payment {
+	return Payment{&f}
+}
+
 func (f Faker) Color() Color {
 	return Color{&f}
 }
