@@ -169,6 +169,10 @@ func (f Faker) UserAgent() UserAgent {
 	return UserAgent{&f}
 }
 
+func (f Faker) Color() Color {
+	return Color{&f}
+}
+
 func New() (f Faker) {
 	seed := rand.NewSource(time.Now().Unix())
 	f = NewWithSeed(seed)
