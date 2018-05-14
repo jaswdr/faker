@@ -11,32 +11,6 @@ Faker requires Go >= 1.9.4.
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/cgjqw3h5b59p7at9?svg=true&label=Windows+build "Windows Build Status")](https://ci.appveyor.com/project/jaswdr/faker/branch/master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/jaswdr/faker)](https://goreportcard.com/report/github.com/jaswdr/faker)
 
-# Table of Contents
-
-- [Installation](#installation)
-- [Basic Usage](#basic-usage)
-- [Formatters](#formatters)
-	- [Base](#base-faker)
-	- [Lorem Ipsum Text](#lorem-fakerlorem)
-	- [Person](#person-fakerperson)
-	- [Address](#address-fakeraddress)
-	- [Phone](#phone-fakerphone)
-	- [Company](#fakerprovideren_uscompany)
-	- [Date and Time](#fakerprovidertime.Time)
-	- [Internet](#fakerproviderinternet)
-	- [User Agent](#fakerprovideruseragent)
-	- [Payment](#fakerproviderpayment)
-	- [Color](#fakerprovidercolor)
-	- [File](#fakerproviderfile)
-	- [Image](#fakerproviderimage)
-	- [Uuid](#fakerprovideruuid)
-	- [Barcode](#fakerproviderbarcode)
-	- [Miscellaneous](#fakerprovidermiscellaneous)
-	- [Biased](#fakerproviderbiased)
-	- [Html Lorem](#fakerproviderhtmllorem)
-- [License](#license)
-
-
 ## Installation
 
 Add this to your Go file
