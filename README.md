@@ -6,10 +6,10 @@ Faker is heavily inspired by PHP"s [Faker](https://github.com/fzaninotto/Faker)
 
 Faker requires Go >= 1.9.4.
 
-[![GoDoc](https://godoc.org/github.com/jaschweder/faker?status.svg)](https://godoc.org/github.com/jaschweder/faker)
-[![Linux and macOS Build Status](https://api.travis-ci.org/jaschweder/faker.svg?branch=master&label=Linux+and+macOS+build "Linux and macOS Build Status")](https://travis-ci.org/jaschweder/faker)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/cgjqw3h5b59p7at9?svg=true&label=Windows+build "Windows Build Status")](https://ci.appveyor.com/project/jaschweder/faker/branch/master)
-[![Go Report Card](https://goreportcard.com/badge/github.com/jaschweder/faker)](https://goreportcard.com/report/github.com/jaschweder/faker)
+[![GoDoc](https://godoc.org/github.com/jaswdr/faker?status.svg)](https://godoc.org/github.com/jaschweder/faker)
+[![Linux and macOS Build Status](https://api.travis-ci.org/jaschweder/faker.svg?branch=master&label=Linux+and+macOS+build "Linux and macOS Build Status")](https://travis-ci.org/jaswdr/faker)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/cgjqw3h5b59p7at9?svg=true&label=Windows+build "Windows Build Status")](https://ci.appveyor.com/project/jaswdr/faker/branch/master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/jaswdr/faker)](https://goreportcard.com/report/github.com/jaswdr/faker)
 
 # Table of Contents
 
