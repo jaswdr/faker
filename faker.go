@@ -177,6 +177,10 @@ func (f Faker) Color() Color {
 	return Color{&f}
 }
 
+func (f Faker) UUID() UUID {
+	return UUID{&f}
+}
+
 func New() (f Faker) {
 	seed := rand.NewSource(time.Now().Unix())
 	f = NewWithSeed(seed)
