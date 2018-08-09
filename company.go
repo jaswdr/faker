@@ -72,7 +72,7 @@ type Company struct {
 	Faker *Faker
 }
 
-func (c *Company) CatchPhrase() (phrase string) {
+func (c Company) CatchPhrase() (phrase string) {
 	for _, words := range catchPhraseWords {
 		phrase = phrase + " " + c.Faker.RandomStringElement(words)
 	}
@@ -80,7 +80,7 @@ func (c *Company) CatchPhrase() (phrase string) {
 	return
 }
 
-func (c *Company) BS() (bs string) {
+func (c Company) BS() (bs string) {
 	for _, words := range catchPhraseWords {
 		bs = bs + " " + c.Faker.RandomStringElement(words)
 	}
@@ -88,11 +88,11 @@ func (c *Company) BS() (bs string) {
 	return
 }
 
-func (c *Company) Suffix() string {
+func (c Company) Suffix() string {
 	return c.Faker.RandomStringElement(companySuffix)
 }
 
-func (c *Company) Name() string {
+func (c Company) Name() string {
 	name := c.Faker.RandomStringElement(companyNameFormat)
 
 	// {{companySuffix}}
@@ -109,6 +109,6 @@ func (c *Company) Name() string {
 	return name
 }
 
-func (c *Company) JobTitle() string {
+func (c Company) JobTitle() string {
 	return c.Faker.RandomStringElement(jobTitle)
 }
