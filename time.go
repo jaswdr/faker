@@ -14,89 +14,89 @@ type Time struct {
 	Faker *Faker
 }
 
-func (t *Time) Unix(max time.Time) int64 {
+func (t Time) Unix(max time.Time) int64 {
 	return max.Unix() - t.Faker.Int64Between(0, max.Unix())
 }
 
-func (t *Time) Time(max time.Time) time.Time {
+func (t Time) Time(max time.Time) time.Time {
 	return time.Unix(int64(t.Unix(max)), 0)
 }
 
-func (t *Time) TimeBetween(min, max time.Time) time.Time {
+func (t Time) TimeBetween(min, max time.Time) time.Time {
 	diff := time.Nanosecond * time.Duration(t.Faker.IntBetween(0, int(max.Sub(min).Nanoseconds())))
 	duration := time.Nanosecond * diff
 	return min.Add(duration)
 }
 
-func (t *Time) ISO8601(max time.Time) string {
+func (t Time) ISO8601(max time.Time) string {
 	t1 := t.Time(max)
 	return t1.Format("2006-02-01T15:04:05+000")
 }
 
-func (t *Time) ANSIC(max time.Time) string {
+func (t Time) ANSIC(max time.Time) string {
 	t1 := t.Time(max)
 	return t1.Format(time.ANSIC)
 }
 
-func (t *Time) UnixDate(max time.Time) string {
+func (t Time) UnixDate(max time.Time) string {
 	t1 := t.Time(max)
 	return t1.Format(time.UnixDate)
 }
 
-func (t *Time) RubyDate(max time.Time) string {
+func (t Time) RubyDate(max time.Time) string {
 	t1 := t.Time(max)
 	return t1.Format(time.RubyDate)
 }
 
-func (t *Time) RFC822(max time.Time) string {
+func (t Time) RFC822(max time.Time) string {
 	t1 := t.Time(max)
 	return t1.Format(time.RFC822)
 }
 
-func (t *Time) RFC822Z(max time.Time) string {
+func (t Time) RFC822Z(max time.Time) string {
 	t1 := t.Time(max)
 	return t1.Format(time.RFC822Z)
 }
 
-func (t *Time) RFC850(max time.Time) string {
+func (t Time) RFC850(max time.Time) string {
 	t1 := t.Time(max)
 	return t1.Format(time.RFC850)
 }
 
-func (t *Time) RFC1123(max time.Time) string {
+func (t Time) RFC1123(max time.Time) string {
 	t1 := t.Time(max)
 	return t1.Format(time.RFC1123)
 }
 
-func (t *Time) RFC1123Z(max time.Time) string {
+func (t Time) RFC1123Z(max time.Time) string {
 	t1 := t.Time(max)
 	return t1.Format(time.RFC1123Z)
 }
 
-func (t *Time) RFC3339(max time.Time) string {
+func (t Time) RFC3339(max time.Time) string {
 	t1 := t.Time(max)
 	return t1.Format(time.RFC3339)
 }
 
-func (t *Time) RFC3339Nano(max time.Time) string {
+func (t Time) RFC3339Nano(max time.Time) string {
 	t1 := t.Time(max)
 	return t1.Format(time.RFC3339Nano)
 }
 
-func (t *Time) Kitchen(max time.Time) string {
+func (t Time) Kitchen(max time.Time) string {
 	t1 := t.Time(max)
 	return t1.Format(time.Kitchen)
 }
 
-func (t *Time) AmPm() string {
+func (t Time) AmPm() string {
 	return t.Faker.RandomStringElement([]string{"am", "pm"})
 }
 
-func (t *Time) DayOfMonth() int {
+func (t Time) DayOfMonth() int {
 	return t.Faker.IntBetween(1, 31)
 }
 
-func (t *Time) DayOfWeek() time.Weekday {
+func (t Time) DayOfWeek() time.Weekday {
 	days := []time.Weekday{
 		time.Sunday,
 		time.Monday,
@@ -110,7 +110,7 @@ func (t *Time) DayOfWeek() time.Weekday {
 	return days[t.Faker.IntBetween(0, len(days)-1)]
 }
 
-func (t *Time) Month() time.Month {
+func (t Time) Month() time.Month {
 	months := []time.Month{
 		time.January,
 		time.February,
@@ -129,15 +129,15 @@ func (t *Time) Month() time.Month {
 	return months[t.Faker.IntBetween(0, len(months)-1)]
 }
 
-func (t *Time) MonthName() string {
+func (t Time) MonthName() string {
 	return t.Month().String()
 }
 
-func (t *Time) Year() int {
+func (t Time) Year() int {
 	return t.Faker.IntBetween(1970, time.Now().Year())
 }
 
-func (t *Time) Century() string {
+func (t Time) Century() string {
 	centuries := []string{
 		"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X",
 		"XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX", "XXI",
@@ -146,6 +146,6 @@ func (t *Time) Century() string {
 	return t.Faker.RandomStringElement(centuries)
 }
 
-func (t *Time) Timezone() string {
+func (t Time) Timezone() string {
 	return t.Faker.RandomStringElement(timezones)
 }
