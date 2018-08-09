@@ -34,7 +34,7 @@ type Internet struct {
 	Faker *Faker
 }
 
-func (i *Internet) User() string {
+func (i Internet) User() string {
 	user := i.Faker.RandomStringElement(userFormats)
 
 	p := i.Faker.Person()
@@ -52,25 +52,25 @@ func (i *Internet) User() string {
 	return user
 }
 
-func (i *Internet) Password() string {
+func (i Internet) Password() string {
 	pattern := strings.Repeat("*", i.Faker.IntBetween(6, 16))
 	return i.Faker.Asciify(pattern)
 }
 
-func (i *Internet) Domain() string {
+func (i Internet) Domain() string {
 	domain := strings.ToLower(i.Faker.Lexify("???"))
 	return strings.Join([]string{domain, i.TLD()}, ".")
 }
 
-func (i *Internet) FreeEmailDomain() string {
+func (i Internet) FreeEmailDomain() string {
 	return i.Faker.RandomStringElement(freeEmailDomain)
 }
 
-func (i *Internet) SafeEmailDomain() string {
+func (i Internet) SafeEmailDomain() string {
 	return "example.org"
 }
 
-func (i *Internet) Email() string {
+func (i Internet) Email() string {
 	email := i.Faker.RandomStringElement(emailFormats)
 
 	// {{user}}
@@ -91,17 +91,17 @@ func (i *Internet) Email() string {
 	return email
 }
 
-func (i *Internet) FreeEmail() string {
+func (i Internet) FreeEmail() string {
 	domain := i.Faker.RandomStringElement(freeEmailDomain)
 
 	return strings.Join([]string{i.User(), domain}, "@")
 }
 
-func (i *Internet) SafeEmail() string {
+func (i Internet) SafeEmail() string {
 	return strings.Join([]string{i.User(), i.SafeEmailDomain()}, "@")
 }
 
-func (i *Internet) CompanyEmail() string {
+func (i Internet) CompanyEmail() string {
 	c := i.Faker.Company()
 
 	companyName := c.Name()
@@ -113,11 +113,11 @@ func (i *Internet) CompanyEmail() string {
 	return strings.Join([]string{i.User(), domain}, "@")
 }
 
-func (i *Internet) TLD() string {
+func (i Internet) TLD() string {
 	return i.Faker.RandomStringElement(tld)
 }
 
-func (i *Internet) Slug() string {
+func (i Internet) Slug() string {
 	slug := strings.Repeat("?", i.Faker.IntBetween(1, 5))
 	slug = slug + "-"
 	slug = strings.Repeat("?", i.Faker.IntBetween(1, 6))
@@ -126,7 +126,7 @@ func (i *Internet) Slug() string {
 	return strings.ToLower(slug)
 }
 
-func (i *Internet) URL() string {
+func (i Internet) URL() string {
 	url := i.Faker.RandomStringElement(urlFormats)
 
 	// {{domain}}
@@ -142,7 +142,7 @@ func (i *Internet) URL() string {
 	return url
 }
 
-func (i *Internet) Ipv4() string {
+func (i Internet) Ipv4() string {
 	ips := []string{}
 
 	for j := 0; j < 4; j++ {
@@ -152,7 +152,7 @@ func (i *Internet) Ipv4() string {
 	return strings.Join(ips, ".")
 }
 
-func (i *Internet) LocalIpv4() string {
+func (i Internet) LocalIpv4() string {
 	ips := []string{i.Faker.RandomStringElement([]string{"10", "172", "192"})}
 
 	if ips[0] == "10" {
@@ -180,7 +180,7 @@ func (i *Internet) LocalIpv4() string {
 	return strings.Join(ips, ".")
 }
 
-func (i *Internet) Ipv6() string {
+func (i Internet) Ipv6() string {
 	ips := []string{}
 
 	for j := 0; j < 8; j++ {
@@ -195,7 +195,7 @@ func (i *Internet) Ipv6() string {
 	return strings.Join(ips, ":")
 }
 
-func (i *Internet) MacAddress() string {
+func (i Internet) MacAddress() string {
 	values := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"}
 
 	mac := []string{}
