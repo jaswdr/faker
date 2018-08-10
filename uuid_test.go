@@ -12,3 +12,10 @@ func TestUUIDv4(t *testing.T) {
 	Expect(t, true, err == nil)
 	Expect(t, true, match)
 }
+
+func TestUUIDV4UniqueInSequence(t *testing.T) {
+	f := New()
+	last := f.UUID().V4()
+	current := f.UUID().V4()
+	Expect(t, true, last != current)
+}
