@@ -84,6 +84,11 @@ func (f Faker) RandomStringElement(s []string) string {
 	return s[i]
 }
 
+func (f Faker) RandomIntElement(a []int) int {
+	i := f.IntBetween(0, len(a)-1)
+	return a[i]
+}
+
 func (f Faker) ShuffleString(s string) string {
 	orig := strings.Split(s, "")
 	dest := make([]string, len(orig))

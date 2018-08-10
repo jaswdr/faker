@@ -84,6 +84,19 @@ func TestRandomLetter(t *testing.T) {
 	Expect(t, 1, len(value))
 }
 
+func TestRandomIntElement(t *testing.T) {
+	f := New()
+	elements := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	element := f.RandomIntElement(elements)
+	found := false
+	for _, i := range elements {
+		if i == element {
+			found = true
+		}
+	}
+	Expect(t, true, found)
+}
+
 func TestShuffleString(t *testing.T) {
 	f := New()
 	orig := "foo bar"
