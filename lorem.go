@@ -60,3 +60,7 @@ func (l Lorem) Text(maxNbChars int) (out string) {
 
 	return
 }
+
+func (l Lorem) Bytes(maxNbChars int) (out []byte) {
+	return []byte(l.Text(maxNbChars))
+}

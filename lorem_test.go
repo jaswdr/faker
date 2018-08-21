@@ -50,3 +50,9 @@ func TestText(t *testing.T) {
 	text := l.Text(255)
 	Expect(t, true, len(text) <= 255)
 }
+
+func TestBytes(t *testing.T) {
+	l := New().Lorem()
+	text := l.Bytes(255)
+	Expect(t, true, len(text) <= 255)
+}
