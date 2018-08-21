@@ -142,6 +142,10 @@ func (f Faker) Asciify(in string) (out string) {
 	return
 }
 
+func (f Faker) Bool() bool {
+	return f.IntBetween(0, 100) > 50
+}
+
 func (f Faker) Lorem() Lorem {
 	return Lorem{&f}
 }
