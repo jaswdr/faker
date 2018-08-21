@@ -1,6 +1,7 @@
 package faker
 
 import (
+	"net/http"
 	"strconv"
 	"strings"
 )
@@ -206,4 +207,18 @@ func (i Internet) MacAddress() string {
 	}
 
 	return strings.Join(mac, ":")
+}
+
+func (i Internet) HTTPMethod() string {
+	return i.Faker.RandomStringElement([]string{
+		http.MethodGet,
+		http.MethodHead,
+		http.MethodPost,
+		http.MethodPut,
+		http.MethodPatch,
+		http.MethodDelete,
+		http.MethodConnect,
+		http.MethodOptions,
+		http.MethodTrace,
+	})
 }

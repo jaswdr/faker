@@ -119,3 +119,9 @@ func TestMacAddress(t *testing.T) {
 
 	Expect(t, 17, len(i.MacAddress()))
 }
+
+func TestHTTPMethod(t *testing.T) {
+	i := New().Internet()
+
+	Expect(t, true, len(i.HTTPMethod()) > 0)
+}
