@@ -125,3 +125,10 @@ func TestHTTPMethod(t *testing.T) {
 
 	Expect(t, true, len(i.HTTPMethod()) > 0)
 }
+
+func TestQuery(t *testing.T) {
+	i := New().Internet()
+
+	query := i.Query()
+	Expect(t, 0, strings.Index(query, "?"))
+}
