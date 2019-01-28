@@ -209,6 +209,10 @@ func (f Faker) UUID() UUID {
 	return UUID{&f}
 }
 
+func (f Faker) Image() Image {
+	return Image{&f}
+}
+
 func New() (f Faker) {
 	seed := rand.NewSource(time.Now().Unix())
 	f = NewWithSeed(seed)
