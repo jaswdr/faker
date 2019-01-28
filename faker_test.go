@@ -62,6 +62,24 @@ func TestRandomNumber(t *testing.T) {
 	Expect(t, true, value <= 9999)
 }
 
+func TestInt(t *testing.T) {
+	f := New()
+	value := f.Int()
+	Expect(t, fmt.Sprintf("%T", value), "int")
+}
+
+func TestInt64(t *testing.T) {
+	f := New()
+	value := f.Int64()
+	Expect(t, fmt.Sprintf("%T", value), "int64")
+}
+
+func TestInt32(t *testing.T) {
+	f := New()
+	value := f.Int32()
+	Expect(t, fmt.Sprintf("%T", value), "int32")
+}
+
 func TestIntBetween(t *testing.T) {
 	f := New()
 	value := f.IntBetween(1, 100)
@@ -76,6 +94,13 @@ func TestRandomFloat(t *testing.T) {
 	Expect(t, fmt.Sprintf("%T", value), "float64")
 	Expect(t, true, value >= 1)
 	Expect(t, true, value <= 100)
+}
+
+func TestLetter(t *testing.T) {
+	f := New()
+	value := f.Letter()
+	Expect(t, fmt.Sprintf("%T", value), "string")
+	Expect(t, 1, len(value))
 }
 
 func TestRandomLetter(t *testing.T) {

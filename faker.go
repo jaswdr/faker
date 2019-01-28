@@ -57,6 +57,21 @@ func (f Faker) RandomFloat(maxDecimals, min, max int) float64 {
 	return value
 }
 
+func (f Faker) Int() int {
+	maxU := ^uint(0) >> 1
+	max := int(maxU)
+	min := -max - 1
+	return f.IntBetween(min, max)
+}
+
+func (f Faker) Int64() int64 {
+	return int64(f.Int())
+}
+
+func (f Faker) Int32() int32 {
+	return int32(f.Int())
+}
+
 func (f Faker) IntBetween(min, max int) int {
 	diff := max - min
 
@@ -73,6 +88,10 @@ func (f Faker) Int64Between(min, max int64) int64 {
 
 func (f Faker) Int32Between(min, max int32) int32 {
 	return int32(f.IntBetween(int(min), int(max)))
+}
+
+func (f Faker) Letter() string {
+	return f.RandomLetter()
 }
 
 func (f Faker) RandomLetter() string {
