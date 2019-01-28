@@ -16,10 +16,24 @@ func (i Image) Image(width, height int) *os.File {
 	upLeft := image.Point{0, 0}
 	lowRight := image.Point{width, height}
 	img := image.NewRGBA(image.Rectangle{upLeft, lowRight})
-	dot := color.RGBA{0, 0, 0, 0xff}
+	black := color.RGBA{0, 0, 0, 0xff}
+	white := color.RGBA{0xff, 0xff, 0xff, 0xff}
+	step := 4
 	for x := 0; x < width; x++ {
 		for y := 0; y < height; y++ {
-			img.Set(x, y, dot)
+			if y > 0 {
+				if x%step == 0 {
+					if y%step == 0 {
+						img.Set(x, y, black)
+					} else {
+						img.Set(x, y, white)
+					}
+				} else {
+					img.Set(x, y, white)
+				}
+			} else {
+				img.Set(x, y, white)
+			}
 		}
 	}
 
