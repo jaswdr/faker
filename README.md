@@ -6,6 +6,8 @@ Faker is heavily inspired by PHP"s [Faker](https://github.com/fzaninotto/Faker)
 
 Faker requires Go >= 1.9.4.
 
+<a href="https://www.buymeacoffee.com/jaswdr" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 11px !important;width: 104px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+
 [![GoDoc](https://godoc.org/github.com/jaswdr/faker?status.svg)](https://godoc.org/github.com/jaswdr/faker)
 [![Linux and macOS Build Status](https://api.travis-ci.org/jaswdr/faker.svg?branch=master&label=Linux+and+macOS+build "Linux and macOS Build Status")](https://travis-ci.org/jaswdr/faker)
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/cgjqw3h5b59p7at9?svg=true&label=Windows+build "Windows Build Status")](https://ci.appveyor.com/project/jaschweder/faker/branch/master)
