@@ -4,7 +4,7 @@ Faker is a Go library that generates fake data for you. Whether you need to boot
 
 Faker is heavily inspired by PHP"s [Faker](https://github.com/fzaninotto/Faker)
 
-Faker requires Go >= 1.9.4.
+Faker requires Go >= 1.11
 
 <a href="https://www.buymeacoffee.com/jaswdr" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 11px !important;width: 104px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
@@ -68,10 +68,6 @@ for i:=0; i < 10; i++ {
 ```
 
 See more formatters in [godoc](https://godoc.org/github.com/jaswdr/faker)
-
-## Support
-
-We support Go 1.11 or later
 
 ## License
 
