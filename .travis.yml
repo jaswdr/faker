@@ -4,6 +4,8 @@ dist: xenial
 go:
   - 1.9.4
   - "1.10"
+  - "1.11"
+  - "1.12"
   - tip
 os:
   - linux
