@@ -8,10 +8,16 @@ import (
 	"testing"
 )
 
-func Expect(t *testing.T, expected, got interface{}) {
+func Expect(t *testing.T, expected, got interface{}, values ...interface{}) {
 	t.Helper()
 	if expected != got {
 		t.Errorf("\nExpected: (%T) %v \nGot:\t  (%T) %v", expected, expected, got, got)
+		if len(values) > 0 {
+			for _, v := range values {
+				t.Errorf("\n%+v", v)
+			}
+		}
+
 		t.FailNow()
 	}
 }
