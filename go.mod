@@ -1,3 +1,3 @@
 module github.com/jaswdr/faker
 
-go 1.12
+go 1.11
