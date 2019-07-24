@@ -1,6 +1,6 @@
 language: go
 sudo: required
-dist: precise
+dist: xenial
 go:
   - 1.9.4
   - "1.10"
