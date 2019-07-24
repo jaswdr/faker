@@ -69,6 +69,10 @@ for i:=0; i < 10; i++ {
 
 See more formatters in [godoc](https://godoc.org/github.com/jaswdr/faker)
 
+## Support
+
+We support Go 1.11 or later
+
 ## License
 
 Faker is released under the MIT Licence. See the bundled LICENSE file for details.
