@@ -119,12 +119,11 @@ func (i Internet) TLD() string {
 }
 
 func (i Internet) Slug() string {
-	slug := strings.Repeat("?", i.Faker.IntBetween(1, 5))
-	slug = slug + "-"
-	slug = strings.Repeat("?", i.Faker.IntBetween(1, 6))
-	slug = i.Faker.Lexify(slug)
+	slug := strings.Repeat("?", i.Faker.IntBetween(1, 5)) +
+		"-" +
+		strings.Repeat("?", i.Faker.IntBetween(1, 6))
 
-	return strings.ToLower(slug)
+	return strings.ToLower(i.Faker.Lexify(slug))
 }
 
 func (i Internet) URL() string {
