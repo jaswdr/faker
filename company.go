@@ -73,16 +73,22 @@ type Company struct {
 }
 
 func (c Company) CatchPhrase() (phrase string) {
-	for _, words := range catchPhraseWords {
-		phrase = phrase + " " + c.Faker.RandomStringElement(words)
+	for i, words := range catchPhraseWords {
+		if i > 0 {
+			phrase += " "
+		}
+		phrase += c.Faker.RandomStringElement(words)
 	}
 
 	return
 }
 
 func (c Company) BS() (bs string) {
-	for _, words := range catchPhraseWords {
-		bs = bs + " " + c.Faker.RandomStringElement(words)
+	for i, words := range catchPhraseWords {
+		if i > 0 {
+			bs += " "
+		}
+		bs += c.Faker.RandomStringElement(words)
 	}
 
 	return
