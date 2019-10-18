@@ -81,7 +81,7 @@ func (c Company) CatchPhrase() (phrase string) {
 }
 
 func (c Company) BS() (bs string) {
-	for _, words := range catchPhraseWords {
+	for _, words := range bsWords {
 		bs = bs + " " + c.Faker.RandomStringElement(words)
 	}
 
