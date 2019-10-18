@@ -84,7 +84,7 @@ func (c Company) CatchPhrase() (phrase string) {
 }
 
 func (c Company) BS() (bs string) {
-	for i, words := range catchPhraseWords {
+	for i, words := range bsWords {
 		if i > 0 {
 			bs += " "
 		}
