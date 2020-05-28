@@ -99,12 +99,12 @@ func (f Faker) RandomLetter() string {
 }
 
 func (f Faker) RandomStringElement(s []string) string {
-	i := f.IntBetween(0, len(s)-1)
+	i := f.IntBetween(0, len(s))
 	return s[i]
 }
 
 func (f Faker) RandomIntElement(a []int) int {
-	i := f.IntBetween(0, len(a)-1)
+	i := f.IntBetween(0, len(a))
 	return a[i]
 }
 
