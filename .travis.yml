@@ -8,6 +8,7 @@ go:
 os:
   - linux
   - osx
+  - windows
 matrix:
   allow_failures:
     - go: tip
