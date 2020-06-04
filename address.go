@@ -1,6 +1,3 @@
-/**
- * @example 'Avenue'
- */
 package faker
 
 import (
@@ -86,59 +83,35 @@ var (
 	secondaryAddressFormats = []string{"Apt. ###", "Suite ###"}
 )
 
-/**
- * Generate information related to addresses
- */
 type Address struct {
 	Faker *Faker
 }
 
-/**
- * @example 'town'
- */
 func (a Address) CityPrefix() string {
 	return a.Faker.RandomStringElement(cityPrefix)
 }
 
-/**
- * @example 'town'
- */
 func (a Address) SecondaryAddress() string {
 	format := a.Faker.RandomStringElement(secondaryAddressFormats)
 	return a.Faker.Bothify(format)
 }
 
-/**
- * @example 'Alabama'
- */
 func (a Address) State() string {
 	return a.Faker.RandomStringElement(state)
 }
 
-/**
- * @example 'AL'
- */
 func (a Address) StateAbbr() string {
 	return a.Faker.RandomStringElement(stateAbbr)
 }
 
-/**
- * @example 'town'
- */
 func (a Address) CitySuffix() string {
 	return a.Faker.RandomStringElement(citySuffix)
 }
 
-/**
- * @example 'Avenue'
- */
 func (a Address) StreetSuffix() string {
 	return a.Faker.RandomStringElement(streetSuffix)
 }
 
-/**
- * @example '791'
- */
 func (a Address) BuildingNumber() (bn string) {
 	t := a.Faker.IntBetween(1, 6)
 	for i := 0; i < t; i++ {
@@ -148,9 +121,6 @@ func (a Address) BuildingNumber() (bn string) {
 	return
 }
 
-/**
- * @example 'Sashabury'
- */
 func (a Address) City() string {
 	city := a.Faker.RandomStringElement(cityFormats)
 
@@ -179,9 +149,6 @@ func (a Address) City() string {
 	return city
 }
 
-/**
- * @example 'Crist Parks'
- */
 func (a Address) StreetName() string {
 	street := a.Faker.RandomStringElement(streetNameFormats)
 
@@ -205,9 +172,6 @@ func (a Address) StreetName() string {
 	return street
 }
 
-/**
- * @example '791 Crist Parks'
- */
 func (a Address) StreetAddress() string {
 	streetAddress := a.Faker.RandomStringElement(streetAddressFormats)
 
@@ -229,17 +193,11 @@ func (a Address) StreetAddress() string {
 	return streetAddress
 }
 
-/**
- * @example 86039-9874
- */
 func (a Address) PostCode() string {
 	format := a.Faker.RandomStringElement(postCode)
 	return a.Faker.Bothify(format)
 }
 
-/**
- * @example '791 Crist Parks, Sashabury, IL 86039-9874'
- */
 func (a Address) Address() string {
 	address := a.Faker.RandomStringElement(addressFormats)
 
@@ -266,30 +224,15 @@ func (a Address) Address() string {
 	return address
 }
 
-/**
- * @example 'Japan'
- */
 func (a Address) Country() string {
 	return a.Faker.RandomStringElement(country)
 }
 
-/**
- * @example '77.147489'
- * @param float|int $min
- * @param float|int $max
- * @return float Uses signed degrees format (returns a float number between -90 and 90)
- */
 func (a Address) Latitude() (latitude float64) {
 	latitude, _ = strconv.ParseFloat(a.Faker.Numerify("##.######"), 64)
 	return
 }
 
-/**
- * @example '86.211205'
- * @param float|int $min
- * @param float|int $max
- * @return float Uses signed degrees format (returns a float number between -180 and 180)
- */
 func (a Address) Longitude() (latitude float64) {
 	latitude, _ = strconv.ParseFloat(a.Faker.Numerify("##.######"), 64)
 	return
