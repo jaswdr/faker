@@ -66,7 +66,7 @@ for i:=0; i < 10; i++ {
   // Ms. Karley Kiehn V
 ```
 
-See more formatters in [godoc](https://godoc.org/github.com/jaswdr/faker)
+See more formatters in [docs](https://pkg.go.dev/github.com/jaswdr/faker?tab=doc)
 
 ## License
 
