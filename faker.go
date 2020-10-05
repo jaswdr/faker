@@ -201,6 +201,10 @@ func (f Faker) Payment() Payment {
 	return Payment{&f}
 }
 
+func (f Faker) MimeType() MimeType {
+	return MimeType{&f}
+}
+
 func (f Faker) Color() Color {
 	return Color{&f}
 }
