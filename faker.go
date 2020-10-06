@@ -213,6 +213,10 @@ func (f Faker) Image() Image {
 	return Image{&f}
 }
 
+func (f Faker) YouTube() YouTube {
+	return YouTube{&f}
+}
+
 func New() (f Faker) {
 	seed := rand.NewSource(time.Now().Unix())
 	f = NewWithSeed(seed)
