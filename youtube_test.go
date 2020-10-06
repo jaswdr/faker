@@ -7,40 +7,26 @@ import (
 
 func TestGenerateVideoID(t *testing.T) {
 	y := New().YouTube()
-	got := len(y.GenerateVideoID())
-	expect := VideoLength
-
-	if got != expect {
-		t.Errorf("expected length to be: %d, got %d", expect, got)
-	}
+	Expect(t, VideoLength, len(y.GenerateVideoID()))
 }
 
 func TestGenerateFullURL(t *testing.T) {
 	y := New().YouTube()
-	got := y.GenerateFullURL()
-	parts := strings.Split(got, "v=")
-
-	if parts[0] != "www.youtube.com/watch?" || len(parts[1]) != VideoLength {
-		t.Errorf("received unexpected format for a full URL: %s", got)
-	}
+	split := strings.Split(y.GenerateFullURL(), "v=")
+	Expect(t, "www.youtube.com/watch?", split[0])
+	Expect(t, VideoLength, len(split[1]))
 }
 
 func TestGenerateShareURL(t *testing.T) {
 	y := New().YouTube()
-	got := y.GenerateShareURL()
-	parts := strings.Split(got, "/")
-
-	if parts[0] != "youtu.be" || len(parts[1]) != VideoLength {
-		t.Errorf("received unexpected format for a share URL: %s", got)
-	}
+	split := strings.Split(y.GenerateShareURL(), "/")
+	Expect(t, "youtu.be", split[0])
+	Expect(t, VideoLength, len(split[1]))
 }
 
 func TestGenerateEmbededURL(t *testing.T) {
 	y := New().YouTube()
-	got := y.GenerateEmbededURL()
-	parts := strings.Split(got, "embed/")
-
-	if parts[0] != "www.youtube.com/" || len(parts[1]) != VideoLength {
-		t.Errorf("received unexpected format for a embeded URL: %s", got)
-	}
+	split := strings.Split(y.GenerateEmbededURL(), "embed/")
+	Expect(t, "www.youtube.com/", split[0])
+	Expect(t, VideoLength, len(split[1]))
 }
