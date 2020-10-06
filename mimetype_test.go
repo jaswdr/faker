@@ -1,7 +1,6 @@
 package faker
 
 import (
-	"fmt"
 	"testing"
 )
 
