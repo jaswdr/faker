@@ -1,10 +1,13 @@
 package faker
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+)
 
 const charset = "abcdefghijklmnopqrstuvwxyz" +
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-const videoLength = 11
+const VideoLength = 11
 
 type YouTube struct {
 	Faker *Faker
@@ -14,9 +17,9 @@ type YouTube struct {
 // which consists of both upper and lower case alphabets and numeric values.
 // It is used to define a YouTube video uniquely.
 func (y YouTube) GenerateVideoID() (videoID string) {
-	b := make([]byte, videoLength)
+	b := make([]byte, VideoLength)
 	for i := range b {
-		b[i] = charset[y.Faker.RandomNumber(len(charset))]
+		b[i] = charset[rand.Intn(len(charset))]
 	}
 	return string(b)
 }
