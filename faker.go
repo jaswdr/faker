@@ -165,8 +165,8 @@ func (f Faker) Bool() bool {
 	return f.IntBetween(0, 100) > 50
 }
 
-// BoolChanced returns true with chance chanceTrue in percents otherwise returns false
-func (f Faker) BoolChanced(chanceTrue int) bool {
+// BoolWithChance returns true with chance chanceTrue in percents otherwise returns false
+func (f Faker) BoolWithChance(chanceTrue int) bool {
 	if chanceTrue <= 0 {
 		return false
 	} else if chanceTrue >= 100 {

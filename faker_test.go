@@ -182,13 +182,13 @@ func TestBool(t *testing.T) {
 	Expect(t, "bool", tp.String())
 }
 
-func TestBoolChanced(t *testing.T) {
+func TestBoolWithChance(t *testing.T) {
 	f := New()
-	tp := reflect.TypeOf(f.BoolChanced(30))
+	tp := reflect.TypeOf(f.BoolWithChance(30))
 	Expect(t, "bool", tp.String())
 
-	Expect(t, true, f.BoolChanced(100))
-	Expect(t, false, f.BoolChanced(0))
-	Expect(t, true, f.BoolChanced(101))
-	Expect(t, false, f.BoolChanced(-1))
+	Expect(t, true, f.BoolWithChance(100))
+	Expect(t, false, f.BoolWithChance(0))
+	Expect(t, true, f.BoolWithChance(101))
+	Expect(t, false, f.BoolWithChance(-1))
 }
