@@ -102,22 +102,23 @@ var (
 )
 
 type Person struct {
-	Faker *Faker
+	Faker  *Faker
+	gender string
 }
 
-func (p Person) Suffix() string {
+func (p *Person) Suffix() string {
 	return suffix[p.Faker.IntBetween(0, len(suffix)-1)]
 }
 
-func (p Person) TitleMale() string {
+func (p *Person) TitleMale() string {
 	return "Mr."
 }
 
-func (p Person) TitleFemale() string {
+func (p *Person) TitleFemale() string {
 	return "Ms."
 }
 
-func (p Person) Title() string {
+func (p *Person) Title() string {
 	if p.Faker.IntBetween(0, 1) == 0 {
 		return p.TitleMale()
 	}
@@ -125,48 +126,53 @@ func (p Person) Title() string {
 	return p.TitleFemale()
 }
 
-func (p Person) FirstNameMale() string {
+func (p *Person) FirstNameMale() string {
 	index := p.Faker.IntBetween(0, len(firstNameMale)-1)
 	return firstNameMale[index]
 }
 
-func (p Person) FirstNameFemale() string {
+func (p *Person) FirstNameFemale() string {
 	index := p.Faker.IntBetween(0, len(firstNameFemale)-1)
 	return firstNameFemale[index]
 }
 
-func (p Person) FirstName() string {
+func (p *Person) FirstName() string {
 	names := append(firstNameMale, firstNameFemale...)
 	return p.Faker.RandomStringElement(names)
 }
 
-func (p Person) LastName() string {
+func (p *Person) LastName() string {
 	index := p.Faker.IntBetween(0, len(lastName)-1)
 	return lastName[index]
 }
 
-func (p Person) Name() string {
+func (p *Person) Name() string {
 	formats := append(maleNameFormats, femaleNameFormats...)
 	name := formats[p.Faker.IntBetween(0, len(formats)-1)]
+	var gender string
 
 	// {{titleMale}}
 	if strings.Contains(name, "{{titleMale}}") {
 		name = strings.Replace(name, "{{titleMale}}", p.TitleMale(), 1)
+		gender = "Male"
 	}
 
 	//{{firstNameMale}}
 	if strings.Contains(name, "{{firstNameMale}}") {
 		name = strings.Replace(name, "{{firstNameMale}}", p.FirstNameMale(), 1)
+		gender = "Male"
 	}
 
 	// {{titleFemale}}
 	if strings.Contains(name, "{{titleFemale}}") {
 		name = strings.Replace(name, "{{titleFemale}}", p.TitleFemale(), 1)
+		gender = "Female"
 	}
 
 	//{{firstNameFemale}}
 	if strings.Contains(name, "{{firstNameFemale}}") {
 		name = strings.Replace(name, "{{firstNameFemale}}", p.FirstNameFemale(), 1)
+		gender = "Female"
 	}
 
 	//{{lastName}}
@@ -179,5 +185,12 @@ func (p Person) Name() string {
 		name = strings.Replace(name, "{{suffix}}", p.Suffix(), 1)
 	}
 
+	p.gender = gender
+
 	return name
+}
+
+func (p *Person) Gender() string {
+	gender := p.gender
+	return gender
 }

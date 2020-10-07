@@ -170,7 +170,10 @@ func (f Faker) Lorem() Lorem {
 }
 
 func (f Faker) Person() Person {
-	return Person{&f}
+	return Person{
+		Faker:  &f,
+		gender: "Male", // default
+	}
 }
 
 func (f Faker) Address() Address {
