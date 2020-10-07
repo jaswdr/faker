@@ -111,10 +111,12 @@ func (p *Person) Suffix() string {
 }
 
 func (p *Person) TitleMale() string {
+	p.gender = "Male"
 	return "Mr."
 }
 
 func (p *Person) TitleFemale() string {
+	p.gender = "Female"
 	return "Ms."
 }
 
@@ -127,11 +129,13 @@ func (p *Person) Title() string {
 }
 
 func (p *Person) FirstNameMale() string {
+	p.gender = "Male"
 	index := p.Faker.IntBetween(0, len(firstNameMale)-1)
 	return firstNameMale[index]
 }
 
 func (p *Person) FirstNameFemale() string {
+	p.gender = "Female"
 	index := p.Faker.IntBetween(0, len(firstNameFemale)-1)
 	return firstNameFemale[index]
 }
