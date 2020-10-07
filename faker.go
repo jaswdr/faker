@@ -95,7 +95,7 @@ func (f Faker) Letter() string {
 }
 
 func (f Faker) RandomLetter() string {
-	return string(f.IntBetween(97, 122))
+	return fmt.Sprintf("%c",f.IntBetween(97, 122))
 }
 
 func (f Faker) RandomStringElement(s []string) string {
@@ -152,7 +152,7 @@ func (f Faker) Bothify(in string) (out string) {
 func (f Faker) Asciify(in string) (out string) {
 	for _, c := range strings.Split(in, "") {
 		if c == "*" {
-			c = string(f.IntBetween(97, 126))
+			c = fmt.Sprintf("%c",f.IntBetween(97, 126))
 		}
 
 		out = out + c
