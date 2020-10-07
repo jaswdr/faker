@@ -9,8 +9,7 @@ Faker requires Go >= 1.11
 <a href="https://www.buymeacoffee.com/jaswdr" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 11px !important;width: 104px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
 [![GoDoc](https://godoc.org/github.com/jaswdr/faker?status.svg)](https://godoc.org/github.com/jaswdr/faker)
-[![Linux and macOS Build Status](https://travis-ci.org/jaswdr/faker.svg?branch=master)](https://travis-ci.org/jaswdr/faker)
-[![Windows Build status](https://ci.appveyor.com/api/projects/status/6x5okgq8xe8h73ov?svg=true)](https://ci.appveyor.com/project/jaschweder/faker)
+[![Build Status](https://travis-ci.org/jaswdr/faker.svg?branch=master)](https://travis-ci.org/jaswdr/faker)
 [![Go Report Card](https://goreportcard.com/badge/github.com/jaswdr/faker)](https://goreportcard.com/report/github.com/jaswdr/faker)
 
 ## Installation
@@ -67,7 +66,7 @@ for i:=0; i < 10; i++ {
   // Ms. Karley Kiehn V
 ```
 
-See more formatters in [godoc](https://godoc.org/github.com/jaswdr/faker)
+See more formatters in [docs](https://pkg.go.dev/github.com/jaswdr/faker?tab=doc)
 
 ## License
 

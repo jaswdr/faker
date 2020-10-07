@@ -201,6 +201,10 @@ func (f Faker) Payment() Payment {
 	return Payment{&f}
 }
 
+func (f Faker) MimeType() MimeType {
+	return MimeType{&f}
+}
+
 func (f Faker) Color() Color {
 	return Color{&f}
 }
@@ -211,6 +215,10 @@ func (f Faker) UUID() UUID {
 
 func (f Faker) Image() Image {
 	return Image{&f}
+}
+
+func (f Faker) YouTube() YouTube {
+	return YouTube{&f}
 }
 
 func New() (f Faker) {

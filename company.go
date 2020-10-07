@@ -109,7 +109,7 @@ func (c Company) Name() string {
 	// {{lastName}}
 	p := c.Faker.Person()
 	if strings.Contains(name, "{{lastName}}") {
-		name = strings.Replace(name, "{{lastName}}", p.LastName(), 2)
+		name = strings.Replace(name, "{{lastName}}", p.LastName(), 3)
 	}
 
 	return name

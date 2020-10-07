@@ -16,7 +16,7 @@ var (
 		"{{firstName}}",
 		"{{lastName}}"}
 
-	emailFormats = []string{"{{user}}@{{domain}}", "{{user}}@{{freeEmailDomain}}", ""}
+	emailFormats = []string{"{{user}}@{{domain}}", "{{user}}@{{freeEmailDomain}}"}
 
 	urlFormats = []string{"http://www.{{domain}}/",
 		"http://{{domain}}/",
