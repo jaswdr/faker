@@ -105,7 +105,7 @@ var (
 )
 
 type Person struct {
-	*Faker
+	Faker *Faker
 }
 
 func (p Person) Suffix() string {
