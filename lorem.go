@@ -13,13 +13,13 @@ type Lorem struct {
 	Faker *Faker
 }
 
-// Word returns a fake Word for Lorem
+// Word returns a fake word for Lorem
 func (l Lorem) Word() string {
 	index := l.Faker.IntBetween(0, len(wordsList)-1)
 	return wordsList[index]
 }
 
-// Words returns fake Words for Lorem
+// Words returns fake words for Lorem
 func (l Lorem) Words(nbWords int) (words []string) {
 	for i := 0; i < nbWords; i++ {
 		words = append(words, l.Word())
@@ -28,12 +28,12 @@ func (l Lorem) Words(nbWords int) (words []string) {
 	return
 }
 
-// Sentence returns a fake Sentence for Lorem
+// Sentence returns a fake sentence for Lorem
 func (l Lorem) Sentence(nbWords int) string {
 	return strings.Join(l.Words(nbWords), " ") + "."
 }
 
-// Sentences returns fake Sentences for Lorem
+// Sentences returns fake sentences for Lorem
 func (l Lorem) Sentences(nbSentences int) (sentences []string) {
 	for i := 0; i < nbSentences; i++ {
 		sentences = append(sentences, l.Sentence(l.Faker.RandomNumber(2)))
@@ -42,12 +42,12 @@ func (l Lorem) Sentences(nbSentences int) (sentences []string) {
 	return
 }
 
-// Paragraph returns a fake Paragraph for Lorem
+// Paragraph returns a fake paragraph for Lorem
 func (l Lorem) Paragraph(nbSentences int) string {
 	return strings.Join(l.Sentences(nbSentences), " ")
 }
 
-// Paragraphs returns fake Paragraphs for Lorem
+// Paragraphs returns fake paragraphs for Lorem
 func (l Lorem) Paragraphs(nbParagraph int) (out []string) {
 	for i := 0; i < nbParagraph; i++ {
 		out = append(out, l.Paragraph(l.Faker.RandomNumber(2)))
@@ -56,7 +56,7 @@ func (l Lorem) Paragraphs(nbParagraph int) (out []string) {
 	return
 }
 
-// Text returns a fake Text for Lorem
+// Text returns a fake text for Lorem
 func (l Lorem) Text(maxNbChars int) (out string) {
 	for _, w := range wordsList {
 		if len(out)+len(w) > maxNbChars {
@@ -69,7 +69,7 @@ func (l Lorem) Text(maxNbChars int) (out string) {
 	return
 }
 
-// Bytes returns fake Bytes for Lorem
+// Bytes returns fake bytes for Lorem
 func (l Lorem) Bytes(maxNbChars int) (out []byte) {
 	return []byte(l.Text(maxNbChars))
 }

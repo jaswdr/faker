@@ -65,7 +65,7 @@ type MimeType struct {
 	Faker *Faker
 }
 
-// MimeType returns a fake MimeType
+// MimeType returns a fake mime type
 func (p MimeType) MimeType() string {
 	return p.Faker.RandomStringElement(mimeType)
 }

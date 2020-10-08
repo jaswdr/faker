@@ -50,7 +50,7 @@ type Phone struct {
 	Faker *Faker
 }
 
-// AreaCode returns a fake AreaCode for Phone
+// AreaCode returns a fake area code for Phone
 func (p Phone) AreaCode() (code string) {
 	number1 := p.Faker.IntBetween(2, 9)
 	number2 := p.Faker.RandomDigit()
@@ -58,7 +58,7 @@ func (p Phone) AreaCode() (code string) {
 	return fmt.Sprintf("%d%d%d", number1, number2, number3)
 }
 
-// ExchangeCode returns a fake ExchangeCode for Phone
+// ExchangeCode returns a fake exchange code for Phone
 func (p Phone) ExchangeCode() (code string) {
 	number1 := p.Faker.IntBetween(2, 9)
 	number2 := p.Faker.RandomDigit()
@@ -71,7 +71,7 @@ func (p Phone) ExchangeCode() (code string) {
 	return fmt.Sprintf("%d%d%d", number1, number2, number3)
 }
 
-// Number returns a fake Number for Phone
+// Number returns a fake phone number for Phone
 func (p Phone) Number() string {
 	number := p.Faker.RandomStringElement(phoneFormats)
 
@@ -88,12 +88,12 @@ func (p Phone) Number() string {
 	return p.Faker.Numerify(number)
 }
 
-// TollFreeAreaCode returns a fake TollFreeAreaCode for Phone
+// TollFreeAreaCode returns a fake toll free area code for Phone
 func (p Phone) TollFreeAreaCode() string {
 	return p.Faker.RandomStringElement(tollFreeAreaCodes)
 }
 
-// ToolFreeNumber returns a fake ToolFreeNumber for Phone
+// ToolFreeNumber returns a fake tool free number for Phone
 func (p Phone) ToolFreeNumber() string {
 	number := p.Faker.RandomStringElement(tollFreeFormats)
 
@@ -110,7 +110,7 @@ func (p Phone) ToolFreeNumber() string {
 	return p.Faker.Numerify(number)
 }
 
-// E164Number returns a fake E164Number for Phone
+// E164Number returns a fake E164 phone number for Phone
 func (p Phone) E164Number() string {
 	return p.Faker.Numerify("+###########")
 }

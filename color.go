@@ -45,7 +45,7 @@ type Color struct {
 	Faker *Faker
 }
 
-// Hex returns a fake Hex for Color
+// Hex returns a fake hex for Color
 func (c Color) Hex() string {
 	color := "#"
 
@@ -56,7 +56,7 @@ func (c Color) Hex() string {
 	return color
 }
 
-// RGB returns a fake RGB for Color
+// RGB returns a fake rgb for Color
 func (c Color) RGB() string {
 	color := strconv.Itoa(c.Faker.IntBetween(0, 255))
 
@@ -67,23 +67,23 @@ func (c Color) RGB() string {
 	return color
 }
 
-// RGBAsArray returns a fake RGBAsArray for Color
+// RGBAsArray returns a fake rgb color in array format for Color
 func (c Color) RGBAsArray() [3]string {
 	split := strings.Split(c.RGB(), ",")
 	return [3]string{split[0], split[1], split[2]}
 }
 
-// CSS returns a fake CSS for Color
+// CSS returns a fake color in CSS format for Color
 func (c Color) CSS() string {
 	return "rgb(" + c.RGB() + ")"
 }
 
-// SafeColorName returns a fake SafeColorName for Color
+// SafeColorName returns a fake safe color name for Color
 func (c Color) SafeColorName() string {
 	return c.Faker.RandomStringElement(safeColorNames)
 }
 
-// ColorName returns a fake ColorName for Color
+// ColorName returns a fake color name for Color
 func (c Color) ColorName() string {
 	return c.Faker.RandomStringElement(allColorNames)
 }

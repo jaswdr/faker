@@ -36,7 +36,7 @@ type Internet struct {
 	Faker *Faker
 }
 
-// User returns a fake User for Internet
+// User returns a fake user for Internet
 func (i Internet) User() string {
 	user := i.Faker.RandomStringElement(userFormats)
 
@@ -55,29 +55,29 @@ func (i Internet) User() string {
 	return user
 }
 
-// Password returns a fake Password for Internet
+// Password returns a fake password for Internet
 func (i Internet) Password() string {
 	pattern := strings.Repeat("*", i.Faker.IntBetween(6, 16))
 	return i.Faker.Asciify(pattern)
 }
 
-// Domain returns a fake Domain for Internet
+// Domain returns a fake domain for Internet
 func (i Internet) Domain() string {
 	domain := strings.ToLower(i.Faker.Lexify("???"))
 	return strings.Join([]string{domain, i.TLD()}, ".")
 }
 
-// FreeEmailDomain returns a fake FreeEmailDomain for Internet
+// FreeEmailDomain returns a fake free email domain for Internet
 func (i Internet) FreeEmailDomain() string {
 	return i.Faker.RandomStringElement(freeEmailDomain)
 }
 
-// SafeEmailDomain returns a fake SafeEmailDomain for Internet
+// SafeEmailDomain returns a fake safe email domain for Internet
 func (i Internet) SafeEmailDomain() string {
 	return "example.org"
 }
 
-// Email returns a fake Email for Internet
+// Email returns a fake email address for Internet
 func (i Internet) Email() string {
 	email := i.Faker.RandomStringElement(emailFormats)
 
@@ -99,19 +99,19 @@ func (i Internet) Email() string {
 	return email
 }
 
-// FreeEmail returns a fake FreeEmail for Internet
+// FreeEmail returns a fake free email address for Internet
 func (i Internet) FreeEmail() string {
 	domain := i.Faker.RandomStringElement(freeEmailDomain)
 
 	return strings.Join([]string{i.User(), domain}, "@")
 }
 
-// SafeEmail returns a fake SafeEmail for Internet
+// SafeEmail returns a fake safe email address for Internet
 func (i Internet) SafeEmail() string {
 	return strings.Join([]string{i.User(), i.SafeEmailDomain()}, "@")
 }
 
-// CompanyEmail returns a fake CompanyEmail for Internet
+// CompanyEmail returns a fake company email address for Internet
 func (i Internet) CompanyEmail() string {
 	c := i.Faker.Company()
 
@@ -124,12 +124,12 @@ func (i Internet) CompanyEmail() string {
 	return strings.Join([]string{i.User(), domain}, "@")
 }
 
-// TLD returns a fake TLD for Internet
+// TLD returns a fake tld for Internet
 func (i Internet) TLD() string {
 	return i.Faker.RandomStringElement(tld)
 }
 
-// Slug returns a fake Slug for Internet
+// Slug returns a fake slug for Internet
 func (i Internet) Slug() string {
 	slug := strings.Repeat("?", i.Faker.IntBetween(1, 5)) +
 		"-" +
@@ -138,7 +138,7 @@ func (i Internet) Slug() string {
 	return strings.ToLower(i.Faker.Lexify(slug))
 }
 
-// URL returns a fake URL for Internet
+// URL returns a fake url for Internet
 func (i Internet) URL() string {
 	url := i.Faker.RandomStringElement(urlFormats)
 
@@ -155,7 +155,7 @@ func (i Internet) URL() string {
 	return url
 }
 
-// Ipv4 returns a fake Ipv4 for Internet
+// Ipv4 returns a fake ipv4 for Internet
 func (i Internet) Ipv4() string {
 	ips := []string{}
 
@@ -166,7 +166,7 @@ func (i Internet) Ipv4() string {
 	return strings.Join(ips, ".")
 }
 
-// LocalIpv4 returns a fake LocalIpv4 for Internet
+// LocalIpv4 returns a fake local ipv4 for Internet
 func (i Internet) LocalIpv4() string {
 	ips := []string{i.Faker.RandomStringElement([]string{"10", "172", "192"})}
 
@@ -195,7 +195,7 @@ func (i Internet) LocalIpv4() string {
 	return strings.Join(ips, ".")
 }
 
-// Ipv6 returns a fake Ipv6 for Internet
+// Ipv6 returns a fake ipv6 for Internet
 func (i Internet) Ipv6() string {
 	ips := []string{}
 
@@ -211,7 +211,7 @@ func (i Internet) Ipv6() string {
 	return strings.Join(ips, ":")
 }
 
-// MacAddress returns a fake MacAddress for Internet
+// MacAddress returns a fake mac address for Internet
 func (i Internet) MacAddress() string {
 	values := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"}
 
@@ -225,7 +225,7 @@ func (i Internet) MacAddress() string {
 	return strings.Join(mac, ":")
 }
 
-// HTTPMethod returns a fake HTTPMethod for Internet
+// HTTPMethod returns a fake http method for Internet
 func (i Internet) HTTPMethod() string {
 	return i.Faker.RandomStringElement([]string{
 		http.MethodGet,
@@ -240,7 +240,7 @@ func (i Internet) HTTPMethod() string {
 	})
 }
 
-// Query returns a fake Query for Internet
+// Query returns a fake query for Internet
 func (i Internet) Query() string {
 	lorem := i.Faker.Lorem()
 	query := "?" + lorem.Word() + "=" + lorem.Word()
