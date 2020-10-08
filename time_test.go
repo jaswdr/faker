@@ -157,7 +157,7 @@ func TestYear(t *testing.T) {
 	tf := New().Time()
 
 	year := tf.Year()
-	Expect(t, true, year > 1970)
+	Expect(t, true, year >= 1970)
 	Expect(t, 4, len(strconv.Itoa(year)))
 }
 
