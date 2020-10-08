@@ -13,7 +13,7 @@ type Image struct {
 	faker *Faker
 }
 
-// Image returns a fake Image for Image
+// Image returns a fake Image
 func (i Image) Image(width, height int) *os.File {
 	upLeft := image.Point{0, 0}
 	lowRight := image.Point{width, height}

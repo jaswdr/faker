@@ -19,7 +19,7 @@ func (l Lorem) Word() string {
 	return wordsList[index]
 }
 
-// Words returns a fake Words for Lorem
+// Words returns fake Words for Lorem
 func (l Lorem) Words(nbWords int) (words []string) {
 	for i := 0; i < nbWords; i++ {
 		words = append(words, l.Word())
@@ -33,7 +33,7 @@ func (l Lorem) Sentence(nbWords int) string {
 	return strings.Join(l.Words(nbWords), " ") + "."
 }
 
-// Sentences returns a fake Sentences for Lorem
+// Sentences returns fake Sentences for Lorem
 func (l Lorem) Sentences(nbSentences int) (sentences []string) {
 	for i := 0; i < nbSentences; i++ {
 		sentences = append(sentences, l.Sentence(l.Faker.RandomNumber(2)))
@@ -47,7 +47,7 @@ func (l Lorem) Paragraph(nbSentences int) string {
 	return strings.Join(l.Sentences(nbSentences), " ")
 }
 
-// Paragraphs returns a fake Paragraphs for Lorem
+// Paragraphs returns fake Paragraphs for Lorem
 func (l Lorem) Paragraphs(nbParagraph int) (out []string) {
 	for i := 0; i < nbParagraph; i++ {
 		out = append(out, l.Paragraph(l.Faker.RandomNumber(2)))
@@ -69,7 +69,7 @@ func (l Lorem) Text(maxNbChars int) (out string) {
 	return
 }
 
-// Bytes returns a fake Bytes for Lorem
+// Bytes returns fake Bytes for Lorem
 func (l Lorem) Bytes(maxNbChars int) (out []byte) {
 	return []byte(l.Text(maxNbChars))
 }

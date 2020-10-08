@@ -9,6 +9,7 @@ const charset = "abcdefghijklmnopqrstuvwxyz" +
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 const VideoLength = 11
 
+// YouTube is a faker struct for YouTube
 type YouTube struct {
 	Faker *Faker
 }
