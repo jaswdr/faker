@@ -60,10 +60,12 @@ var (
 	}
 )
 
+// MimeType is a faker struct for MimeType
 type MimeType struct {
 	Faker *Faker
 }
 
+// MimeType returns a fake MimeType
 func (p MimeType) MimeType() string {
 	return p.Faker.RandomStringElement(mimeType)
 }

@@ -83,35 +83,43 @@ var (
 	secondaryAddressFormats = []string{"Apt. ###", "Suite ###"}
 )
 
+// Address is a faker struct for Address
 type Address struct {
 	Faker *Faker
 }
 
+// CityPrefix returns a fake CityPrefix for Address
 func (a Address) CityPrefix() string {
 	return a.Faker.RandomStringElement(cityPrefix)
 }
 
+// SecondaryAddress returns a fake SecondaryAddress for Address
 func (a Address) SecondaryAddress() string {
 	format := a.Faker.RandomStringElement(secondaryAddressFormats)
 	return a.Faker.Bothify(format)
 }
 
+// State returns a fake State for Address
 func (a Address) State() string {
 	return a.Faker.RandomStringElement(state)
 }
 
+// StateAbbr returns a fake StateAbbr for Address
 func (a Address) StateAbbr() string {
 	return a.Faker.RandomStringElement(stateAbbr)
 }
 
+// CitySuffix returns a fake CitySuffix for Address
 func (a Address) CitySuffix() string {
 	return a.Faker.RandomStringElement(citySuffix)
 }
 
+// StreetSuffix returns a fake StreetSuffix for Address
 func (a Address) StreetSuffix() string {
 	return a.Faker.RandomStringElement(streetSuffix)
 }
 
+// BuildingNumber returns a fake BuildingNumber for Address
 func (a Address) BuildingNumber() (bn string) {
 	t := a.Faker.IntBetween(1, 6)
 	for i := 0; i < t; i++ {
@@ -121,6 +129,7 @@ func (a Address) BuildingNumber() (bn string) {
 	return
 }
 
+// City returns a fake City for Address
 func (a Address) City() string {
 	city := a.Faker.RandomStringElement(cityFormats)
 
@@ -149,6 +158,7 @@ func (a Address) City() string {
 	return city
 }
 
+// StreetName returns a fake StreetName for Address
 func (a Address) StreetName() string {
 	street := a.Faker.RandomStringElement(streetNameFormats)
 
@@ -172,6 +182,7 @@ func (a Address) StreetName() string {
 	return street
 }
 
+// StreetAddress returns a fake StreetAddress for Address
 func (a Address) StreetAddress() string {
 	streetAddress := a.Faker.RandomStringElement(streetAddressFormats)
 
@@ -193,11 +204,13 @@ func (a Address) StreetAddress() string {
 	return streetAddress
 }
 
+// PostCode returns a fake PostCode for Address
 func (a Address) PostCode() string {
 	format := a.Faker.RandomStringElement(postCode)
 	return a.Faker.Bothify(format)
 }
 
+// Address returns a fake Address for Address
 func (a Address) Address() string {
 	address := a.Faker.RandomStringElement(addressFormats)
 
@@ -224,15 +237,18 @@ func (a Address) Address() string {
 	return address
 }
 
+// Country returns a fake Country for Address
 func (a Address) Country() string {
 	return a.Faker.RandomStringElement(country)
 }
 
+// Latitude returns a fake Latitude for Address
 func (a Address) Latitude() (latitude float64) {
 	latitude, _ = strconv.ParseFloat(a.Faker.Numerify("##.######"), 64)
 	return
 }
 
+// Longitude returns a fake Longitude for Address
 func (a Address) Longitude() (latitude float64) {
 	latitude, _ = strconv.ParseFloat(a.Faker.Numerify("##.######"), 64)
 	return
