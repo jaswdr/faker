@@ -7,7 +7,6 @@ import (
 
 const charset = "abcdefghijklmnopqrstuvwxyz" +
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-const VideoLength = 11
 
 // YouTube is a faker struct for YouTube
 type YouTube struct {
@@ -16,7 +15,7 @@ type YouTube struct {
 
 // GenerateVideoID returns a youtube video id 
 func (y YouTube) GenerateVideoID() (videoID string) {
-	b := make([]byte, VideoLength)
+	b := make([]byte, 11)
 	for i := range b {
 		b[i] = charset[rand.Intn(len(charset))]
 	}
@@ -33,7 +32,7 @@ func (y YouTube) GenerateShareURL() string {
 	return fmt.Sprintf("youtu.be/%s", y.GenerateVideoID())
 }
 
-// GenerateEmbededURL returns a fake embeded youtube video url
+// GenerateEmbededURL returns a fake embedded youtube video url
 func (y YouTube) GenerateEmbededURL() string {
 	return fmt.Sprintf("www.youtube.com/embed/%s", y.GenerateVideoID())
 }

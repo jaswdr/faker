@@ -81,7 +81,7 @@ func (f Faker) Int32() int32 {
 	return int32(f.Int())
 }
 
-// IntBetween returns a fake Int between a given minumum and maximum values for Faker
+// IntBetween returns a fake Int between a given minimum and maximum values for Faker
 func (f Faker) IntBetween(min, max int) int {
 	diff := max - min
 
@@ -275,7 +275,7 @@ func New() (f Faker) {
 	return
 }
 
-// New returns a new instance of Faker instance with a given seed
+// NewWithSeed returns a new instance of Faker instance with a given seed
 func NewWithSeed(src rand.Source) (f Faker) {
 	generator := rand.New(src)
 	f = Faker{Generator: generator}
