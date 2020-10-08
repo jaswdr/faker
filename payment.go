@@ -11,18 +11,22 @@ var (
 		"American Express", "Discover Card", "Visa Retired"}
 )
 
+// Payment is a faker struct for Payment
 type Payment struct {
 	Faker *Faker
 }
 
+// CreditCardType returns a fake credit card type for Payment
 func (p Payment) CreditCardType() string {
 	return p.Faker.RandomStringElement(cardVendors)
 }
 
+// CreditCardNumber returns a fake credit card number for Payment
 func (p Payment) CreditCardNumber() string {
 	return strconv.Itoa(p.Faker.IntBetween(1000000000000000, 9999999999999999))
 }
 
+// CreditCardExpirationDateString returns a fake credit card expiration date in string format for Payment
 func (p Payment) CreditCardExpirationDateString() string {
 	day := strconv.Itoa(p.Faker.IntBetween(0, 30))
 	if len(day) == 1 {

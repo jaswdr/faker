@@ -9,13 +9,12 @@ const charset = "abcdefghijklmnopqrstuvwxyz" +
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 const VideoLength = 11
 
+// YouTube is a faker struct for YouTube
 type YouTube struct {
 	Faker *Faker
 }
 
-// GenerateVideoID returns an 11 characters long string,
-// which consists of both upper and lower case alphabets and numeric values.
-// It is used to define a YouTube video uniquely.
+// GenerateVideoID returns a youtube video id 
 func (y YouTube) GenerateVideoID() (videoID string) {
 	b := make([]byte, VideoLength)
 	for i := range b {
@@ -24,17 +23,17 @@ func (y YouTube) GenerateVideoID() (videoID string) {
 	return string(b)
 }
 
-// GenerateFullURL returns a fake, standard youtube video URL
+// GenerateFullURL returns a fake standard youtube video url
 func (y YouTube) GenerateFullURL() string {
 	return fmt.Sprintf("www.youtube.com/watch?v=%s", y.GenerateVideoID())
 }
 
-// GenerateShareURL returns a fake, share youtube video URL
+// GenerateShareURL returns a fake share youtube video url
 func (y YouTube) GenerateShareURL() string {
 	return fmt.Sprintf("youtu.be/%s", y.GenerateVideoID())
 }
 
-// GenerateEmbededURL returns a fake, embeded youtube video URL
+// GenerateEmbededURL returns a fake embeded youtube video url
 func (y YouTube) GenerateEmbededURL() string {
 	return fmt.Sprintf("www.youtube.com/embed/%s", y.GenerateVideoID())
 }
