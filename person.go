@@ -101,6 +101,7 @@ var (
 	suffix = []string{"Jr.", "Sr.", "I", "II", "III", "IV", "V", "MD", "DDS", "PhD", "DVM"}
 )
 
+// Person is a faker struct for Person
 type Person struct {
 	Faker *Faker
 }

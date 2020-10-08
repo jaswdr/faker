@@ -83,6 +83,7 @@ var (
 	secondaryAddressFormats = []string{"Apt. ###", "Suite ###"}
 )
 
+// Address is a faker struct for Address
 type Address struct {
 	Faker *Faker
 }

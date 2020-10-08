@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+// Faker is the Generator struct for Faker
 type Faker struct {
 	Generator *rand.Rand
 }

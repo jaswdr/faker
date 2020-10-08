@@ -45,6 +45,7 @@ var (
 		"{{tollFreeAreaCode}}.{{exchangeCode}}.####"}
 )
 
+// Phone is a faker struct for Phone
 type Phone struct {
 	Faker *Faker
 }

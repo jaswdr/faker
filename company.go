@@ -68,6 +68,7 @@ var (
 		66, 67, 68, 71, 72, 73, 74, 75, 76, 77, 80, 81, 82, 83, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 98, 99}
 )
 
+// Company is a faker struct for Company
 type Company struct {
 	Faker *Faker
 }

@@ -31,6 +31,7 @@ var (
 	}
 )
 
+// Internet is a faker struct for Internet
 type Internet struct {
 	Faker *Faker
 }
