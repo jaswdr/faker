@@ -17,13 +17,14 @@ jobs:
   fast_finish: true
   include:
     - stage: coverage_report
-      after_success: $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
+      before_install:
+        - go get golang.org/x/tools/cmd/cover
+        - go get github.com/mattn/goveralls
+      after_success:
+        - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
       go:
         - "1.15"
       os:
         - linux
-before_install:
-  - go get golang.org/x/tools/cmd/cover
-  - go get github.com/mattn/goveralls
 script:
   - go test -v -covermode=count -coverprofile=coverage.out
