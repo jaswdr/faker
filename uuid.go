@@ -6,10 +6,12 @@ import (
 	"io"
 )
 
+// UUID is a faker struct for UUID
 type UUID struct {
 	Faker *Faker
 }
 
+// V4 returns a fake UUID version 4
 func (u UUID) V4() (uuid string) {
 	var uiq [16]byte
 	io.ReadFull(rand.Reader, uiq[:])

@@ -104,22 +104,27 @@ var (
 	gender = []string{"Male", "Female"}
 )
 
+// Person is a faker struct for Person
 type Person struct {
 	Faker *Faker
 }
 
+// Suffix returns a fake suffix for Person
 func (p Person) Suffix() string {
 	return suffix[p.Faker.IntBetween(0, len(suffix)-1)]
 }
 
+// TitleMale returns a fake male title for Person
 func (p Person) TitleMale() string {
 	return "Mr."
 }
 
+// TitleFemale returns a fake female title for Person
 func (p Person) TitleFemale() string {
 	return "Ms."
 }
 
+// Title returns a fake title for Person
 func (p Person) Title() string {
 	if p.Faker.IntBetween(0, 1) == 0 {
 		return p.TitleMale()
@@ -128,26 +133,31 @@ func (p Person) Title() string {
 	return p.TitleFemale()
 }
 
+// FirstNameMale returns a fake male first mame for Person
 func (p Person) FirstNameMale() string {
 	index := p.Faker.IntBetween(0, len(firstNameMale)-1)
 	return firstNameMale[index]
 }
 
+// FirstNameFemale returns a fake female first name for Person
 func (p Person) FirstNameFemale() string {
 	index := p.Faker.IntBetween(0, len(firstNameFemale)-1)
 	return firstNameFemale[index]
 }
 
+// FirstName returns a fake first name for Person
 func (p Person) FirstName() string {
 	names := append(firstNameMale, firstNameFemale...)
 	return p.Faker.RandomStringElement(names)
 }
 
+// LastName returns a fake last name for Person
 func (p Person) LastName() string {
 	index := p.Faker.IntBetween(0, len(lastName)-1)
 	return lastName[index]
 }
 
+// Name returns a fake name for Person
 func (p Person) Name() string {
 	formats := append(maleNameFormats, femaleNameFormats...)
 	name := formats[p.Faker.IntBetween(0, len(formats)-1)]
