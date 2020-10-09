@@ -3,7 +3,6 @@ package faker
 import (
 	"fmt"
 	"math/rand"
-	"reflect"
 	"strings"
 	"testing"
 )
@@ -174,21 +173,4 @@ func TestAsciify(t *testing.T) {
 	Expect(t, true, strings.Contains(value, "#"))
 	Expect(t, true, strings.Contains(value, "?"))
 	Expect(t, false, strings.Contains(value, "*"))
-}
-
-func TestBool(t *testing.T) {
-	f := New()
-	tp := reflect.TypeOf(f.Bool())
-	Expect(t, "bool", tp.String())
-}
-
-func TestBoolWithChance(t *testing.T) {
-	f := New()
-	tp := reflect.TypeOf(f.BoolWithChance(30))
-	Expect(t, "bool", tp.String())
-
-	Expect(t, true, f.BoolWithChance(100))
-	Expect(t, false, f.BoolWithChance(0))
-	Expect(t, true, f.BoolWithChance(101))
-	Expect(t, false, f.BoolWithChance(-1))
 }
