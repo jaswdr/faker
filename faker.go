@@ -182,6 +182,16 @@ func (f Faker) Asciify(in string) (out string) {
 	return
 }
 
+// Bool returns a fake bool for Faker
+func (f Faker) Bool() bool {
+	return f.Boolean().Bool()
+}
+
+// BoolWithChance returns true with a given percentual chance that the value is true, otherwise returns false
+func (f Faker) BoolWithChance(chanceTrue int) bool {
+	return f.Boolean().BoolWithChance(chanceTrue)
+}
+
 // Boolean returns a fake Boolean instance for Faker
 func (f Faker) Boolean() Boolean {
 	return Boolean{&f}
