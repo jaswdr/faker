@@ -63,3 +63,9 @@ func TestName(t *testing.T) {
 	Expect(t, false, strings.Contains(name, "{{suffix}}"))
 	Expect(t, true, gender == "Male" || gender == "Female")
 }
+
+func TestGender(t *testing.T) {
+	p := New().Person()
+	gender := p.Gender()
+	Expect(t, true, gender == "Male" || gender == "Female")
+}
