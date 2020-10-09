@@ -13,6 +13,10 @@ Faker requires Go >= 1.11
 [![Coverage Status](https://coveralls.io/repos/github/jaswdr/faker/badge.svg?branch=master)](https://coveralls.io/github/jaswdr/faker?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/jaswdr/faker)](https://goreportcard.com/report/github.com/jaswdr/faker)
 
+## Test it in Go Playground
+
+Start at https://play.golang.org/p/AQlqXf-Wi5o
+
 ## Installation
 
 Add this to your Go file
