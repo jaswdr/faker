@@ -24,13 +24,13 @@ func TestBooleanBoolWithChance(t *testing.T) {
 
 func TestBooleanInt(t *testing.T) {
 	p := New().Boolean()
-	result := p.IntBool()
+	result := p.BoolInt()
 	Expect(t, true, result == 1 || result == 0)
 }
 
 func TestBooleanString(t *testing.T) {
 	p := New().Boolean()
 	args := []string{"yes", "no"}
-	result := p.StringBool(args[0], args[1])
+	result := p.BoolString(args[0], args[1])
 	Expect(t, true, result == args[0] || result == args[1])
 }
