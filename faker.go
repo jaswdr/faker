@@ -182,7 +182,7 @@ func (f Faker) Asciify(in string) (out string) {
 	return
 }
 
-// Lorem returns a fake Lorem instance for Faker
+// Boolean returns a fake Boolean instance for Faker
 func (f Faker) Boolean() Boolean {
 	return Boolean{&f}
 }
