@@ -182,20 +182,9 @@ func (f Faker) Asciify(in string) (out string) {
 	return
 }
 
-// Bool returns a fake bool for Faker
-func (f Faker) Bool() bool {
-	return f.IntBetween(0, 100) > 50
-}
-
-// BoolWithChance returns true with a given percentual chance that the value is true, otherwise returns false
-func (f Faker) BoolWithChance(chanceTrue int) bool {
-	if chanceTrue <= 0 {
-		return false
-	} else if chanceTrue >= 100 {
-		return true
-	}
-
-	return f.IntBetween(0, 100) < chanceTrue
+// Lorem returns a fake Lorem instance for Faker
+func (f Faker) Boolean() Boolean {
+	return Boolean{&f}
 }
 
 // Lorem returns a fake Lorem instance for Faker
