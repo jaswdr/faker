@@ -6,14 +6,15 @@ go:
   - "1.12"
   - "1.13"
   - "1.14"
-  - tip
+  - "1.15"
+  - master
 os:
   - linux
   - osx
   - windows
 matrix:
   allow_failures:
-    - go: tip
+    - go: master
   fast_finish: true
 script:
   - go test -v -cover
