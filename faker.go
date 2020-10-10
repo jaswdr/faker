@@ -262,6 +262,11 @@ func (f Faker) Image() Image {
 	return Image{&f}
 }
 
+// File returns a fake File instance for Faker
+func (f Faker) File() File {
+	return File{&f}
+}
+
 // YouTube returns a fake YouTube instance for Faker
 func (f Faker) YouTube() YouTube {
 	return YouTube{&f}
