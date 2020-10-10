@@ -3,9 +3,9 @@ package faker
 import (
 	"fmt"
 	"math/rand"
+	"reflect"
 	"strings"
 	"testing"
-	"reflect"
 )
 
 func Expect(t *testing.T, expected, got interface{}, values ...interface{}) {
