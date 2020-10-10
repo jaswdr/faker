@@ -100,8 +100,6 @@ var (
 		"Zboncak", "Zemlak", "Ziemann", "Zieme", "Zulauf"}
 
 	suffix = []string{"Jr.", "Sr.", "I", "II", "III", "IV", "V", "MD", "DDS", "PhD", "DVM"}
-
-	gender = []string{"Male", "Female"}
 )
 
 // Person is a faker struct for Person
@@ -217,7 +215,7 @@ func (p Person) NameFemale() string {
 
 // Gender returns a fake Gender for Person
 func (p Person) Gender() string {
-	return p.Faker.RandomStringElement(gender)
+	return p.Faker.RandomStringElement([]string{p.GenderMale(), p.GenderFemale()})
 }
 
 // NameAndGender returns a fake NameAndGender for Person

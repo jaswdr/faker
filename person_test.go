@@ -53,7 +53,6 @@ func TestLastName(t *testing.T) {
 func TestName(t *testing.T) {
 	p := New().Person()
 	name := p.Name()
-	gender := p.Gender()
 	Expect(t, true, len(name) > 0)
 	Expect(t, false, strings.Contains(name, "{{titleMale}}"))
 	Expect(t, false, strings.Contains(name, "{{firstNameMale}}"))
@@ -61,13 +60,22 @@ func TestName(t *testing.T) {
 	Expect(t, false, strings.Contains(name, "{{firstNameFemale}}"))
 	Expect(t, false, strings.Contains(name, "{{lastName}}"))
 	Expect(t, false, strings.Contains(name, "{{suffix}}"))
-	Expect(t, true, gender == "Male" || gender == "Female")
 }
 
 func TestGender(t *testing.T) {
 	p := New().Person()
 	gender := p.Gender()
 	Expect(t, true, gender == "Male" || gender == "Female")
+}
+
+func TestGenderMale(t *testing.T) {
+	p := New().Person()
+	Expect(t, "Male", p.GenderMale())
+}
+
+func TestGenderFemale(t *testing.T) {
+	p := New().Person()
+	Expect(t, "Female", p.GenderFemale())
 }
 
 func TestNameAndGender(t *testing.T) {
