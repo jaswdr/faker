@@ -1,6 +1,7 @@
 package faker
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -99,6 +100,8 @@ var (
 		"Zboncak", "Zemlak", "Ziemann", "Zieme", "Zulauf"}
 
 	suffix = []string{"Jr.", "Sr.", "I", "II", "III", "IV", "V", "MD", "DDS", "PhD", "DVM"}
+
+	gender = []string{"Male", "Female"}
 )
 
 // Person is a faker struct for Person
@@ -119,6 +122,16 @@ func (p Person) TitleMale() string {
 // TitleFemale returns a fake female title for Person
 func (p Person) TitleFemale() string {
 	return "Ms."
+}
+
+// GenderMale returns a fake GenderMale for Person
+func (p Person) GenderMale() string {
+	return "Male"
+}
+
+// GenderFemale returns a fake GenderFemale for Person
+func (p Person) GenderFemale() string {
+	return "Female"
 }
 
 // Title returns a fake title for Person
@@ -190,4 +203,28 @@ func (p Person) Name() string {
 	}
 
 	return name
+}
+
+// NameMale returns a fake NameMale for Person
+func (p Person) NameMale() string {
+	return fmt.Sprintf("%s %s", p.FirstNameMale(), p.LastName())
+}
+
+// NameFemale returns a fake NameFemale for Person
+func (p Person) NameFemale() string {
+	return fmt.Sprintf("%s %s", p.FirstNameFemale(), p.LastName())
+}
+
+// Gender returns a fake Gender for Person
+func (p Person) Gender() string {
+	return p.Faker.RandomStringElement(gender)
+}
+
+// NameAndGender returns a fake NameAndGender for Person
+func (p Person) NameAndGender() (string, string) {
+	if p.Faker.Boolean().Bool() {
+		return p.NameMale(), p.GenderMale()
+	}
+
+	return p.NameFemale(), p.GenderFemale()
 }
