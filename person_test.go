@@ -69,3 +69,10 @@ func TestGender(t *testing.T) {
 	gender := p.Gender()
 	Expect(t, true, gender == "Male" || gender == "Female")
 }
+
+func TestNameAndGender(t *testing.T) {
+	p := New().Person()
+	name, gender := p.NameAndGender()
+	Expect(t, true, name != "")
+	Expect(t, true, gender == "Male" || gender == "Female")
+}
