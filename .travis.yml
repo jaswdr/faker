@@ -1,19 +1,30 @@
 language: go
-sudo: required
 dist: bionic
 go:
   - "1.11"
   - "1.12"
   - "1.13"
   - "1.14"
-  - tip
+  - "1.15"
+  - master
 os:
   - linux
   - osx
   - windows
-matrix:
+jobs:
   allow_failures:
-    - go: tip
+    - go: master
   fast_finish: true
+  include:
+    - stage: coverage_report
+      before_install:
+        - go get golang.org/x/tools/cmd/cover
+        - go get github.com/mattn/goveralls
+      after_success:
+        - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
+      go:
+        - "1.15"
+      os:
+        - linux
 script:
-  - go test -v -cover
+  - go test -v -covermode=count -coverprofile=coverage.out

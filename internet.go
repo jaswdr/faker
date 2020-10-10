@@ -245,7 +245,7 @@ func (i Internet) Query() string {
 	lorem := i.Faker.Lorem()
 	query := "?" + lorem.Word() + "=" + lorem.Word()
 	for j := 0; j < i.Faker.IntBetween(1, 3); j++ {
-		if i.Faker.Bool() {
+		if i.Faker.Boolean().Bool() {
 			query += "&" + lorem.Word() + "=" + lorem.Word()
 		} else {
 			query += "&" + lorem.Word() + "=" + strconv.Itoa(i.Faker.RandomDigitNotNull())
