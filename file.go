@@ -16,8 +16,8 @@ func (f File) Extension() string {
 	return f.Faker.RandomStringElement(extensions)
 }
 
-// FileWithExtension returns a fake file name with extension
-func (f File) FileWithExtension() string {
+// FilenameWithExtension returns a fake file name with extension
+func (f File) FilenameWithExtension() string {
 	extension := f.Faker.RandomStringElement(extensions)
 	text := f.Faker.Lorem().Word()
 

@@ -12,5 +12,5 @@ func TestExtension(t *testing.T) {
 
 func TestFileWithExtension(t *testing.T) {
 	p := New().File()
-	Expect(t, true, len(strings.Split(p.FileWithExtension(), ".")) == 2)
+	Expect(t, true, len(strings.Split(p.FilenameWithExtension(), ".")) == 2)
 }
