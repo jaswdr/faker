@@ -134,7 +134,7 @@ func (p Person) GenderFemale() string {
 
 // Title returns a fake title for Person
 func (p Person) Title() string {
-	if p.Faker.IntBetween(0, 1) == 0 {
+	if p.Faker.IntBetween(0, 2) == 0 {
 		return p.TitleMale()
 	}
 
@@ -168,7 +168,7 @@ func (p Person) LastName() string {
 // Name returns a fake name for Person
 func (p Person) Name() string {
 	formats := append(maleNameFormats, femaleNameFormats...)
-	name := formats[p.Faker.IntBetween(0, len(formats)-1)]
+	name := formats[p.Faker.IntBetween(0, len(formats))]
 
 	// {{titleMale}}
 	if strings.Contains(name, "{{titleMale}}") {
