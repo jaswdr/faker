@@ -73,6 +73,24 @@ for i:=0; i < 10; i++ {
 
 See more formatters in [docs](https://pkg.go.dev/github.com/jaswdr/faker?tab=doc)
 
+## Development
+
+Create a fork and get the code.
+
+```bash
+$ go get github.com/jaswdr/faker
+```
+
+Do your changes, add tests, run the tests.
+
+```bash
+$ go test
+PASS
+ok      github.com/jaswdr/faker 0.010s
+```
+
+Push to your fork and send a new pull request from your fork to this repository.
+
 ## License
 
 Faker is released under the MIT Licence. See the bundled LICENSE file for details.
