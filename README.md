@@ -1,4 +1,4 @@
-![](https://socialify.git.ci/jaswdr/faker/image?description=1&descriptionEditable=Ultimate%20fake%20data%20generator%20for%20Go%20with%20zero%20dependencies&font=Source%20Code%20Pro&language=1&owner=1&pattern=Signal&theme=Light)
+![faker](https://socialify.git.ci/jaswdr/faker/image?description=1&descriptionEditable=Ultimate%20fake%20data%20generator%20for%20Go%20with%20zero%20dependencies&font=Source%20Code%20Pro&language=1&owner=1&pattern=Signal&theme=Light)
 
 Faker is a Go library that generates fake data for you. Whether you need to bootstrap your database, create good-looking XML documents, fill-in your persistence to stress test it, or anonymize data taken from a production service, Faker is for you.
 
