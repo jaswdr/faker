@@ -74,6 +74,10 @@ for i:=0; i < 10; i++ {
 
 See more formatters in [docs](https://pkg.go.dev/github.com/jaswdr/faker?tab=doc)
 
+## Get involved
+
+Have a question? Use the [Discussions](https://github.com/jaswdr/faker/discussions) page.
+
 ## Development
 
 Create a fork and get the code.
