@@ -90,3 +90,10 @@ func TestSSN(t *testing.T) {
 	ssn := p.SSN()
 	Expect(t, 9, len(ssn))
 }
+
+func TestContact(t *testing.T) {
+	p := New().Person()
+	contact := p.Contact()
+	Expect(t, true, len(contact.Phone)>0)
+	Expect(t, true, len(contact.Email)>0)
+}
