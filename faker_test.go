@@ -94,6 +94,30 @@ func TestIntBetween(t *testing.T) {
 	Expect(t, true, value <= 100)
 }
 
+func TestIntBetweenCanGenerateFirstElementInFirst100GeneratedValues(t *testing.T) {
+	f := New()
+	foundZero := false
+	for i := 0; i < 100; i++ {
+		if f.IntBetween(0, 1) == 0 {
+			foundZero = true
+			break
+		}
+	}
+	Expect(t, true, foundZero)
+}
+
+func TestIntBetweenCanGenerateLastElementInFirst100GeneratedValues(t *testing.T) {
+	f := New()
+	foundOne := false
+	for i := 0; i < 100; i++ {
+		if f.IntBetween(0, 1) == 1 {
+			foundOne = true
+			break
+		}
+	}
+	Expect(t, true, foundOne)
+}
+
 func TestRandomFloat(t *testing.T) {
 	f := New()
 	value := f.RandomFloat(1, 1, 100)
