@@ -3,6 +3,7 @@ package faker
 import (
 	"fmt"
 	"strings"
+	"strconv"
 )
 
 var (
@@ -225,4 +226,9 @@ func (p Person) NameAndGender() (string, string) {
 	}
 
 	return p.NameFemale(), p.GenderFemale()
+}
+
+// SSN will generate a random Social Security Number
+func (p Person) SSN() string {
+	return strconv.Itoa(p.Faker.IntBetween(100000000, 999999999))
 }
