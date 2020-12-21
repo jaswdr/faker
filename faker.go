@@ -63,6 +63,27 @@ func (f Faker) RandomFloat(maxDecimals, min, max int) float64 {
 	return value
 }
 
+// Float returns a fake random float number for Faker
+func (f Faker) Float(maxDecimals, min, max int) float64 {
+	s := fmt.Sprintf("%d.%d", f.IntBetween(min, max-1), f.IntBetween(1, maxDecimals))
+	value, _ := strconv.ParseFloat(s, 10)
+	return value
+}
+
+// Float32 returns a fake random float64 number for Faker
+func (f Faker) Float32(maxDecimals, min, max int) float32 {
+	s := fmt.Sprintf("%d.%d", f.IntBetween(min, max-1), f.IntBetween(1, maxDecimals))
+	value, _ := strconv.ParseFloat(s, 10)
+	return float32(value)
+}
+
+// Float64 returns a fake random float64 number for Faker
+func (f Faker) Float64(maxDecimals, min, max int) float64 {
+	s := fmt.Sprintf("%d.%d", f.IntBetween(min, max-1), f.IntBetween(1, maxDecimals))
+	value, _ := strconv.ParseFloat(s, 10)
+	return float64(value)
+}
+
 // Int returns a fake Int number for Faker
 func (f Faker) Int() int {
 	maxU := ^uint(0) >> 1
@@ -71,14 +92,51 @@ func (f Faker) Int() int {
 	return f.IntBetween(min, max)
 }
 
-// Int64 returns a fake Int64 number for Faker
-func (f Faker) Int64() int64 {
-	return int64(f.Int())
+// Int8 returns a fake Int8 number for Faker
+func (f Faker) Int8() int8 {
+	return int8(f.Int())
+}
+
+// Int16 returns a fake Int16 number for Faker
+func (f Faker) Int16() int16 {
+	return int16(f.Int())
 }
 
 // Int32 returns a fake Int32 number for Faker
 func (f Faker) Int32() int32 {
 	return int32(f.Int())
+}
+
+// Int64 returns a fake Int64 number for Faker
+func (f Faker) Int64() int64 {
+	return int64(f.Int())
+}
+
+// UInt returns a fake UInt number for Faker
+func (f Faker) UInt() uint {
+	maxU := ^uint(0) >> 1
+	max := int(maxU)
+	return uint(f.IntBetween(0, max))
+}
+
+// UInt8 returns a fake UInt8 number for Faker
+func (f Faker) UInt8() uint8 {
+	return uint8(f.Int())
+}
+
+// UInt16 returns a fake UInt16 number for Faker
+func (f Faker) UInt16() uint16 {
+	return uint16(f.Int())
+}
+
+// UInt32 returns a fake UInt32 number for Faker
+func (f Faker) UInt32() uint32 {
+	return uint32(f.Int())
+}
+
+// UInt64 returns a fake UInt64 number for Faker
+func (f Faker) UInt64() uint64 {
+	return uint64(f.Int())
 }
 
 // IntBetween returns a fake Int between a given minimum and maximum values for Faker
@@ -89,7 +147,7 @@ func (f Faker) IntBetween(min, max int) int {
 		return min
 	}
 
-	return rand.Intn(diff + 1) + min
+	return rand.Intn(diff+1) + min
 }
 
 // Int64Between returns a fake Int64 between a given minimum and maximum values for Faker
@@ -270,6 +328,11 @@ func (f Faker) File() File {
 // YouTube returns a fake YouTube instance for Faker
 func (f Faker) YouTube() YouTube {
 	return YouTube{&f}
+}
+
+// Struct returns a fake Struct instance for Faker
+func (f Faker) Struct() Struct {
+	return Struct{&f}
 }
 
 // New returns a new instance of Faker instance with a random seed

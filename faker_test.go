@@ -22,6 +22,20 @@ func Expect(t *testing.T, expected, got interface{}, values ...interface{}) {
 	}
 }
 
+func NotExpect(t *testing.T, notExpected, got interface{}, values ...interface{}) {
+	t.Helper()
+	if notExpected == got {
+		t.Errorf("\nNot Expecting: (%T) '%v', but it was", notExpected, notExpected)
+		if len(values) > 0 {
+			for _, v := range values {
+				t.Errorf("\n%+v", v)
+			}
+		}
+
+		t.FailNow()
+	}
+}
+
 func F(t *testing.T) Faker {
 	return NewWithSeed(rand.NewSource(0))
 }
