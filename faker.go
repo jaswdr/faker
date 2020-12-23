@@ -429,6 +429,11 @@ func (f Faker) Pet() Pet {
 	return Pet{&f}
 }
 
+// Emoji returns a fake Emoji instance for Faker
+func (f Faker) Emoji() Emoji {
+	return Emoji{&f}
+}
+
 // New returns a new instance of Faker instance with a random seed
 func New() (f Faker) {
 	seed := rand.NewSource(time.Now().Unix())
