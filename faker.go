@@ -414,6 +414,11 @@ func (f Faker) Car() Car {
 	return Car{&f}
 }
 
+// Food returns a fake Food instance for Faker
+func (f Faker) Food() Food {
+	return Food{&f}
+}
+
 // New returns a new instance of Faker instance with a random seed
 func New() (f Faker) {
 	seed := rand.NewSource(time.Now().Unix())
