@@ -230,3 +230,9 @@ func TestBoolWithChance(t *testing.T) {
 	Expect(t, true, f.BoolWithChance(101))
 	Expect(t, false, f.BoolWithChance(-1))
 }
+
+func TestMap(t *testing.T) {
+	f := New()
+	mp := f.Map()
+	Expect(t, true, len(mp) > 0)
+}

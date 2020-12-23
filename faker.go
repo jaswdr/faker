@@ -255,6 +255,65 @@ func (f Faker) Boolean() Boolean {
 	return Boolean{&f}
 }
 
+// Map returns a fake Map instance for Faker
+func (f Faker) Map() map[string]interface{} {
+	m := map[string]interface{}{}
+	lorem := f.Lorem()
+
+	randWordType := func() string {
+		s := f.RandomStringElement([]string{"lorem", "bs", "job", "name", "address"})
+		switch s {
+		case "bs":
+			return f.Company().BS()
+		case "job":
+			return f.Company().JobTitle()
+		case "name":
+			return f.Person().Name()
+		case "address":
+			return f.Address().Address()
+		}
+		return lorem.Word()
+	}
+
+	randSlice := func() []string {
+		var sl []string
+		for ii := 0; ii < f.IntBetween(3, 10); ii++ {
+			sl = append(sl, lorem.Word())
+		}
+		return sl
+	}
+
+	for i := 0; i < f.IntBetween(3, 10); i++ {
+		t := f.RandomStringElement([]string{"string", "int", "float", "slice", "map"})
+		switch t {
+		case "string":
+			m[lorem.Word()] = randWordType()
+		case "int":
+			m[lorem.Word()] = f.IntBetween(1, 10000000)
+		case "float":
+			m[lorem.Word()] = f.Float64(f.IntBetween(1, 4), 1, 1000000)
+		case "slice":
+			m[lorem.Word()] = randSlice()
+		case "map":
+			mm := map[string]interface{}{}
+			tt := f.RandomStringElement([]string{"string", "int", "float", "slice"})
+			switch tt {
+			case "string":
+				mm[lorem.Word()] = randWordType()
+			case "int":
+				mm[lorem.Word()] = f.IntBetween(1, 10000000)
+			case "float":
+				mm[lorem.Word()] = f.Float64(f.IntBetween(1, 4), 1, 1000000)
+			case "slice":
+				mm[lorem.Word()] = randSlice()
+			}
+			m[lorem.Word()] = mm
+		}
+	}
+
+	return m
+}
+
 // Lorem returns a fake Lorem instance for Faker
 func (f Faker) Lorem() Lorem {
 	return Lorem{&f}
