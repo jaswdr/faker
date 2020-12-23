@@ -2,6 +2,7 @@ package faker
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -105,6 +106,12 @@ var (
 // Person is a faker struct for Person
 type Person struct {
 	Faker *Faker
+}
+
+// ContactInfo struct full of contact info
+type ContactInfo struct {
+	Phone string
+	Email string
 }
 
 // Suffix returns a fake suffix for Person
@@ -225,4 +232,17 @@ func (p Person) NameAndGender() (string, string) {
 	}
 
 	return p.NameFemale(), p.GenderFemale()
+}
+
+// SSN will generate a random Social Security Number
+func (p Person) SSN() string {
+	return strconv.Itoa(p.Faker.IntBetween(100000000, 999999999))
+}
+
+// Contact will generate a struct with information randomly populated contact information
+func (p Person) Contact() ContactInfo {
+	return ContactInfo{
+		Phone: p.Faker.Phone().Number(),
+		Email: p.Faker.Internet().Email(),
+	}
 }

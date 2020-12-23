@@ -132,3 +132,21 @@ func TestQuery(t *testing.T) {
 	query := i.Query()
 	Expect(t, 0, strings.Index(query, "?"))
 }
+
+func TestStatusCode(t *testing.T) {
+	i := New().Internet()
+
+	NotExpect(t, 0, i.StatusCode())
+}
+
+func TestStatusCodeMessage(t *testing.T) {
+	i := New().Internet()
+
+	NotExpect(t, "", i.StatusCodeMessage())
+}
+
+func TestStatusCodeWithMessage(t *testing.T) {
+	i := New().Internet()
+
+	NotExpect(t, "", i.StatusCodeWithMessage())
+}
