@@ -399,6 +399,11 @@ func (f Faker) Gamer() Gamer {
 	return Gamer{&f}
 }
 
+// Language returns a fake Language instance for Faker
+func (f Faker) Language() Language {
+	return Language{&f}
+}
+
 // New returns a new instance of Faker instance with a random seed
 func New() (f Faker) {
 	seed := rand.NewSource(time.Now().Unix())
