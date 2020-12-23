@@ -394,6 +394,11 @@ func (f Faker) Struct() Struct {
 	return Struct{&f}
 }
 
+// Gamer returns a fake Gamer instance for Faker
+func (f Faker) Gamer() Gamer {
+	return Gamer{&f}
+}
+
 // New returns a new instance of Faker instance with a random seed
 func New() (f Faker) {
 	seed := rand.NewSource(time.Now().Unix())
