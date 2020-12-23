@@ -424,6 +424,11 @@ func (f Faker) App() App {
 	return App{&f}
 }
 
+// Pet returns a fake Pet instance for Faker
+func (f Faker) Pet() Pet {
+	return Pet{&f}
+}
+
 // New returns a new instance of Faker instance with a random seed
 func New() (f Faker) {
 	seed := rand.NewSource(time.Now().Unix())
