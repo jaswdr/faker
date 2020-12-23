@@ -2,8 +2,8 @@ package faker
 
 import (
 	"fmt"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 var (

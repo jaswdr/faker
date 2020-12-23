@@ -94,6 +94,6 @@ func TestSSN(t *testing.T) {
 func TestContact(t *testing.T) {
 	p := New().Person()
 	contact := p.Contact()
-	Expect(t, true, len(contact.Phone)>0)
-	Expect(t, true, len(contact.Email)>0)
+	Expect(t, true, len(contact.Phone) > 0)
+	Expect(t, true, len(contact.Email) > 0)
 }
