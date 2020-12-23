@@ -8,16 +8,16 @@ Faker requires Go >= 1.11
 
 <a href="https://www.buymeacoffee.com/jaswdr" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 11px !important;width: 104px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ba14f84a3f824410be0a6f6670de012a)](https://app.codacy.com/gh/jaswdr/faker?utm_source=github.com&utm_medium=referral&utm_content=jaswdr/faker&utm_campaign=Badge_Grade)
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/jaswdr/faker)](https://pkg.go.dev/github.com/jaswdr/faker)
 [![Build Status](https://travis-ci.org/jaswdr/faker.svg?branch=master)](https://travis-ci.org/jaswdr/faker)
 [![Coverage Status](https://coveralls.io/repos/github/jaswdr/faker/badge.svg?branch=master)](https://coveralls.io/github/jaswdr/faker?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/jaswdr/faker)](https://goreportcard.com/report/github.com/jaswdr/faker)
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/jaswdr/faker)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ba14f84a3f824410be0a6f6670de012a)](https://app.codacy.com/gh/jaswdr/faker?utm_source=github.com&utm_medium=referral&utm_content=jaswdr/faker&utm_campaign=Badge_Grade)
 
 ## Test it in Go Playground
 
-Start at https://play.golang.org/p/AQlqXf-Wi5o
+Start at https://play.golang.org/p/JpTagDGBaHK
 
 ## Installation
 
@@ -71,6 +71,23 @@ for i:=0; i < 10; i++ {
   // Keegan Thiel
   // Wellington Koelpin II
   // Ms. Karley Kiehn V
+```
+
+Generate fake data using Structs
+
+```go
+type ExampleStruct struct {
+	SimpleStringField string
+	SimpleNumber int
+	SimpleBool bool
+	SomeFormatedString string `fake:"??? ###"`
+	SomeStringArray [5]string `fake:"????"`
+}
+
+example := ExampleStruct{}
+f.Struct().Fill(&example)
+fmt.Printf("%+v", example)
+//{SimpleStringField:87576a01c2a547b2bbf9b7c736d1db40 SimpleNumber:9223372036854775807 SimpleBool:false SomeFormatedString:cxo 321 SomeStringArray:[effr swxp ldnj obcs nvlg]}
 ```
 
 See more formatters in [docs](https://pkg.go.dev/github.com/jaswdr/faker?tab=doc)
