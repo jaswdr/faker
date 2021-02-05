@@ -147,7 +147,7 @@ func (f Faker) IntBetween(min, max int) int {
 		return min
 	}
 
-	return rand.Intn(diff+1) + min
+	return f.Generator.Intn(diff+1) + min
 }
 
 // Int64Between returns a fake Int64 between a given minimum and maximum values for Faker
