@@ -11,11 +11,11 @@ type LoremFlickr struct {
 	faker *Faker
 }
 
-func (lf LoremFlickr) Image(width, height int, categories []string, prefix string, categoriesStrict bool) *os.File {
+func (lf LoremFlickr) Image(width, height int, categories []*string, prefix *string, categoriesStrict *bool) *os.File {
 
 	url := BASE_URL
 
-	switch prefix {
+	switch *prefix {
 	case "g":
 		url += "/g"
 	case "p":
@@ -35,10 +35,10 @@ func (lf LoremFlickr) Image(width, height int, categories []string, prefix strin
 		url += string('/')
 
 		for _, category := range categories {
-			url += category + string(',')
+			url += *category + string(',')
 		}
 
-		if categoriesStrict {
+		if *categoriesStrict {
 			url += "/all"
 		}
 	}
