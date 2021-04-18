@@ -1,6 +1,9 @@
 package faker
 
 import (
+	"io"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -12,11 +15,11 @@ type LoremFlickr struct {
 	faker *Faker
 }
 
-func (lf LoremFlickr) Image(width, height int, categories []*string, prefix *string, categoriesStrict *bool) *os.File {
+func (lf LoremFlickr) Image(width, height int, categories []string, prefix string, categoriesStrict bool) *os.File {
 
 	url := BASE_URL
 
-	switch *prefix {
+	switch prefix {
 	case "g":
 		url += "/g"
 	case "p":
@@ -36,15 +39,26 @@ func (lf LoremFlickr) Image(width, height int, categories []*string, prefix *str
 		url += string('/')
 
 		for _, category := range categories {
-			url += *category + string(',')
+			url += category + string(',')
 		}
 
-		if *categoriesStrict {
+		if categoriesStrict {
 			url += "/all"
 		}
 	}
 
-	http.Get(url)
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Println("Error while requesting", url, ":", err)
+	}
+	defer resp.Body.Close()
 
-	return &os.File{}
+	f, err := ioutil.TempFile(os.TempDir(), "loremflickr-img-*.jpg")
+	if err != nil {
+		panic(err)
+	}
+
+	io.Copy(f, resp.Body)
+
+	return f
 }
