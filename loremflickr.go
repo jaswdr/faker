@@ -3,6 +3,7 @@ package faker
 import (
 	"net/http"
 	"os"
+	"strconv"
 )
 
 const BASE_URL = "https://loremflickr.com"
@@ -28,7 +29,7 @@ func (lf LoremFlickr) Image(width, height int, categories []*string, prefix *str
 		url += "/blue"
 	}
 
-	url += string('/') + string(width) + string('/') + string(height)
+	url += string('/') + strconv.Itoa(width) + string('/') + strconv.Itoa(height)
 
 	if len(categories) > 0 {
 
