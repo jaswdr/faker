@@ -438,6 +438,10 @@ func (f Faker) LoremFlickr() LoremFlickr {
 	return LoremFlickr{&f}
 }
 
+func (f Faker) ProfilPicture() ProfilPicture {
+	return ProfilPicture{&f}
+}
+
 // New returns a new instance of Faker instance with a random seed
 func New() (f Faker) {
 	seed := rand.NewSource(time.Now().Unix())
