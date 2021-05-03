@@ -271,6 +271,6 @@ func (i Internet) StatusCodeMessage() string {
 
 // StatusCodeWithMessage returns a fake status code with message for Internet
 func (i Internet) StatusCodeWithMessage() string {
-	index := i.Faker.IntBetween(0, len(statusCodes))
+	index := i.Faker.IntBetween(0, len(statusCodes)-1)
 	return statusCodes[index] + " " + statusCodeMessages[index]
 }
