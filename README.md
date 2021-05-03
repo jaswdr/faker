@@ -74,6 +74,18 @@ for i:=0; i < 10; i++ {
   // Ms. Karley Kiehn V
 ```
 
+You can also generate a profile image.
+
+```go
+image := p.Image()
+
+fmt.Println(image.Name())
+// /tmp/profil-picture-img-1064677774.jfif
+
+fmt.Printf("%+v", image)
+// &{file:0xc0002e4300}
+```
+
 Generate fake data using Structs
 
 ```go
@@ -89,6 +101,25 @@ example := ExampleStruct{}
 f.Struct().Fill(&example)
 fmt.Printf("%+v", example)
 //{SimpleStringField:87576a01c2a547b2bbf9b7c736d1db40 SimpleNumber:9223372036854775807 SimpleBool:false SomeFormatedString:cxo 321 SomeStringArray:[effr swxp ldnj obcs nvlg]}
+```
+
+Generate random placeholder images using [LoremFlickr](https://loremflickr.com/)
+
+```go
+// get a *os.File pointing to a file that is a random image
+image := f.LoremFlickr().Image(100, 100, []string{}, "", false)
+
+fmt.Println(image.Name())
+// /tmp/loremflickr-img-4101493944.jpg
+```
+
+Generate profile images using [ThisPersonDoesNotExist](https://thispersondoesnotexist.com/)
+
+```go
+profileImage := f.ProfileImage().Image()
+
+fmt.Println(profileImage.Name())
+// /tmp/profil-picture-img-4022222298.jfif
 ```
 
 See more formatters in [docs](https://pkg.go.dev/github.com/jaswdr/faker?tab=doc)
