@@ -46,7 +46,7 @@ func main() {
     faker.Address().Address()
     // 426 Jordy Lodge
 
-    faker.Lorem().Text()
+    faker.Lorem().Text(100)
     // Dolores sit sint laboriosam dolorem culpa et autem. Beatae nam sunt fugit
     // et sit et mollitia sed.
     // Fuga deserunt tempora facere magni omnis. Omnis quia temporibus laudantium
