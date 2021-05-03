@@ -2,6 +2,7 @@ package faker
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -245,4 +246,9 @@ func (p Person) Contact() ContactInfo {
 		Phone: p.Faker.Phone().Number(),
 		Email: p.Faker.Internet().Email(),
 	}
+}
+
+// Image return the person profile image
+func (p Person) Image() *os.File {
+	return p.Faker.ProfileImage().Image()
 }

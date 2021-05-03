@@ -1,6 +1,7 @@
 package faker
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -96,4 +97,11 @@ func TestContact(t *testing.T) {
 	contact := p.Contact()
 	Expect(t, true, len(contact.Phone) > 0)
 	Expect(t, true, len(contact.Email) > 0)
+}
+
+func TestPersonImage(t *testing.T) {
+	p := New().Person()
+	image := p.Image()
+	Expect(t, fmt.Sprintf("%T", image), "*os.File")
+	Expect(t, strings.HasSuffix(image.Name(), ".jfif"), true, image.Name())
 }

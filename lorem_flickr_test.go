@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestImageLorem(t *testing.T) {
+func TestLoremFlickrImage(t *testing.T) {
 	f := New()
 	value := f.LoremFlickr().Image(300, 200, []string{}, "", false)
 	Expect(t, fmt.Sprintf("%T", value), "*os.File")
