@@ -86,9 +86,8 @@ func (f Faker) Float64(maxDecimals, min, max int) float64 {
 
 // Int returns a fake Int number for Faker
 func (f Faker) Int() int {
-	maxU := ^uint(0) >> 1
-	max := int(maxU)
-	min := -max - 2
+	max := int(^uint(0)>>1) - 1
+	min := 0
 	return f.IntBetween(min, max)
 }
 
@@ -438,8 +437,9 @@ func (f Faker) LoremFlickr() LoremFlickr {
 	return LoremFlickr{&f}
 }
 
-func (f Faker) ProfilPicture() ProfilPicture {
-	return ProfilPicture{&f}
+// ProfileImage returns a fake ProfileImage instance for Faker
+func (f Faker) ProfileImage() ProfileImage {
+	return ProfileImage{&f}
 }
 
 // New returns a new instance of Faker instance with a random seed
