@@ -16,6 +16,6 @@ $ go version
 **Go Tests**
 
 ```
-$ go test -v
+$ go test
 # replace this line with the output
 ```
