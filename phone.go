@@ -112,5 +112,9 @@ func (p Phone) ToolFreeNumber() string {
 
 // E164Number returns a fake E164 phone number for Phone
 func (p Phone) E164Number() string {
-	return p.Faker.Numerify("+###########")
+	// Excluding 0 since it cannot be any country code in E164
+	firstDigit := p.Faker.IntBetween(1, 9)
+	randomDigits := p.Faker.Numerify("##########")
+
+	return fmt.Sprintf("+%d%s", firstDigit, randomDigits)
 }
