@@ -4,11 +4,10 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
-	"net/http"
 	"os"
 )
 
-const PROFILE_IMAGE_BASE_URL = "https://thispersondoesnotexist.com/image"
+const profile_image_base_url = "https://thispersondoesnotexist.com/image"
 
 // ProfileImage  is a faker struct for ProfileImage
 type ProfileImage struct {
@@ -17,12 +16,12 @@ type ProfileImage struct {
 
 // Image generates a *os.File with a random profile image using the thispersondoesnotexist.com service
 func (pi ProfileImage) Image() *os.File {
-	resp, err := http.Get(PROFILE_IMAGE_BASE_URL)
-	if err != nil {
-		log.Println("Error while requesting", PROFILE_IMAGE_BASE_URL, ":", err)
-	}
-
+	resp, err := get(profile_image_base_url)
 	defer resp.Body.Close()
+
+	if err != nil {
+		log.Println("Error while requesting", profile_image_base_url, ":", err)
+	}
 
 	f, err := ioutil.TempFile(os.TempDir(), "profil-picture-img-*.jfif")
 	if err != nil {
