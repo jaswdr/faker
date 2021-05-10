@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-const loremFlickrBaseUrl = "https://loremflickr.com"
+const loremFlickrBaseURL = "https://loremflickr.com"
 
 // LoremFlickr is a faker struct for LoremFlickr
 type LoremFlickr struct {
@@ -18,7 +18,7 @@ type LoremFlickr struct {
 // Image generates a *os.File with a random image using the loremflickr.com service
 func (lf LoremFlickr) Image(width, height int, categories []string, prefix string, categoriesStrict bool) *os.File {
 
-	url := loremFlickrBaseUrl
+	url := loremFlickrBaseURL
 
 	switch prefix {
 	case "g":
