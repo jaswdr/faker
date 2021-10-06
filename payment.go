@@ -23,7 +23,7 @@ func (p Payment) CreditCardType() string {
 
 // CreditCardNumber returns a fake credit card number for Payment
 func (p Payment) CreditCardNumber() string {
-	return strconv.Itoa(p.Faker.IntBetween(1000000000000000, 9999999999999999))
+	return p.Faker.Numerify("################")
 }
 
 // CreditCardExpirationDateString returns a fake credit card expiration date in string format for Payment
