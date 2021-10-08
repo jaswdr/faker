@@ -59,6 +59,7 @@ func TestCompanyEmail(t *testing.T) {
 	split := strings.Split(email, "@")
 
 	Expect(t, 2, len(split))
+	Expect(t, false, strings.Contains(email, " "))
 }
 
 func TestPassword(t *testing.T) {
