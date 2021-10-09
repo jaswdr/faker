@@ -120,7 +120,7 @@ func (i Internet) CompanyEmail() string {
 
 	companyName := c.Name()
 	companyName = strings.ToLower(companyName)
-	companyName = strings.Replace(companyName, " ", ".", 0)
+	companyName = strings.Replace(companyName, " ", ".", -1)
 
 	domain := strings.Join([]string{companyName, i.Domain()}, ".")
 
