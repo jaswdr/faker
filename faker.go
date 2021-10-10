@@ -175,6 +175,28 @@ func (f Faker) RandomStringElement(s []string) string {
 	return s[i]
 }
 
+// RandomStringMapKey returns a fake random string key from a given map[string]string for Faker
+func (f Faker) RandomStringMapKey (m map[string]string) string {
+    keys := make([]string, 0, len(m))
+    for k := range m {
+        keys = append(keys, k)
+    }
+
+	i := f.IntBetween(0, len(keys)-1)
+	return keys[i]
+}
+
+// RandomStringMapValue returns a fake random string value from a given map[string]string for Faker
+func (f Faker) RandomStringMapValue (m map[string]string) string {
+    values := make([]string, 0, len(m))
+    for k := range m {
+        values = append(values, m[k])
+    }
+
+	i := f.IntBetween(0, len(values)-1)
+	return values[i]
+}
+
 // RandomIntElement returns a fake random int element form a given list of ints for Faker
 func (f Faker) RandomIntElement(a []int) int {
 	i := f.IntBetween(0, len(a)-1)
@@ -441,6 +463,16 @@ func (f Faker) LoremFlickr() LoremFlickr {
 // ProfileImage returns a fake ProfileImage instance for Faker
 func (f Faker) ProfileImage() ProfileImage {
 	return ProfileImage{&f}
+}
+
+// Genre returns a fake Genre instance for Faker
+func (f Faker) Genre() Genre {
+	return Genre{&f}
+}
+
+// Gender returns a fake Gender instance for Faker
+func (f Faker) Gender() Gender {
+	return Gender{&f}
 }
 
 // New returns a new instance of Faker instance with a random seed
