@@ -5,8 +5,8 @@ type BinaryString struct {
 	faker *Faker
 }
 
-// BinaryStringOfLength returns a random binarystring of given input length
-func (bn BinaryString) BinaryStringOfLength(length int) string {
+// BinaryString returns a random binarystring of given input length
+func (bn BinaryString) BinaryString(length int) string {
 	var bs string
 	for i := 0; i < length; i++ {
 		bs += bn.faker.RandomStringElement([]string{"0", "1"})
