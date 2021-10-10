@@ -236,3 +236,17 @@ func TestMap(t *testing.T) {
 	mp := f.Map()
 	Expect(t, true, len(mp) > 0)
 }
+
+func TestRandomStringMapKey(t *testing.T) {
+	f := New()
+    m := map[string]string{"k0": "v0", "k1": "v1"}
+    key := f.RandomStringMapKey(m)
+	Expect(t, true, key == "k0" || key == "k1")
+}
+
+func TestRandomStringMapValue (t *testing.T) {
+	f := New()
+    m := map[string]string{"k0": "v0", "k1": "v1"}
+    key := f.RandomStringMapValue(m)
+	Expect(t, true, key == "v0" || key == "v1")
+}
