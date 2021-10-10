@@ -465,6 +465,11 @@ func (f Faker) ProfileImage() ProfileImage {
 	return ProfileImage{&f}
 }
 
+// Genre returns a fake Genre instance for Faker
+func (f Faker) Genre() Genre {
+	return Genre{&f}
+}
+
 // New returns a new instance of Faker instance with a random seed
 func New() (f Faker) {
 	seed := rand.NewSource(time.Now().Unix())
