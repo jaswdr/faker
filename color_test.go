@@ -17,7 +17,7 @@ func TestRGB(t *testing.T) {
 	c := New().Color()
 
 	color := c.RGB()
-	Expect(t, true, len(color) > 6)
+	Expect(t, true, len(color) >= 5)
 	Expect(t, true, len(color) <= 11)
 	Expect(t, true, strings.Contains(color, ","))
 }
