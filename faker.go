@@ -176,22 +176,22 @@ func (f Faker) RandomStringElement(s []string) string {
 }
 
 // RandomStringMapKey returns a fake random string key from a given map[string]string for Faker
-func (f Faker) RandomStringMapKey (m map[string]string) string {
-    keys := make([]string, 0, len(m))
-    for k := range m {
-        keys = append(keys, k)
-    }
+func (f Faker) RandomStringMapKey(m map[string]string) string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
 
 	i := f.IntBetween(0, len(keys)-1)
 	return keys[i]
 }
 
 // RandomStringMapValue returns a fake random string value from a given map[string]string for Faker
-func (f Faker) RandomStringMapValue (m map[string]string) string {
-    values := make([]string, 0, len(m))
-    for k := range m {
-        values = append(values, m[k])
-    }
+func (f Faker) RandomStringMapValue(m map[string]string) string {
+	values := make([]string, 0, len(m))
+	for k := range m {
+		values = append(values, m[k])
+	}
 
 	i := f.IntBetween(0, len(values)-1)
 	return values[i]
@@ -473,6 +473,11 @@ func (f Faker) Genre() Genre {
 // Gender returns a fake Gender instance for Faker
 func (f Faker) Gender() Gender {
 	return Gender{&f}
+}
+
+// BinaryString returns a fake BinaryString instance for Faker
+func (f Faker) BinaryString() BinaryString {
+	return BinaryString{&f}
 }
 
 // New returns a new instance of Faker instance with a random seed
