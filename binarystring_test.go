@@ -5,10 +5,10 @@ import (
 )
 
 //check if given string is binary or not
-func CheckIfBinaryString(binary_string string) bool {
+func CheckIfBinaryString(str string) bool {
 
-	for i := 0; i < len(binary_string); i++ {
-		if binary_string[i] != '1' && binary_string[i] != '0' {
+	for i := 0; i < len(str); i++ {
+		if str[i] != '1' && str[i] != '0' {
 			return false
 		}
 	}
@@ -18,9 +18,9 @@ func CheckIfBinaryString(binary_string string) bool {
 //tests BinaryStringOfLength()
 func TestBinaryStringOfLength(t *testing.T) {
 	f := New().BinaryString()
-	input_length := 11
-	binary_string := f.BinaryStringOfLength(input_length)
+	inputLength := 11
+	str := f.BinaryStringOfLength(inputLength)
 
-	Expect(t, len(binary_string), input_length)
-	Expect(t, CheckIfBinaryString(binary_string), true)
+	Expect(t, len(str), inputLength)
+	Expect(t, CheckIfBinaryString(str), true)
 }
