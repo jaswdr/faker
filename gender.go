@@ -10,7 +10,7 @@ func (f Gender) Name() string {
 	return f.Faker.RandomStringElement([]string{"masculine", "feminine"})
 }
 
-// Name returns a Gender name for Gender
+// Abbr returns a Gender name for Gender
 func (f Gender) Abbr() string {
 	return f.Faker.RandomStringElement([]string{"masc", "fem"})
 }
