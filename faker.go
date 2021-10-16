@@ -480,6 +480,10 @@ func (f Faker) BinaryString() BinaryString {
 	return BinaryString{&f}
 }
 
+func (f Faker) Hash() Hash {
+	return Hash{&f}
+}
+
 // New returns a new instance of Faker instance with a random seed
 func New() (f Faker) {
 	seed := rand.NewSource(time.Now().Unix())
