@@ -1,6 +1,6 @@
 package faker
 
-//BinaryString is the faker struct for BinaryStrict
+//BinaryString is the faker struct for BinaryString
 type BinaryString struct {
 	faker *Faker
 }
