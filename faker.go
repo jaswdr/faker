@@ -483,6 +483,7 @@ func (f Faker) BinaryString() BinaryString {
 // Hash returns a fake Hash instance for Faker
 func (f Faker) Hash() Hash {
 	return Hash{&f}
+}
 
 // Music returns a fake Music instance for Faker
 func (f Faker) Music() Music {
