@@ -10,7 +10,7 @@ func TestBinaryString(t *testing.T) {
 	inputLength := 11
 	str := f.BinaryString(inputLength)
 
-	Expect(t, len(str), inputLength)
+	Expect(t, inputLength, len(str))
 
 	isStringValid := true
 	for i := 0; i < len(str); i++ {
@@ -19,5 +19,5 @@ func TestBinaryString(t *testing.T) {
 			break
 		}
 	}
-	Expect(t, isStringValid, true)
+	Expect(t, true, isStringValid)
 }
