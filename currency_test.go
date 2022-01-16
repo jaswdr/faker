@@ -26,7 +26,7 @@ func TestCurrencyCountry(t *testing.T) {
 
 func TestCurrencyAndCode(t *testing.T) {
 	c := New().Currency()
-    currency, code := c.CurrencyAndCode()
+	currency, code := c.CurrencyAndCode()
 	NotExpect(t, "", currency)
 	NotExpect(t, "", code)
 }
