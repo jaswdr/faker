@@ -27,7 +27,7 @@ func (c Currency) Code() string {
 	return c.Faker.RandomStringElement(currenciesCodes)
 }
 
-// Code returns a random currency number
+// Number returns a random currency number
 func (c Currency) Number() int {
 	return c.Faker.RandomIntElement(currenciesNumbers)
 }
