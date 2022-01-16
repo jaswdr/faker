@@ -127,6 +127,6 @@ func (f Genre) Name() string {
 
 // NameWithDescription returns a name and description for Genre
 func (f Genre) NameWithDescription() (string, string) {
-    key := f.Faker.RandomStringMapKey(genres)
-    return key, genres[key]
+	key := f.Faker.RandomStringMapKey(genres)
+	return key, genres[key]
 }
