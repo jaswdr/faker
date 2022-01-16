@@ -490,6 +490,11 @@ func (f Faker) Music() Music {
 	return Music{&f}
 }
 
+// Currency returns a fake Currency instance for Faker
+func (f Faker) Currency() Currency {
+	return Currency{&f}
+}
+
 // New returns a new instance of Faker instance with a random seed
 func New() (f Faker) {
 	seed := rand.NewSource(time.Now().Unix())
