@@ -2,6 +2,7 @@ package faker
 
 import (
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -39,6 +40,13 @@ type Internet struct {
 	Faker *Faker
 }
 
+func (i Internet) transformIntoValidEmailName(name string) string {
+	name = strings.ToLower(name)
+	onlyValidCharacters := regexp.MustCompile(`[^a-z0-9._%+\-]+`)
+	name = onlyValidCharacters.ReplaceAllString(name, "_")
+	return name
+}
+
 // User returns a fake user for Internet
 func (i Internet) User() string {
 	user := i.Faker.RandomStringElement(userFormats)
@@ -47,12 +55,12 @@ func (i Internet) User() string {
 
 	// {{firstName}}
 	if strings.Contains(user, "{{firstName}}") {
-		user = strings.Replace(user, "{{firstName}}", strings.ToLower(p.FirstName()), 1)
+		user = strings.Replace(user, "{{firstName}}", i.transformIntoValidEmailName(p.FirstName()), 1)
 	}
 
 	// {{lastName}}
 	if strings.Contains(user, "{{lastName}}") {
-		user = strings.Replace(user, "{{lastName}}", strings.ToLower(p.LastName()), 1)
+		user = strings.Replace(user, "{{lastName}}", i.transformIntoValidEmailName(p.LastName()), 1)
 	}
 
 	return user
@@ -86,7 +94,7 @@ func (i Internet) Email() string {
 
 	// {{user}}
 	if strings.Contains(email, "{{user}}") {
-		email = strings.Replace(email, "{{user}}", i.User(), 1)
+		email = strings.Replace(email, "{{user}}", i.transformIntoValidEmailName(i.User()), 1)
 	}
 
 	// {{domain}}
@@ -106,25 +114,23 @@ func (i Internet) Email() string {
 func (i Internet) FreeEmail() string {
 	domain := i.Faker.RandomStringElement(freeEmailDomain)
 
-	return strings.Join([]string{i.User(), domain}, "@")
+	return strings.Join([]string{i.transformIntoValidEmailName(i.User()), domain}, "@")
 }
 
 // SafeEmail returns a fake safe email address for Internet
 func (i Internet) SafeEmail() string {
-	return strings.Join([]string{i.User(), i.SafeEmailDomain()}, "@")
+	return strings.Join([]string{i.transformIntoValidEmailName(i.User()), i.SafeEmailDomain()}, "@")
 }
 
 // CompanyEmail returns a fake company email address for Internet
 func (i Internet) CompanyEmail() string {
 	c := i.Faker.Company()
 
-	companyName := c.Name()
-	companyName = strings.ToLower(companyName)
-	companyName = strings.Replace(companyName, " ", ".", -1)
+	companyName := i.transformIntoValidEmailName(c.Name())
 
 	domain := strings.Join([]string{companyName, i.Domain()}, ".")
 
-	return strings.Join([]string{i.User(), domain}, "@")
+	return strings.Join([]string{i.transformIntoValidEmailName(i.User()), domain}, "@")
 }
 
 // TLD returns a fake tld for Internet
