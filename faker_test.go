@@ -154,7 +154,7 @@ func TestRandomLetter(t *testing.T) {
 	Expect(t, 1, len(value))
 }
 
-func TestRandomStringWithLength(t *testing.T){
+func TestRandomStringWithLength(t *testing.T) {
 	f := New()
 	length := f.IntBetween(97, 1000)
 	value := f.RandomStringWithLength(length)

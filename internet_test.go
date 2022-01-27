@@ -1,6 +1,7 @@
 package faker
 
 import (
+	"net/mail"
 	"strings"
 	"testing"
 )
@@ -11,6 +12,11 @@ func TestUser(t *testing.T) {
 	user := i.User()
 	Expect(t, true, len(user) > 0)
 	Expect(t, false, strings.Contains(user, " "))
+}
+
+func isValidEmail(email string) bool {
+	_, err := mail.ParseAddress(email)
+	return err == nil
 }
 
 func TestDomain(t *testing.T) {
@@ -32,6 +38,7 @@ func TestEmail(t *testing.T) {
 	split := strings.Split(email, "@")
 
 	Expect(t, 2, len(split))
+	Expect(t, true, isValidEmail(email))
 }
 
 func TestFreeEmail(t *testing.T) {
@@ -41,6 +48,7 @@ func TestFreeEmail(t *testing.T) {
 	split := strings.Split(email, "@")
 
 	Expect(t, 2, len(split))
+	Expect(t, true, isValidEmail(email))
 }
 
 func TestSafeEmail(t *testing.T) {
@@ -50,6 +58,7 @@ func TestSafeEmail(t *testing.T) {
 	split := strings.Split(email, "@")
 
 	Expect(t, 2, len(split))
+	Expect(t, true, isValidEmail(email))
 }
 
 func TestCompanyEmail(t *testing.T) {
@@ -60,6 +69,7 @@ func TestCompanyEmail(t *testing.T) {
 
 	Expect(t, 2, len(split))
 	Expect(t, false, strings.Contains(email, " "))
+	Expect(t, true, isValidEmail(email))
 }
 
 func TestPassword(t *testing.T) {
