@@ -169,6 +169,14 @@ func (f Faker) RandomLetter() string {
 	return fmt.Sprintf("%c", f.IntBetween(97, 122))
 }
 
+func (f Faker) RandomStringWithLength(l int) string {
+	r := []string{}
+	for i := 0; i < l; i++ {
+		r = append(r, f.RandomLetter())
+	}
+	return strings.Join(r, "")
+}
+
 // RandomStringElement returns a fake random string element from a given list of strings for Faker
 func (f Faker) RandomStringElement(s []string) string {
 	i := f.IntBetween(0, len(s)-1)
