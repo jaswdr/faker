@@ -50,7 +50,7 @@ func randBitcoin(length int, prefix string, f *Faker) string {
 		asciiStart, asciiEnd := getBitcoinRange(f)
 		val := f.IntBetween(asciiStart, asciiEnd)
 		if inExclusion(val) {
-			val += 1
+			val ++
 		}
 		address = append(address, string(rune(val)))
 	}
