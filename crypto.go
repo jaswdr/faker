@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-// Bitcoin is a faker struct for generating bitcoin data
+// Crypto is a faker struct for generating bitcoin data
 type Crypto struct {
 	Faker *Faker
 }
@@ -57,7 +57,7 @@ func randBitcoin(length int, prefix string, f *Faker) string {
 	return strings.Join(address, "")
 }
 
-// Generates P2PKH bitcoin address.
+// P2PKH generates a P2PKH bitcoin address.
 // Based on https://github.com/jaswdr/faker/issues/78#issuecomment-1020662826
 func (c Crypto) P2PKH() string {
 	length := c.Faker.IntBetween(bitcoinMin, bitcoinMax)
@@ -65,12 +65,12 @@ func (c Crypto) P2PKH() string {
 	return randBitcoin(length-1, "1", c.Faker)
 }
 
-// Generates P2PKH bitcoin address with specified length.
+// P2PKHWithLength generates a P2PKH bitcoin address with specified length.
 func (c Crypto) P2PKHWithLength(length int) string {
 	return randBitcoin(length-1, "1", c.Faker)
 }
 
-// Generates P2SH bitcoin address.
+// P2SH generates a P2SH bitcoin address.
 // Based on https://github.com/jaswdr/faker/issues/78#issuecomment-1020662826
 func (c Crypto) P2SH() string {
 	length := c.Faker.IntBetween(bitcoinMin, bitcoinMax)
@@ -78,20 +78,19 @@ func (c Crypto) P2SH() string {
 	return randBitcoin(length-1, "3", c.Faker)
 }
 
-// Generates P2PKH bitcoin address with specified length.
+// P2SHWithLength generates a P2PKH bitcoin address with specified length.
 func (c Crypto) P2SHWithLength(length int) string {
 	return randBitcoin(length-1, "3", c.Faker)
 }
 
-// Generates P2SH bitcoin address.
-// Based on https://github.com/jaswdr/faker/issues/78#issuecomment-1020662826
+// Bech32 generates a Bech32 bitcoin address
 func (c Crypto) Bech32() string {
 	length := c.Faker.IntBetween(bitcoinMin, bitcoinMax)
 	// subtract 1 for prefix
 	return randBitcoin(length-3, "bc1", c.Faker)
 }
 
-// Generates P2PKH bitcoin address with specified length.
+// Bech32WithLength generates a Bech32 bitcoin address with specified length.
 func (c Crypto) Bech32WithLength(length int) string {
 	return randBitcoin(length-3, "bc1", c.Faker)
 }
