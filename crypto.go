@@ -14,6 +14,7 @@ var (
 	bitcoinMax = 35
 )
 
+// Checks whether the ascii value provided is in the exclusion for bitcoin.
 func inExclusion(check int) bool {
 	// switch probably seems to be the fastest as compared to list/map
 	// https://stackoverflow.com/questions/15323767/does-go-have-if-x-in-construct-similar-to-python
@@ -63,8 +64,8 @@ func (c Crypto) P2PKH() string{
 	// subtrace 1 for prefix
 	return randBitcoin(length-1, "1", c.Faker)
 }
-/*
-func (c Crypto) P2PKHVariableLength(int length){
 
+// Generates P2PKH bitcoin address with specified length.
+func (c Crypto) P2PKHWithLength(length int) string{
+	return randBitcoin(length-1, "1", c.Faker)
 }
-*/
