@@ -82,3 +82,16 @@ func (c Crypto) P2SH() string {
 func (c Crypto) P2SHWithLength(length int) string {
 	return randBitcoin(length-1, "3", c.Faker)
 }
+
+// Generates P2SH bitcoin address.
+// Based on https://github.com/jaswdr/faker/issues/78#issuecomment-1020662826
+func (c Crypto) Bech32() string {
+	length := c.Faker.IntBetween(bitcoinMin, bitcoinMax)
+	// subtract 1 for prefix
+	return randBitcoin(length-3, "bc1", c.Faker)
+}
+
+// Generates P2PKH bitcoin address with specified length.
+func (c Crypto) Bech32WithLength(length int) string {
+	return randBitcoin(length-3, "bc1", c.Faker)
+}
