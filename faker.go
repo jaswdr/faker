@@ -9,6 +9,13 @@ import (
 	"time"
 )
 
+const (
+	maxUint = ^uint(0)
+	minUint = 0
+	maxInt  = int(maxUint >> 1)
+	minInt  = -maxInt - 1
+)
+
 // Faker is the Generator struct for Faker
 type Faker struct {
 	Generator *rand.Rand
@@ -59,28 +66,28 @@ func (f Faker) RandomNumber(size int) int {
 // RandomFloat returns a fake random float number for Faker
 func (f Faker) RandomFloat(maxDecimals, min, max int) float64 {
 	s := fmt.Sprintf("%d.%d", f.IntBetween(min, max-1), f.IntBetween(1, maxDecimals))
-	value, _ := strconv.ParseFloat(s, 10)
+	value, _ := strconv.ParseFloat(s, 32)
 	return value
 }
 
 // Float returns a fake random float number for Faker
 func (f Faker) Float(maxDecimals, min, max int) float64 {
 	s := fmt.Sprintf("%d.%d", f.IntBetween(min, max-1), f.IntBetween(1, maxDecimals))
-	value, _ := strconv.ParseFloat(s, 10)
+	value, _ := strconv.ParseFloat(s, 32)
 	return value
 }
 
 // Float32 returns a fake random float64 number for Faker
 func (f Faker) Float32(maxDecimals, min, max int) float32 {
 	s := fmt.Sprintf("%d.%d", f.IntBetween(min, max-1), f.IntBetween(1, maxDecimals))
-	value, _ := strconv.ParseFloat(s, 10)
+	value, _ := strconv.ParseFloat(s, 32)
 	return float32(value)
 }
 
 // Float64 returns a fake random float64 number for Faker
 func (f Faker) Float64(maxDecimals, min, max int) float64 {
 	s := fmt.Sprintf("%d.%d", f.IntBetween(min, max-1), f.IntBetween(1, maxDecimals))
-	value, _ := strconv.ParseFloat(s, 10)
+	value, _ := strconv.ParseFloat(s, 32)
 	return float64(value)
 }
 
@@ -142,8 +149,16 @@ func (f Faker) UInt64() uint64 {
 func (f Faker) IntBetween(min, max int) int {
 	diff := max - min
 
+	if diff < 0 {
+		diff = 0
+	}
+
 	if diff == 0 {
 		return min
+	}
+
+	if diff == maxInt {
+		return f.Generator.Intn(diff)
 	}
 
 	return f.Generator.Intn(diff+1) + min
