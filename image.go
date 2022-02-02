@@ -4,13 +4,25 @@ import (
 	"image"
 	"image/color"
 	"image/png"
-	"io/ioutil"
+	"io"
 	"os"
 )
 
+type PngEncoder interface {
+	Encode(w io.Writer, m image.Image) error
+}
+
+type PngEncoderImpl struct{}
+
+func (encoder PngEncoderImpl) Encode(w io.Writer, m image.Image) error {
+	return png.Encode(w, m)
+}
+
 // Image is a faker struct for Image
 type Image struct {
-	faker *Faker
+	faker           *Faker
+	TempFileCreator TempFileCreator
+	PngEncoder      PngEncoder
 }
 
 // Image returns a fake image file
@@ -39,12 +51,12 @@ func (i Image) Image(width, height int) *os.File {
 		}
 	}
 
-	f, err := ioutil.TempFile(os.TempDir(), "fake-img-*.png")
+	f, err := i.TempFileCreator.TempFile("fake-img-*.png")
 	if err != nil {
 		panic(err)
 	}
 
-	err = png.Encode(f, img)
+	err = i.PngEncoder.Encode(f, img)
 	if err != nil {
 		panic(err)
 	}

@@ -76,14 +76,10 @@ func (p Phone) Number() string {
 	number := p.Faker.RandomStringElement(phoneFormats)
 
 	// {{areaCode}}
-	if strings.Contains(number, "{{areaCode}}") {
-		number = strings.Replace(number, "{{areaCode}}", p.AreaCode(), 1)
-	}
+	number = strings.Replace(number, "{{areaCode}}", p.AreaCode(), 1)
 
 	// {{exchangeCode}}
-	if strings.Contains(number, "{{exchangeCode}}") {
-		number = strings.Replace(number, "{{exchangeCode}}", p.ExchangeCode(), 1)
-	}
+	number = strings.Replace(number, "{{exchangeCode}}", p.ExchangeCode(), 1)
 
 	return p.Faker.Numerify(number)
 }
@@ -98,14 +94,10 @@ func (p Phone) ToolFreeNumber() string {
 	number := p.Faker.RandomStringElement(tollFreeFormats)
 
 	// {{tollFreeAreaCode}}
-	if strings.Contains(number, "{{tollFreeAreaCode}}") {
-		number = strings.Replace(number, "{{tollFreeAreaCode}}", p.TollFreeAreaCode(), 1)
-	}
+	number = strings.Replace(number, "{{tollFreeAreaCode}}", p.TollFreeAreaCode(), 1)
 
 	// {{exchangeCode}}
-	if strings.Contains(number, "{{exchangeCode}}") {
-		number = strings.Replace(number, "{{exchangeCode}}", p.ExchangeCode(), 1)
-	}
+	number = strings.Replace(number, "{{exchangeCode}}", p.ExchangeCode(), 1)
 
 	return p.Faker.Numerify(number)
 }

@@ -19,7 +19,7 @@ func TestCurrencyCode(t *testing.T) {
 
 func TestCurrencyNumber(t *testing.T) {
 	c := New().Currency()
-	NotExpect(t, "", c.Currency())
+	NotExpect(t, 0, c.Number())
 }
 
 func TestCurrencyCountry(t *testing.T) {

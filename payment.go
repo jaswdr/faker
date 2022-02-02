@@ -1,7 +1,7 @@
 package faker
 
 import (
-	"strconv"
+	"fmt"
 )
 
 var (
@@ -28,12 +28,7 @@ func (p Payment) CreditCardNumber() string {
 
 // CreditCardExpirationDateString returns a fake credit card expiration date in string format for Payment
 func (p Payment) CreditCardExpirationDateString() string {
-	day := strconv.Itoa(p.Faker.IntBetween(0, 30))
-	if len(day) == 1 {
-		day = "0" + day
-	}
-
-	month := strconv.Itoa(p.Faker.IntBetween(12, 30))
-
-	return day + "/" + month
+	day := p.Faker.IntBetween(0, 30)
+	month := p.Faker.IntBetween(12, 30)
+	return fmt.Sprintf("%02d/%02d", day, month)
 }

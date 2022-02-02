@@ -36,3 +36,9 @@ func TestCompanyJobTitle(t *testing.T) {
 	value := f.JobTitle()
 	Expect(t, true, len(value) > 0)
 }
+
+func TestEIN(t *testing.T) {
+	f := New().Company()
+	value := f.EIN()
+	Expect(t, true, value > 0)
+}
