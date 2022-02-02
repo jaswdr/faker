@@ -35,9 +35,9 @@ func getBitcoinRange(f *Faker) (int, int) {
 		return 48, 57
 	} else if dec == 1 {
 		return 65, 90
-	} 
+	}
 	return 97, 122
-	
+
 }
 
 // Helper function to return a bitcoin address with a given prefix and length
@@ -48,7 +48,7 @@ func randBitcoin(length int, prefix string, f *Faker) string {
 		asciiStart, asciiEnd := getBitcoinRange(f)
 		val := f.IntBetween(asciiStart, asciiEnd)
 		if inExclusionBitcoin(val) {
-			val ++
+			val++
 		}
 		address = append(address, string(rune(val)))
 	}

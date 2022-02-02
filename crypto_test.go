@@ -67,7 +67,6 @@ func TestBech32(t *testing.T) {
 	addr := c.Bech32()
 	Expect(t, true, len(addr) >= bitcoinMin)
 	Expect(t, true, len(addr) <= bitcoinMax)
-	t.Log(addr)
 	Expect(t, true, strings.HasPrefix(addr, "bc1"))
 	for i := 0; i < len(bannedBitcoin); i++ {
 		Expect(t, true, !strings.Contains(addr, bannedBitcoin[i]))
