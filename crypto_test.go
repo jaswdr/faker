@@ -9,12 +9,12 @@ var (
 	bannedBitcoin = []string{"O", "I", "l", "0"}
 )
 
-func TestInExclusion(t *testing.T) {
+func TestInExclusionBitcoin(t *testing.T) {
 	for _, c := range bannedBitcoin {
-		Expect(t, true, inExclusion(int(rune(c[0]))))
+		Expect(t, true, inExclusionBitcoin(int(rune(c[0]))))
 	}
 	// take any banned rune and + 1 it to get a valid character
-	Expect(t, false, inExclusion(int(rune(bannedBitcoin[0][0]))+1))
+	Expect(t, false, inExclusionBitcoin(int(rune(bannedBitcoin[0][0]))+1))
 }
 
 func TestRandBitcoin(t *testing.T) {

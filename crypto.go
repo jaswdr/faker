@@ -15,10 +15,8 @@ var (
 )
 
 // Checks whether the ascii value provided is in the exclusion for bitcoin.
-func inExclusion(check int) bool {
-	// switch probably seems to be the fastest as compared to list/map
-	// https://stackoverflow.com/questions/15323767/does-go-have-if-x-in-construct-similar-to-python
-	switch check {
+func inExclusionBitcoin(ascii int) bool {
+	switch ascii {
 	// Ascii for uppercase letter "O", uppercase letter "I", lowercase letter "l", and the number "0"
 	case
 		48,
@@ -37,19 +35,19 @@ func getBitcoinRange(f *Faker) (int, int) {
 		return 48, 57
 	} else if dec == 1 {
 		return 65, 90
-	} else {
-		return 97, 122
-	}
+	} 
+	return 97, 122
+	
 }
 
-// Helper function to return a bitcoin
+// Helper function to return a bitcoin address with a given prefix and length
 func randBitcoin(length int, prefix string, f *Faker) string {
 	address := []string{prefix}
 
 	for i := 0; i < length; i++ {
 		asciiStart, asciiEnd := getBitcoinRange(f)
 		val := f.IntBetween(asciiStart, asciiEnd)
-		if inExclusion(val) {
+		if inExclusionBitcoin(val) {
 			val ++
 		}
 		address = append(address, string(rune(val)))
@@ -58,7 +56,6 @@ func randBitcoin(length int, prefix string, f *Faker) string {
 }
 
 // P2PKH generates a P2PKH bitcoin address.
-// Based on https://github.com/jaswdr/faker/issues/78#issuecomment-1020662826
 func (c Crypto) P2PKH() string {
 	length := c.Faker.IntBetween(bitcoinMin, bitcoinMax)
 	// subtract 1 for prefix
@@ -71,7 +68,6 @@ func (c Crypto) P2PKHWithLength(length int) string {
 }
 
 // P2SH generates a P2SH bitcoin address.
-// Based on https://github.com/jaswdr/faker/issues/78#issuecomment-1020662826
 func (c Crypto) P2SH() string {
 	length := c.Faker.IntBetween(bitcoinMin, bitcoinMax)
 	// subtract 1 for prefix
