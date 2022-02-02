@@ -277,7 +277,6 @@ func (f Faker) Asciify(in string) (out string) {
 		if c == "*" {
 			c = fmt.Sprintf("%c", f.IntBetween(97, 126))
 		}
-
 		out = out + c
 	}
 
@@ -516,6 +515,11 @@ func (f Faker) Music() Music {
 // Currency returns a fake Currency instance for Faker
 func (f Faker) Currency() Currency {
 	return Currency{&f}
+}
+
+// Crypto returns a fake Crypto instance for Faker
+func (f Faker) Crypto() Crypto {
+	return Crypto{&f}
 }
 
 // New returns a new instance of Faker instance with a random seed
