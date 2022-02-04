@@ -119,6 +119,7 @@ func (c Crypto) RandomBitcoin() string {
 	return c.P2PKH()
 }
 
+// RandomEth returns a hexadecimal ethereum address of 42 characters.
 func (c Crypto) RandomEth() string {
 	return randEth(ethLen-2, ethPrefix, c.Faker)
 }
