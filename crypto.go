@@ -12,6 +12,9 @@ type Crypto struct {
 var (
 	bitcoinMin = 26
 	bitcoinMax = 35
+	ethLen = 42
+	ethPrefix = "0x"
+
 )
 
 // Checks whether the ascii value provided is in the exclusion for bitcoin.
@@ -29,23 +32,26 @@ func inExclusionBitcoin(ascii int) bool {
 }
 
 // Decide whether to get digit, uppercase, or lowercase. returns the ascii range to do IntBetween on
-func getBitcoinRange(f *Faker) (int, int) {
+func getAlnumRange(f *Faker) (int, int) {
 	dec := f.IntBetween(0, 2)
 	if dec == 0 {
+		// digit
 		return 48, 57
 	} else if dec == 1 {
+		// upper
 		return 65, 90
 	}
+	// lower
 	return 97, 122
-
 }
+
 
 // Helper function to return a bitcoin address with a given prefix and length
 func randBitcoin(length int, prefix string, f *Faker) string {
 	address := []string{prefix}
 
 	for i := 0; i < length; i++ {
-		asciiStart, asciiEnd := getBitcoinRange(f)
+		asciiStart, asciiEnd := getAlnumRange(f)
 		val := f.IntBetween(asciiStart, asciiEnd)
 		if inExclusionBitcoin(val) {
 			val++
@@ -54,6 +60,7 @@ func randBitcoin(length int, prefix string, f *Faker) string {
 	}
 	return strings.Join(address, "")
 }
+// Helper function
 
 // P2PKH generates a P2PKH bitcoin address.
 func (c Crypto) P2PKH() string {
