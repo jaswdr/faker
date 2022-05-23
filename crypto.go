@@ -12,6 +12,8 @@ type Crypto struct {
 var (
 	bitcoinMin = 26
 	bitcoinMax = 35
+	ethLen     = 42
+	ethPrefix  = "0x"
 )
 
 // Checks whether the ascii value provided is in the exclusion for bitcoin.
@@ -29,15 +31,17 @@ func inExclusionBitcoin(ascii int) bool {
 }
 
 // Decide whether to get digit, uppercase, or lowercase. returns the ascii range to do IntBetween on
-func getBitcoinRange(f *Faker) (int, int) {
+func getAlnumRange(f *Faker) (int, int) {
 	dec := f.IntBetween(0, 2)
 	if dec == 0 {
+		// digit
 		return 48, 57
 	} else if dec == 1 {
+		// upper
 		return 65, 90
 	}
+	// lower
 	return 97, 122
-
 }
 
 // Helper function to return a bitcoin address with a given prefix and length
@@ -45,7 +49,7 @@ func randBitcoin(length int, prefix string, f *Faker) string {
 	address := []string{prefix}
 
 	for i := 0; i < length; i++ {
-		asciiStart, asciiEnd := getBitcoinRange(f)
+		asciiStart, asciiEnd := getAlnumRange(f)
 		val := f.IntBetween(asciiStart, asciiEnd)
 		if inExclusionBitcoin(val) {
 			val++
@@ -53,6 +57,19 @@ func randBitcoin(length int, prefix string, f *Faker) string {
 		address = append(address, string(rune(val)))
 	}
 	return strings.Join(address, "")
+}
+
+// Helper function to return an Ethereum address.
+func randEth(length int, prefix string, f *Faker) string {
+	address := []string{prefix}
+
+	for i := 0; i < length; i++ {
+		asciiStart, asciiEnd := getAlnumRange(f)
+		val := f.IntBetween(asciiStart, asciiEnd)
+		address = append(address, string(rune(val)))
+	}
+	return strings.Join(address, "")
+
 }
 
 // P2PKH generates a P2PKH bitcoin address.
@@ -89,4 +106,20 @@ func (c Crypto) Bech32() string {
 // Bech32WithLength generates a Bech32 bitcoin address with specified length.
 func (c Crypto) Bech32WithLength(length int) string {
 	return randBitcoin(length-3, "bc1", c.Faker)
+}
+
+// RandomBitcoin returns an address of either Bech32, P2PKH, or P2SH type.
+func (c Crypto) RandomBitcoin() string {
+	dec := c.Faker.IntBetween(0, 2)
+	if dec == 0 {
+		return c.Bech32()
+	} else if dec == 1 {
+		return c.P2SH()
+	}
+	return c.P2PKH()
+}
+
+// RandomEth returns a hexadecimal ethereum address of 42 characters.
+func (c Crypto) RandomEth() string {
+	return randEth(ethLen-2, ethPrefix, c.Faker)
 }
