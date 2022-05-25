@@ -1,6 +1,7 @@
 package faker
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -14,6 +15,24 @@ var (
 	}
 	validEthPrefix = "0x"
 )
+
+type GeneratorMock struct {
+	local int
+}
+
+func (g GeneratorMock) Intn(n int) int {
+	return g.local
+}
+
+func (g GeneratorMock) Int() int {
+	return g.local
+}
+
+type TestCaseAlnum struct {
+	desc     string
+	localInt int
+	assert   func(t *testing.T, a int, b int)
+}
 
 func TestInExclusionBitcoin(t *testing.T) {
 	for _, c := range bannedBitcoin {
@@ -107,4 +126,46 @@ func TestRandomEth(t *testing.T) {
 	addr := c.RandomEth()
 	Expect(t, true, len(addr) == ethLen)
 	Expect(t, true, strings.HasPrefix(addr, ethPrefix))
+}
+
+func TestGetAlnumRange(t *testing.T) {
+	for k, tc := range []TestCaseAlnum{
+		{
+			// The Description of the test case
+			desc:     "Test Get Digit 0-9",
+			localInt: 0,
+			// Our anticipated result
+			assert: func(t *testing.T, a int, b int) {
+				Expect(t, true, a == int('0'))
+				Expect(t, true, b == int('9'))
+			},
+		},
+		{
+			desc:     "Test Get Uppercase A-Z",
+			localInt: 1,
+			assert: func(t *testing.T, a int, b int) {
+				Expect(t, true, a == int('A'))
+				Expect(t, true, b == int('Z'))
+			},
+		},
+		{
+			desc:     "Test Get Lowercase a-z",
+			localInt: 2,
+			assert: func(t *testing.T, a int, b int) {
+				Expect(t, true, a == int('a'))
+				Expect(t, true, b == int('z'))
+			},
+		},
+	} {
+		t.Run(fmt.Sprintf("case=%d/description=%s", k, tc.desc), func(t *testing.T) {
+			// Use our mock here instead of using a seed.
+			gen := GeneratorMock{}
+			gen.local = tc.localInt
+			// populate the generator with our mock as it is an interface.
+			c := Faker{Generator: gen}
+			a, b := getAlnumRange(c.Crypto().Faker)
+
+			tc.assert(t, a, b)
+		})
+	}
 }
