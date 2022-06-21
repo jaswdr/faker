@@ -188,29 +188,19 @@ func (f Music) Name() string {
 	)
 
 	// {{adverb}}
-	if strings.Contains(name, "{{adverb}}") {
-		name = strings.Replace(name, "{{adverb}}", adverb, 1)
-	}
+	name = strings.Replace(name, "{{adverb}}", adverb, 1)
 
 	// {{verb}}
-	if strings.Contains(name, "{{verb}}") {
-		name = strings.Replace(name, "{{verb}}", verb, 1)
-	}
+	name = strings.Replace(name, "{{verb}}", verb, 1)
 
 	// {{adjective}}
-	if strings.Contains(name, "{{adjective}}") {
-		name = strings.Replace(name, "{{adjective}}", adjective, 1)
-	}
+	name = strings.Replace(name, "{{adjective}}", adjective, 1)
 
 	// {{noun}}
-	if strings.Contains(name, "{{noun}}") {
-		name = strings.Replace(name, "{{noun}}", noun, 1)
-	}
+	name = strings.Replace(name, "{{noun}}", noun, 1)
 
 	// {{ending}}
-	if strings.Contains(name, "{{ending}}") {
-		name = strings.Replace(name, "{{ending}}", ending, 1)
-	}
+	name = strings.Replace(name, "{{ending}}", ending, 1)
 
 	return name
 }

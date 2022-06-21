@@ -105,3 +105,9 @@ func TestPersonImage(t *testing.T) {
 	Expect(t, fmt.Sprintf("%T", image), "*os.File")
 	Expect(t, strings.HasSuffix(image.Name(), ".jfif"), true, image.Name())
 }
+
+func TestPersonaNameMale(t *testing.T) {
+	p := New().Person()
+	name := p.NameMale()
+	Expect(t, true, len(name) > 0)
+}

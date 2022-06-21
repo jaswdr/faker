@@ -179,34 +179,22 @@ func (p Person) Name() string {
 	name := formats[p.Faker.IntBetween(0, len(formats)-1)]
 
 	// {{titleMale}}
-	if strings.Contains(name, "{{titleMale}}") {
-		name = strings.Replace(name, "{{titleMale}}", p.TitleMale(), 1)
-	}
+	name = strings.Replace(name, "{{titleMale}}", p.TitleMale(), 1)
 
 	//{{firstNameMale}}
-	if strings.Contains(name, "{{firstNameMale}}") {
-		name = strings.Replace(name, "{{firstNameMale}}", p.FirstNameMale(), 1)
-	}
+	name = strings.Replace(name, "{{firstNameMale}}", p.FirstNameMale(), 1)
 
 	// {{titleFemale}}
-	if strings.Contains(name, "{{titleFemale}}") {
-		name = strings.Replace(name, "{{titleFemale}}", p.TitleFemale(), 1)
-	}
+	name = strings.Replace(name, "{{titleFemale}}", p.TitleFemale(), 1)
 
 	//{{firstNameFemale}}
-	if strings.Contains(name, "{{firstNameFemale}}") {
-		name = strings.Replace(name, "{{firstNameFemale}}", p.FirstNameFemale(), 1)
-	}
+	name = strings.Replace(name, "{{firstNameFemale}}", p.FirstNameFemale(), 1)
 
 	//{{lastName}}
-	if strings.Contains(name, "{{lastName}}") {
-		name = strings.Replace(name, "{{lastName}}", p.LastName(), 1)
-	}
+	name = strings.Replace(name, "{{lastName}}", p.LastName(), 1)
 
 	//{{suffix}}
-	if strings.Contains(name, "{{suffix}}") {
-		name = strings.Replace(name, "{{suffix}}", p.Suffix(), 1)
-	}
+	name = strings.Replace(name, "{{suffix}}", p.Suffix(), 1)
 
 	return name
 }
