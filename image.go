@@ -8,12 +8,15 @@ import (
 	"os"
 )
 
+// PngEncoder encodes a image.Image to a io.Writer
 type PngEncoder interface {
 	Encode(w io.Writer, m image.Image) error
 }
 
+// PngEncoderImpl is the default implementation of the PngEncoder
 type PngEncoderImpl struct{}
 
+// Encode does the encoding of the image.Image to an io.Writer
 func (encoder PngEncoderImpl) Encode(w io.Writer, m image.Image) error {
 	return png.Encode(w, m)
 }

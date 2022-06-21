@@ -12,7 +12,7 @@ const loremFlickrBaseURL = "https://loremflickr.com"
 // LoremFlickr is a faker struct for LoremFlickr
 type LoremFlickr struct {
 	faker           *Faker
-	HttpClient      HTTPClient
+	HTTPClient      HTTPClient
 	TempFileCreator TempFileCreator
 }
 
@@ -49,7 +49,7 @@ func (lf LoremFlickr) Image(width, height int, categories []string, prefix strin
 		}
 	}
 
-	resp, err := lf.HttpClient.Get(url)
+	resp, err := lf.HTTPClient.Get(url)
 	if err != nil {
 		log.Println("Error while requesting", url, ":", err)
 		panic(err)

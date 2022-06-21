@@ -11,13 +11,13 @@ const profileImageBaseURL = "https://thispersondoesnotexist.com/image"
 // ProfileImage  is a faker struct for ProfileImage
 type ProfileImage struct {
 	faker           *Faker
-	HttpClient      HTTPClient
+	HTTPClient      HTTPClient
 	TempFileCreator TempFileCreator
 }
 
 // Image generates a *os.File with a random profile image using the thispersondoesnotexist.com service
 func (pi ProfileImage) Image() *os.File {
-	resp, err := pi.HttpClient.Get(profileImageBaseURL)
+	resp, err := pi.HTTPClient.Get(profileImageBaseURL)
 	if err != nil {
 		log.Println("Error while requesting", profileImageBaseURL, ":", err)
 		panic(err)

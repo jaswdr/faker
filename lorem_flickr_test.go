@@ -36,7 +36,7 @@ func TestLoremFlickrImagePanicIfRequestFails(t *testing.T) {
 	f := New()
 	service := f.LoremFlickr()
 	expected := fmt.Errorf("request failed")
-	service.HttpClient = ErrorRaiserHTTPClient{err: expected}
+	service.HTTPClient = ErrorRaiserHTTPClient{err: expected}
 	defer func() {
 		Expect(t, recover(), expected)
 	}()

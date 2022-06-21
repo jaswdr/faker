@@ -121,6 +121,7 @@ func (c Company) JobTitle() string {
 	return c.Faker.RandomStringElement(jobTitle)
 }
 
+// EIN returns a fake EIN codes for Company
 func (c Company) EIN() int {
 	return c.Faker.RandomIntElement(einPrefixes)
 }
