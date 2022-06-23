@@ -18,7 +18,7 @@ Faker requires Go >= 1.11
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/jaswdr/faker)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fjaswdr%2Ffaker&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
-## Test it in Go Playground
+## Test it directly from your browser
 
 Start at https://play.golang.org/p/JpTagDGBaHK
 
@@ -126,10 +126,6 @@ fmt.Println(profileImage.Name())
 
 See more formatters in [docs](https://pkg.go.dev/github.com/jaswdr/faker?tab=doc)
 
-## Get involved
-
-Have a question? Use the [Discussions](https://github.com/jaswdr/faker/discussions) page.
-
 ## Development
 
 Create a fork and get the code.
@@ -151,3 +147,7 @@ Push to your fork and send a new pull request from your fork to this repository.
 ## License
 
 Faker is released under the MIT Licence. See the bundled LICENSE file for details.
+
+## Maintainer
+
+Created and maitained by Jonathan Schweder ([@jaswdr](https://github.com/jaswdr)) and [many others](https://github.com/jaswdr/faker/graphs/contributors)
