@@ -54,14 +54,10 @@ func (i Internet) User() string {
 	p := i.Faker.Person()
 
 	// {{firstName}}
-	if strings.Contains(user, "{{firstName}}") {
-		user = strings.Replace(user, "{{firstName}}", i.transformIntoValidEmailName(p.FirstName()), 1)
-	}
+	user = strings.Replace(user, "{{firstName}}", i.transformIntoValidEmailName(p.FirstName()), 1)
 
 	// {{lastName}}
-	if strings.Contains(user, "{{lastName}}") {
-		user = strings.Replace(user, "{{lastName}}", i.transformIntoValidEmailName(p.LastName()), 1)
-	}
+	user = strings.Replace(user, "{{lastName}}", i.transformIntoValidEmailName(p.LastName()), 1)
 
 	return user
 }
@@ -93,19 +89,13 @@ func (i Internet) Email() string {
 	email := i.Faker.RandomStringElement(emailFormats)
 
 	// {{user}}
-	if strings.Contains(email, "{{user}}") {
-		email = strings.Replace(email, "{{user}}", i.transformIntoValidEmailName(i.User()), 1)
-	}
+	email = strings.Replace(email, "{{user}}", i.transformIntoValidEmailName(i.User()), 1)
 
 	// {{domain}}
-	if strings.Contains(email, "{{domain}}") {
-		email = strings.Replace(email, "{{domain}}", i.Domain(), 1)
-	}
+	email = strings.Replace(email, "{{domain}}", i.Domain(), 1)
 
 	// {{freeEmailDomain}}
-	if strings.Contains(email, "{{freeEmailDomain}}") {
-		email = strings.Replace(email, "{{freeEmailDomain}}", i.FreeEmailDomain(), 1)
-	}
+	email = strings.Replace(email, "{{freeEmailDomain}}", i.FreeEmailDomain(), 1)
 
 	return email
 }
@@ -152,14 +142,10 @@ func (i Internet) URL() string {
 	url := i.Faker.RandomStringElement(urlFormats)
 
 	// {{domain}}
-	if strings.Contains(url, "{{domain}}") {
-		url = strings.Replace(url, "{{domain}}", i.Domain(), 1)
-	}
+	url = strings.Replace(url, "{{domain}}", i.Domain(), 1)
 
 	// {{slug}}
-	if strings.Contains(url, "{{slug}}") {
-		url = strings.Replace(url, "{{slug}}", i.Slug(), 1)
-	}
+	url = strings.Replace(url, "{{slug}}", i.Slug(), 1)
 
 	return url
 }

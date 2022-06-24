@@ -428,7 +428,7 @@ func (f Faker) UUID() UUID {
 
 // Image returns a fake Image instance for Faker
 func (f Faker) Image() Image {
-	return Image{&f}
+	return Image{&f, TempFileCreatorImpl{}, PngEncoderImpl{}}
 }
 
 // File returns a fake File instance for Faker
@@ -488,12 +488,12 @@ func (f Faker) Emoji() Emoji {
 
 // LoremFlickr returns a fake LoremFlickr instance for Faker
 func (f Faker) LoremFlickr() LoremFlickr {
-	return LoremFlickr{&f}
+	return LoremFlickr{&f, HTTPClientImpl{}, TempFileCreatorImpl{}}
 }
 
 // ProfileImage returns a fake ProfileImage instance for Faker
 func (f Faker) ProfileImage() ProfileImage {
-	return ProfileImage{&f}
+	return ProfileImage{&f, HTTPClientImpl{}, TempFileCreatorImpl{}}
 }
 
 // Genre returns a fake Genre instance for Faker

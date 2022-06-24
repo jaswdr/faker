@@ -107,15 +107,11 @@ func (c Company) Name() string {
 	name := c.Faker.RandomStringElement(companyNameFormat)
 
 	// {{companySuffix}}
-	if strings.Contains(name, "{{companySuffix}}") {
-		name = strings.Replace(name, "{{companySuffix}}", c.Suffix(), 1)
-	}
+	name = strings.Replace(name, "{{companySuffix}}", c.Suffix(), 1)
 
 	// {{lastName}}
 	p := c.Faker.Person()
-	if strings.Contains(name, "{{lastName}}") {
-		name = strings.Replace(name, "{{lastName}}", p.LastName(), 3)
-	}
+	name = strings.Replace(name, "{{lastName}}", p.LastName(), 3)
 
 	return name
 }
@@ -123,4 +119,9 @@ func (c Company) Name() string {
 // JobTitle returns a fake job title for Company
 func (c Company) JobTitle() string {
 	return c.Faker.RandomStringElement(jobTitle)
+}
+
+// EIN returns a fake EIN codes for Company
+func (c Company) EIN() int {
+	return c.Faker.RandomIntElement(einPrefixes)
 }
