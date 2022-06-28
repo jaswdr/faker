@@ -34,6 +34,13 @@ type TestCaseAlnum struct {
 	assert   func(t *testing.T, a int, b int)
 }
 
+type TestCaseRandomBitcoin struct {
+	desc              string
+	localInt          int
+	expectedSubstring string
+	assert            func(t *testing.T, a string)
+}
+
 func TestInExclusionBitcoin(t *testing.T) {
 	for _, c := range bannedBitcoin {
 		Expect(t, true, inExclusionBitcoin(int(rune(c[0]))))
@@ -106,21 +113,6 @@ func TestBech32WithLength(t *testing.T) {
 	Expect(t, true, strings.HasPrefix(addr, validBitcoinPrefix["bech32"]))
 }
 
-func TestRandomBitcoin(t *testing.T) {
-	c := New().Crypto()
-	addr := c.RandomBitcoin()
-	Expect(t, true, len(addr) >= bitcoinMin)
-	Expect(t, true, len(addr) <= bitcoinMax)
-	in := false
-	for _, pfx := range validBitcoinPrefix {
-		if strings.HasPrefix(addr, pfx) {
-			in = true
-			break
-		}
-	}
-	Expect(t, true, in)
-}
-
 func TestRandomEth(t *testing.T) {
 	c := New().Crypto()
 	addr := c.RandomEth()
@@ -166,6 +158,44 @@ func TestGetAlnumRange(t *testing.T) {
 			a, b := getAlnumRange(c.Crypto().Faker)
 
 			tc.assert(t, a, b)
+		})
+	}
+}
+
+func TestRandomBitcoin(t *testing.T) {
+	for k, tc := range []TestCaseRandomBitcoin{
+		{
+			// The Description of the test case
+			desc:     "Test Get Bech32",
+			localInt: 0,
+			// Our anticipated result
+			expectedSubstring: "bc1",
+		},
+		{
+			// The Description of the test case
+			desc:     "Test Get P2SH",
+			localInt: 1,
+			// Our anticipated result
+			expectedSubstring: "3",
+		},
+		{
+			// The Description of the test case
+			desc:     "Test Get P2PKH",
+			localInt: 2,
+			// Our anticipated result
+			expectedSubstring: "1",
+		},
+	} {
+		t.Run(fmt.Sprintf("case=%d/description=%s", k, tc.desc), func(t *testing.T) {
+			// Use our mock here instead of using a seed.
+			gen := GeneratorMock{}
+			gen.local = tc.localInt
+			// populate the generator with our mock as it is an interface.
+			c := Faker{Generator: gen}
+			rs := c.Crypto().RandomBitcoin()
+			Expect(t, true, strings.HasPrefix(rs, tc.expectedSubstring))
+			Expect(t, true, len(rs) >= bitcoinMin)
+			Expect(t, true, len(rs) <= bitcoinMax)
 		})
 	}
 }
