@@ -6,32 +6,35 @@ import (
 
 func TestCurrency(t *testing.T) {
 	c := New().Currency()
-	NotExpect(t, "", c.Currency())
+	currency := c.Currency()
+	NotExpect(t, "", currency)
+	ExpectInString(t, currency, currencies)
 }
 
 func TestCurrencyCode(t *testing.T) {
 	c := New().Currency()
 	code := c.Code()
-	if code != "" {
-		Expect(t, 3, len(code))
-	}
+	NotExpect(t, "", code)
+	ExpectInString(t, code, currenciesCodes)
 }
 
 func TestCurrencyNumber(t *testing.T) {
 	c := New().Currency()
-	NotExpect(t, 0, c.Number())
+	ExpectInInt(t, c.Number(), currenciesNumbers)
 }
 
 func TestCurrencyCountry(t *testing.T) {
 	c := New().Currency()
-	NotExpect(t, "", c.Country())
+	country := c.Country() 
+	NotExpect(t, "", country)
+	ExpectInString(t, country, currenciesCountries)
 }
 
 func TestCurrencyAndCode(t *testing.T) {
 	c := New().Currency()
 	currency, code := c.CurrencyAndCode()
 	NotExpect(t, "", currency)
-	if code != "" {
-		Expect(t, 3, len(code))
-	}
+	NotExpect(t, "", code)
+	ExpectInString(t, currency, currencies)
+	ExpectInString(t, code, currenciesCodes)
 }
