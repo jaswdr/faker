@@ -36,6 +36,36 @@ func NotExpect(t *testing.T, notExpected, got interface{}, values ...interface{}
 	}
 }
 
+func ExpectInInt(t *testing.T, expected int, in []int) {
+	t.Helper()
+	isIn := false
+	for _, v := range in {
+		if expected == v {
+			isIn = true
+			break
+		}
+	}
+
+	if !isIn {
+		t.FailNow()
+	}
+}
+
+func ExpectInString(t *testing.T, expected string, in []string) {
+	t.Helper()
+	isIn := false
+	for _, v := range in {
+		if expected == v {
+			isIn = true
+			break
+		}
+	}
+
+	if !isIn {
+		t.FailNow()
+	}
+}
+
 func F(t *testing.T) Faker {
 	return NewWithSeed(rand.NewSource(0))
 }
