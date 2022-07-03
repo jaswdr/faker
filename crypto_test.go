@@ -1,6 +1,7 @@
 package faker
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -14,6 +15,31 @@ var (
 	}
 	validEthPrefix = "0x"
 )
+
+type GeneratorMock struct {
+	local int
+}
+
+func (g GeneratorMock) Intn(n int) int {
+	return g.local
+}
+
+func (g GeneratorMock) Int() int {
+	return g.local
+}
+
+type TestCaseAlnum struct {
+	desc     string
+	localInt int
+	assert   func(t *testing.T, a int, b int)
+}
+
+type TestCaseRandomBitcoin struct {
+	desc              string
+	localInt          int
+	expectedSubstring string
+	assert            func(t *testing.T, a string)
+}
 
 func TestInExclusionBitcoin(t *testing.T) {
 	for _, c := range bannedBitcoin {
@@ -87,24 +113,89 @@ func TestBech32WithLength(t *testing.T) {
 	Expect(t, true, strings.HasPrefix(addr, validBitcoinPrefix["bech32"]))
 }
 
-func TestRandomBitcoin(t *testing.T) {
-	c := New().Crypto()
-	addr := c.RandomBitcoin()
-	Expect(t, true, len(addr) >= bitcoinMin)
-	Expect(t, true, len(addr) <= bitcoinMax)
-	in := false
-	for _, pfx := range validBitcoinPrefix {
-		if strings.HasPrefix(addr, pfx) {
-			in = true
-			break
-		}
-	}
-	Expect(t, true, in)
-}
-
 func TestRandomEth(t *testing.T) {
 	c := New().Crypto()
 	addr := c.RandomEth()
 	Expect(t, true, len(addr) == ethLen)
 	Expect(t, true, strings.HasPrefix(addr, ethPrefix))
+}
+
+func TestGetAlnumRange(t *testing.T) {
+	for k, tc := range []TestCaseAlnum{
+		{
+			// The Description of the test case
+			desc:     "Test Get Digit 0-9",
+			localInt: 0,
+			// Our anticipated result
+			assert: func(t *testing.T, a int, b int) {
+				Expect(t, true, a == int('0'))
+				Expect(t, true, b == int('9'))
+			},
+		},
+		{
+			desc:     "Test Get Uppercase A-Z",
+			localInt: 1,
+			assert: func(t *testing.T, a int, b int) {
+				Expect(t, true, a == int('A'))
+				Expect(t, true, b == int('Z'))
+			},
+		},
+		{
+			desc:     "Test Get Lowercase a-z",
+			localInt: 2,
+			assert: func(t *testing.T, a int, b int) {
+				Expect(t, true, a == int('a'))
+				Expect(t, true, b == int('z'))
+			},
+		},
+	} {
+		t.Run(fmt.Sprintf("case=%d/description=%s", k, tc.desc), func(t *testing.T) {
+			// Use our mock here instead of using a seed.
+			gen := GeneratorMock{}
+			gen.local = tc.localInt
+			// populate the generator with our mock as it is an interface.
+			c := Faker{Generator: gen}
+			a, b := getAlnumRange(c.Crypto().Faker)
+
+			tc.assert(t, a, b)
+		})
+	}
+}
+
+func TestRandomBitcoin(t *testing.T) {
+	for k, tc := range []TestCaseRandomBitcoin{
+		{
+			// The Description of the test case
+			desc:     "Test Get Bech32",
+			localInt: 0,
+			// Our anticipated result
+			expectedSubstring: "bc1",
+		},
+		{
+			// The Description of the test case
+			desc:     "Test Get P2SH",
+			localInt: 1,
+			// Our anticipated result
+			expectedSubstring: "3",
+		},
+		{
+			// The Description of the test case
+			desc:     "Test Get P2PKH",
+			localInt: 2,
+			// Our anticipated result
+			expectedSubstring: "1",
+		},
+	} {
+		t.Run(fmt.Sprintf("case=%d/description=%s", k, tc.desc), func(t *testing.T) {
+			// Use our mock here instead of using a seed.
+			gen := GeneratorMock{}
+			gen.local = tc.localInt
+			// populate the generator with our mock as it is an interface.
+			c := Faker{Generator: gen}
+			rs := c.Crypto().RandomBitcoin()
+			Expect(t, true, strings.HasPrefix(rs, tc.expectedSubstring))
+			Expect(t, true, len(rs) >= bitcoinMin)
+			Expect(t, true, len(rs) <= bitcoinMax)
+		})
+	}
 }
