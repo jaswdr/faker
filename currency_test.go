@@ -14,7 +14,6 @@ func TestCurrency(t *testing.T) {
 func TestCurrencyCode(t *testing.T) {
 	c := New().Currency()
 	code := c.Code()
-	NotExpect(t, "", code)
 	ExpectInString(t, code, currenciesCodes)
 }
 
@@ -34,7 +33,6 @@ func TestCurrencyAndCode(t *testing.T) {
 	c := New().Currency()
 	currency, code := c.CurrencyAndCode()
 	NotExpect(t, "", currency)
-	NotExpect(t, "", code)
 	ExpectInString(t, currency, currencies)
 	ExpectInString(t, code, currenciesCodes)
 }

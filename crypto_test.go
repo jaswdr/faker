@@ -38,27 +38,26 @@ type TestCaseRandomBitcoin struct {
 	desc              string
 	localInt          int
 	expectedSubstring string
-	assert            func(t *testing.T, a string)
 }
 
-func TestInExclusionBitcoin(t *testing.T) {
-	for _, c := range bannedBitcoin {
-		Expect(t, true, inExclusionBitcoin(int(rune(c[0]))))
+func TestIsInExclusionZone(t *testing.T) {
+	c := New().Crypto()
+	for _, address := range bannedBitcoin {
+		Expect(t, true, c.isInExclusionZone(int(rune(address[0]))))
 	}
 	// take any banned rune and + 1 it to get a valid character
-	Expect(t, false, inExclusionBitcoin(int(rune(bannedBitcoin[0][0]))+1))
+	Expect(t, false, c.isInExclusionZone(int(rune(bannedBitcoin[0][0]))+1))
 }
 
-func TestRandBitcoin(t *testing.T) {
+func TestGenerateBicoinAddress(t *testing.T) {
 	c := New().Crypto()
 	length := c.Faker.IntBetween(5, 10)
-	randAddr := randBitcoin(length, "a", c.Faker)
-	Expect(t, length+1, len(randAddr))
+	Expect(t, length+1, len(c.generateBicoinAddress(length, "a", c.Faker)))
 }
 
-func TestP2PKH(t *testing.T) {
+func TestP2PKHAddress(t *testing.T) {
 	c := New().Crypto()
-	addr := c.P2PKH()
+	addr := c.P2PKHAddress()
 	Expect(t, true, len(addr) >= bitcoinMin)
 	Expect(t, true, len(addr) <= bitcoinMax)
 	Expect(t, true, strings.HasPrefix(addr, validBitcoinPrefix["p2pkh"]))
@@ -67,17 +66,17 @@ func TestP2PKH(t *testing.T) {
 	}
 }
 
-func TestP2PKHWithLength(t *testing.T) {
+func TestP2PKHAddressWithLength(t *testing.T) {
 	c := New().Crypto()
 	length := c.Faker.IntBetween(26, 62)
-	addr := c.P2PKHWithLength(length)
+	addr := c.P2PKHAddressWithLength(length)
 	Expect(t, true, len(addr) == length)
 	Expect(t, true, strings.HasPrefix(addr, validBitcoinPrefix["p2pkh"]))
 }
 
-func TestP2SH(t *testing.T) {
+func TestP2SHAddress(t *testing.T) {
 	c := New().Crypto()
-	addr := c.P2SH()
+	addr := c.P2SHAddress()
 	Expect(t, true, len(addr) >= bitcoinMin)
 	Expect(t, true, len(addr) <= bitcoinMax)
 	Expect(t, true, strings.HasPrefix(addr, validBitcoinPrefix["p2sh"]))
@@ -86,17 +85,17 @@ func TestP2SH(t *testing.T) {
 	}
 }
 
-func TestP2SHWithLength(t *testing.T) {
+func TestP2SHAddressWithLength(t *testing.T) {
 	c := New().Crypto()
 	length := c.Faker.IntBetween(26, 62)
-	addr := c.P2SHWithLength(length)
+	addr := c.P2SHAddressWithLength(length)
 	Expect(t, true, len(addr) == length)
 	Expect(t, true, strings.HasPrefix(addr, validBitcoinPrefix["p2sh"]))
 }
 
-func TestBech32(t *testing.T) {
+func TestBech32Address(t *testing.T) {
 	c := New().Crypto()
-	addr := c.Bech32()
+	addr := c.Bech32Address()
 	Expect(t, true, len(addr) >= bitcoinMin)
 	Expect(t, true, len(addr) <= bitcoinMax)
 	Expect(t, true, strings.HasPrefix(addr, validBitcoinPrefix["bech32"]))
@@ -105,22 +104,22 @@ func TestBech32(t *testing.T) {
 	}
 }
 
-func TestBech32WithLength(t *testing.T) {
+func TestBech32AddressWithLength(t *testing.T) {
 	c := New().Crypto()
 	length := c.Faker.IntBetween(26, 62)
-	addr := c.Bech32WithLength(length)
+	addr := c.Bech32AddressWithLength(length)
 	Expect(t, true, len(addr) == length)
 	Expect(t, true, strings.HasPrefix(addr, validBitcoinPrefix["bech32"]))
 }
 
-func TestRandomEth(t *testing.T) {
+func TestEtheriumAddress(t *testing.T) {
 	c := New().Crypto()
-	addr := c.RandomEth()
+	addr := c.EtheriumAddress()
 	Expect(t, true, len(addr) == ethLen)
 	Expect(t, true, strings.HasPrefix(addr, ethPrefix))
 }
 
-func TestGetAlnumRange(t *testing.T) {
+func TestAlgorithmRange(t *testing.T) {
 	for k, tc := range []TestCaseAlnum{
 		{
 			// The Description of the test case
@@ -155,8 +154,7 @@ func TestGetAlnumRange(t *testing.T) {
 			gen.local = tc.localInt
 			// populate the generator with our mock as it is an interface.
 			c := Faker{Generator: gen}
-			a, b := getAlnumRange(c.Crypto().Faker)
-
+			a, b := c.Crypto().algorithmRange()
 			tc.assert(t, a, b)
 		})
 	}
@@ -192,7 +190,7 @@ func TestRandomBitcoin(t *testing.T) {
 			gen.local = tc.localInt
 			// populate the generator with our mock as it is an interface.
 			c := Faker{Generator: gen}
-			rs := c.Crypto().RandomBitcoin()
+			rs := c.Crypto().BitcoinAddress()
 			Expect(t, true, strings.HasPrefix(rs, tc.expectedSubstring))
 			Expect(t, true, len(rs) >= bitcoinMin)
 			Expect(t, true, len(rs) <= bitcoinMax)
