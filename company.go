@@ -74,27 +74,29 @@ type Company struct {
 }
 
 // CatchPhrase returns a fake catch phrase for Company
-func (c Company) CatchPhrase() (phrase string) {
+func (c Company) CatchPhrase() string {
+	var phrase strings.Builder
 	for i, words := range catchPhraseWords {
 		if i > 0 {
-			phrase += " "
+			phrase.WriteString(" ")
 		}
-		phrase += c.Faker.RandomStringElement(words)
+		phrase.WriteString(c.Faker.RandomStringElement(words))
 	}
 
-	return
+	return phrase.String()
 }
 
 // BS returns a fake bs words for Company
-func (c Company) BS() (bs string) {
+func (c Company) BS() string {
+	var bs strings.Builder
 	for i, words := range bsWords {
 		if i > 0 {
-			bs += " "
+			bs.WriteString(" ")
 		}
-		bs += c.Faker.RandomStringElement(words)
+		bs.WriteString(c.Faker.RandomStringElement(words))
 	}
 
-	return
+	return bs.String()
 }
 
 // Suffix returns a fake suffix for Company

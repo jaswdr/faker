@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-//tests BinaryString()
+// tests BinaryString()
 func TestBinaryString(t *testing.T) {
 	f := New().BinaryString()
 	inputLength := 11
@@ -20,4 +20,12 @@ func TestBinaryString(t *testing.T) {
 		}
 	}
 	Expect(t, true, isStringValid)
+}
+
+func BenchmarkBinaryString(b *testing.B) {
+	f := New().BinaryString()
+	inputLength := 100
+	for i := 0; i < b.N; i++ {
+		_ = f.BinaryString(inputLength)
+	}
 }
