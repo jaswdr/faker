@@ -1,16 +1,16 @@
 package faker
 
-// Gender is a faker struct for Gender
+// Blood is a faker struct for Blood
 type Blood struct {
 	Faker *Faker
 }
 
-// Name returns a Gender name for Gender
+var ( 
+		bloodTypes = [] string{"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"}
+)
+
+// Name returns a Blood name for Blood
 func (f Blood) Name() string {
-	return f.Faker.RandomStringElement([]string{"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"})
+	return f.Faker.RandomStringElement(bloodTypes)
 }
 
-// Abbr returns a Gender name for Gender
-func (f Blood) Abbr() string {
-	return f.Faker.RandomStringElement([]string{"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"})
-}
