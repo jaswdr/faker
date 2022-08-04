@@ -549,8 +549,3 @@ func NewWithSeed(src rand.Source) (f Faker) {
 func (f Faker) Blood() Blood {
 	return Blood{&f}
 }
-
-// CarPlate returns a fake CarPlate instance for Faker
-func (f Faker) CarPlate() CarPlate {
-	return CarPlate{&f}
-}
