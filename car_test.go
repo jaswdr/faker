@@ -28,3 +28,8 @@ func TestCarTransmissionGear(t *testing.T) {
 	v := New().Car().TransmissionGear()
 	NotExpect(t, "", v)
 }
+
+func TestCarPlate(t *testing.T) {
+	v := New().Car().Plate()
+	NotExpect(t, "", v)
+}
