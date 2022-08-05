@@ -38,13 +38,13 @@ func (f File) AbsoluteWin32Path(nbLen int) string {
 	return filepath.Join(f.DriveLetter(), f.Directory(nbLen), f.FilenameWithExtension())
 }
 
-// Directory returns a fake directory (the directory path style OS dependent)
+// Directory returns a fake directory (the directory path style is OS dependent)
 func (f File) Directory(nbLen int) string {
 	if runtime.GOOS == "windows" {
 		return f.DriveLetter() + filepath.Join(f.Faker.Lorem().Words(nbLen)...)
-	} else {
-		return "/" + filepath.Join(f.Faker.Lorem().Words(nbLen)...)
 	}
+
+	return "/" + filepath.Join(f.Faker.Lorem().Words(nbLen)...)
 }
 
 // DriveLetter returns a fake Win32 drive letter
