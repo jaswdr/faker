@@ -2,8 +2,8 @@ package faker
 
 import (
 	"fmt"
-	"path/filepath"
-	"runtime"
+	"os"
+	"strings"
 )
 
 var (
@@ -28,26 +28,32 @@ func (f File) FilenameWithExtension() string {
 	return fmt.Sprintf("%s.%s", text, extension)
 }
 
-// AbsoluteUnixPath returns a fake absolute unix path to a file
-func (f File) AbsoluteUnixPath(nbLen int) string {
-	return filepath.Join(f.Directory(nbLen), f.FilenameWithExtension())
-}
-
-// AbsoluteWin32Path returns a fake absolute win32 path to a file
-func (f File) AbsoluteWin32Path(nbLen int) string {
-	return filepath.Join(f.DriveLetter(), f.Directory(nbLen), f.FilenameWithExtension())
-}
-
-// Directory returns a fake directory (the directory path style is OS dependent)
-func (f File) Directory(nbLen int) string {
-	if runtime.GOOS == "windows" {
-		return f.DriveLetter() + filepath.Join(f.Faker.Lorem().Words(nbLen)...)
+// AbsoluteFilePath returns a fake absolute path to a fake file (style is dependent on OS)
+func (f File) AbsoluteFilePath(levels int) string {
+	path := []string{
+		f.Faker.Directory().Directory(levels),
+		f.FilenameWithExtension(),
 	}
 
-	return "/" + filepath.Join(f.Faker.Lorem().Words(nbLen)...)
+	return strings.Join(path, string(os.PathSeparator))
 }
 
-// DriveLetter returns a fake Win32 drive letter
-func (f File) DriveLetter() string {
-	return f.Faker.RandomLetter() + ":\\"
+// AbsoluteFilePathForUnix returns a fake absolute unix-style path to a fake file
+func (f File) AbsoluteFilePathForUnix(levels int) string {
+	path := []string{
+		f.Faker.Directory().UnixDirectory(levels),
+		f.FilenameWithExtension(),
+	}
+
+	return strings.Join(path, "/")
+}
+
+// AbsoluteFilePathForWindows returns a fake absolute win32-style path to a fake file
+func (f File) AbsoluteFilePathForWindows(levels int) string {
+	path := []string{
+		f.Faker.Directory().WindowsDirectory(levels),
+		f.FilenameWithExtension(),
+	}
+
+	return strings.Join(path, "\\")
 }
