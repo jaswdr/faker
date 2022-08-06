@@ -2,7 +2,6 @@ package faker
 
 import (
 	"fmt"
-	"os"
 	"strings"
 )
 
@@ -12,7 +11,8 @@ var (
 
 // File is a faker struct for File
 type File struct {
-	Faker *Faker
+	Faker      *Faker
+	OSResolver OSResolver
 }
 
 // Extension returns a fake Extension file
@@ -30,12 +30,12 @@ func (f File) FilenameWithExtension() string {
 
 // AbsoluteFilePath returns a fake absolute path to a fake file (style is dependent on OS)
 func (f File) AbsoluteFilePath(levels int) string {
-	path := []string{
-		f.Faker.Directory().Directory(levels),
-		f.FilenameWithExtension(),
+	switch f.OSResolver.OS() {
+	case "windows":
+		return f.AbsoluteFilePathForWindows(levels)
+	default:
+		return f.AbsoluteFilePathForUnix(levels)
 	}
-
-	return strings.Join(path, string(os.PathSeparator))
 }
 
 // AbsoluteFilePathForUnix returns a fake absolute unix-style path to a fake file

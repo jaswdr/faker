@@ -1,25 +1,26 @@
 package faker
 
 import (
-	"os"
 	"regexp"
-	"runtime"
 	"strings"
 	"testing"
 )
 
+func isUnixPath(path string) bool {
+	return path[0] == '/'
+}
+
+func isWindowsPath(path string) bool {
+	return regexp.MustCompile(`^[a-zA-Z]:\\`).MatchString(path[:3])
+}
+
 func TestDirectory(t *testing.T) {
 	p := New().Directory()
-
 	dir := p.Directory(2)
-	parts := strings.Split(dir, string(os.PathSeparator))
+	Expect(t, true, isUnixPath(dir) || isWindowsPath(dir))
 
-	Expect(t, true, len(parts) == 3)
-	if runtime.GOOS == "windows" {
-		Expect(t, true, regexp.MustCompile(`^[a-zA-Z]:`).MatchString(parts[0]))
-	} else {
-		Expect(t, true, dir[0] == '/')
-	}
+	p.OSResolver = WindowsOSResolver{}
+	Expect(t, true, isWindowsPath(p.Directory(2)))
 }
 
 func TestUnixDirectory(t *testing.T) {
@@ -29,7 +30,7 @@ func TestUnixDirectory(t *testing.T) {
 	parts := strings.Split(dir, "/")
 
 	Expect(t, true, len(parts) == 3)
-	Expect(t, true, parts[0] == "")
+	Expect(t, true, isUnixPath(dir))
 }
 
 func TestWindowsDirectory(t *testing.T) {
@@ -39,11 +40,10 @@ func TestWindowsDirectory(t *testing.T) {
 	parts := strings.Split(dir, "\\")
 
 	Expect(t, true, len(parts) == 3)
-	Expect(t, true, regexp.MustCompile(`^[a-zA-Z]:`).MatchString(parts[0]))
+	Expect(t, true, isWindowsPath(dir))
 }
 
 func TestDriveLetter(t *testing.T) {
 	p := New().Directory()
-	reg := regexp.MustCompile(`^[a-zA-Z]:\\`)
-	Expect(t, true, reg.MatchString(p.DriveLetter()))
+	Expect(t, true, isWindowsPath(p.DriveLetter()))
 }

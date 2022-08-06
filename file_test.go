@@ -1,9 +1,7 @@
 package faker
 
 import (
-	"path/filepath"
-	"regexp"
-	"runtime"
+	"os"
 	"strings"
 	"testing"
 )
@@ -22,11 +20,16 @@ func TestAbsolutePath(t *testing.T) {
 	p := New().File()
 
 	path := p.AbsoluteFilePath(2)
-	Expect(t, true, filepath.IsAbs(path))
+	parts := strings.Split(path, string(os.PathSeparator))
+	Expect(t, true, isUnixPath(path) || isWindowsPath(path))
+	Expect(t, true, len(parts) == 4)
+	Expect(t, true, len(strings.Split(parts[len(parts)-1], ".")) == 2)
 
-	if runtime.GOOS == "windows" {
-		Expect(t, true, regexp.MustCompile(`^[a-zA-Z]:`).MatchString(path[:2]))
-	}
+	p.OSResolver = WindowsOSResolver{}
+	path = p.AbsoluteFilePath(2)
+	Expect(t, true, isWindowsPath(p.AbsoluteFilePath(2)))
+	Expect(t, true, len(parts) == 4)
+	Expect(t, true, len(strings.Split(parts[len(parts)-1], ".")) == 2)
 }
 
 func TestAbsoluteFilePathForUnix(t *testing.T) {
@@ -35,7 +38,7 @@ func TestAbsoluteFilePathForUnix(t *testing.T) {
 	path := p.AbsoluteFilePathForUnix(2)
 	parts := strings.Split(path, "/")
 
-	Expect(t, true, path[0] == '/')
+	Expect(t, true, isUnixPath(path))
 	Expect(t, true, len(parts) == 4)
 	Expect(t, true, len(strings.Split(parts[len(parts)-1], ".")) == 2)
 }
@@ -46,7 +49,7 @@ func TestAbsoluteFilePathForWindows(t *testing.T) {
 	path := p.AbsoluteFilePathForWindows(2)
 	parts := strings.Split(path, "\\")
 
-	Expect(t, true, regexp.MustCompile(`^[a-zA-Z]:`).MatchString(parts[0]))
+	Expect(t, true, isWindowsPath(path))
 	Expect(t, true, len(parts) == 4)
 	Expect(t, true, len(strings.Split(parts[len(parts)-1], ".")) == 2)
 }

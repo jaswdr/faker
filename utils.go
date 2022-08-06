@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"runtime"
 )
 
 const (
@@ -41,4 +42,17 @@ type TempFileCreatorImpl struct{}
 // TempFile creates a temporary file
 func (TempFileCreatorImpl) TempFile(prefix string) (f *os.File, err error) {
 	return ioutil.TempFile(os.TempDir(), prefix)
+}
+
+// OSResolver returns the GOOS value for operating an operating system
+type OSResolver interface {
+	OS() string
+}
+
+// OSResolverImpl is the default implementation of OSResolver
+type OSResolverImpl struct{}
+
+// OS returns the runtime.GOOS value for the host operating system
+func (OSResolverImpl) OS() string {
+	return runtime.GOOS
 }

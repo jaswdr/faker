@@ -3,6 +3,7 @@ package faker
 import (
 	"net/http"
 	"os"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -42,4 +43,15 @@ func TestTempFileCreatorImplCanCreateTempFiles(t *testing.T) {
 	Expect(t, err, nil)
 	Expect(t, true, strings.Contains(f.Name(), "prefix"))
 	Expect(t, f.Close(), nil)
+}
+
+type WindowsOSResolver struct{}
+
+func (WindowsOSResolver) OS() string {
+	return "windows"
+}
+
+func TestOSResolverImplReturnsGOOS(t *testing.T) {
+	resolver := OSResolverImpl{}
+	Expect(t, runtime.GOOS, resolver.OS())
 }
