@@ -27,6 +27,7 @@ func TestAbsolutePath(t *testing.T) {
 
 	p.OSResolver = WindowsOSResolver{}
 	path = p.AbsoluteFilePath(2)
+	parts = strings.Split(path, "\\")
 	Expect(t, true, isWindowsPath(p.AbsoluteFilePath(2)))
 	Expect(t, true, len(parts) == 4)
 	Expect(t, true, len(strings.Split(parts[len(parts)-1], ".")) == 2)
