@@ -433,7 +433,12 @@ func (f Faker) Image() Image {
 
 // File returns a fake File instance for Faker
 func (f Faker) File() File {
-	return File{&f}
+	return File{&f, OSResolverImpl{}}
+}
+
+// Directory returns a fake Directory instance for Faker
+func (f Faker) Directory() Directory {
+	return Directory{&f, OSResolverImpl{}}
 }
 
 // YouTube returns a fake YouTube instance for Faker
