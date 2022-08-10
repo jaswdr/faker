@@ -217,7 +217,7 @@ func (f Music) Name() string {
 }
 
 // Author returns the authors name for Music
-func (f Music) Author() string {
+func (Music) Author() string {
 	p := New().Person()
 	return p.Name()
 }

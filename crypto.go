@@ -17,7 +17,7 @@ var (
 )
 
 // Checks whether the ascii value provided is in the exclusion for bitcoin.
-func (c Crypto) isInExclusionZone(ascii int) bool {
+func (Crypto) isInExclusionZone(ascii int) bool {
 	switch ascii {
 	// Ascii for uppercase letter "O", uppercase letter "I", lowercase letter "l", and the number "0"
 	case 48, 73, 79, 108:

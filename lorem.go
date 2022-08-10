@@ -55,7 +55,7 @@ func (l Lorem) Paragraphs(nbParagraph int) (out []string) {
 }
 
 // Text returns a fake text for Lorem
-func (l Lorem) Text(maxNbChars int) (out string) {
+func (Lorem) Text(maxNbChars int) (out string) {
 	for _, w := range wordsList {
 		if len(out)+len(w) > maxNbChars {
 			break

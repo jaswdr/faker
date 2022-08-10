@@ -12,7 +12,7 @@ type ErrorRaiserHTTPClient struct {
 	err error
 }
 
-func (client ErrorRaiserHTTPClient) Get(url string) (*http.Response, error) {
+func (client ErrorRaiserHTTPClient) Get(_ string) (*http.Response, error) {
 	return nil, client.err
 }
 
@@ -20,7 +20,7 @@ type ErrorRaiserTempFileCreator struct {
 	err error
 }
 
-func (creator ErrorRaiserTempFileCreator) TempFile(prefix string) (*os.File, error) {
+func (creator ErrorRaiserTempFileCreator) TempFile(_ string) (*os.File, error) {
 	return nil, creator.err
 }
 

@@ -131,22 +131,22 @@ func (p Person) Suffix() string {
 }
 
 // TitleMale returns a fake male title for Person
-func (p Person) TitleMale() string {
+func (Person) TitleMale() string {
 	return "Mr."
 }
 
 // TitleFemale returns a fake female title for Person
-func (p Person) TitleFemale() string {
+func (Person) TitleFemale() string {
 	return "Ms."
 }
 
 // GenderMale returns a fake GenderMale for Person
-func (p Person) GenderMale() string {
+func (Person) GenderMale() string {
 	return "Male"
 }
 
 // GenderFemale returns a fake GenderFemale for Person
-func (p Person) GenderFemale() string {
+func (Person) GenderFemale() string {
 	return "Female"
 }
 

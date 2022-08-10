@@ -55,7 +55,7 @@ func TestTextNotEmpty(t *testing.T) {
 	l := New().Lorem()
 	for i := 1; i < 255; i++ {
 		text := l.Text(i)
-		Expect(t, true, len(text) != 0)
+		Expect(t, true, text != "")
 	}
 }
 
