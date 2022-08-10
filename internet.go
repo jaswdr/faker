@@ -74,7 +74,7 @@ func (i Internet) Password() string {
 // Domain returns a fake domain for Internet
 func (i Internet) Domain() string {
 	domain := strings.ToLower(i.Faker.Lexify("???"))
-	return strings.Join([]string{domain, i.TLD()}, ".")
+	return domain + "." + i.TLD()
 }
 
 // FreeEmailDomain returns a fake free email domain for Internet
@@ -107,12 +107,12 @@ func (i Internet) Email() string {
 func (i Internet) FreeEmail() string {
 	domain := i.Faker.RandomStringElement(freeEmailDomain)
 
-	return strings.Join([]string{i.transformIntoValidEmailName(i.User()), domain}, "@")
+	return i.transformIntoValidEmailName(i.User()) + "@" + domain
 }
 
 // SafeEmail returns a fake safe email address for Internet
 func (i Internet) SafeEmail() string {
-	return strings.Join([]string{i.transformIntoValidEmailName(i.User()), i.SafeEmailDomain()}, "@")
+	return i.transformIntoValidEmailName(i.User()) + "@" + i.SafeEmailDomain()
 }
 
 // CompanyEmail returns a fake company email address for Internet
@@ -121,9 +121,9 @@ func (i Internet) CompanyEmail() string {
 
 	companyName := i.transformIntoValidEmailName(c.Name())
 
-	domain := strings.Join([]string{companyName, i.Domain()}, ".")
+	domain := companyName + "." + i.Domain()
 
-	return strings.Join([]string{i.transformIntoValidEmailName(i.User()), domain}, "@")
+	return i.transformIntoValidEmailName(i.User()) + "@" + domain
 }
 
 // TLD returns a fake tld for Internet
