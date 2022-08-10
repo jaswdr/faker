@@ -66,7 +66,7 @@ func ExpectInString(t *testing.T, expected string, in []string) {
 	}
 }
 
-func F(t *testing.T) Faker {
+func F(_ *testing.T) Faker {
 	return NewWithSeed(rand.NewSource(0))
 }
 

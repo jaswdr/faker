@@ -20,7 +20,7 @@ type GeneratorMock struct {
 	local int
 }
 
-func (g GeneratorMock) Intn(n int) int {
+func (g GeneratorMock) Intn(_ int) int {
 	return g.local
 }
 

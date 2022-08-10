@@ -12,7 +12,7 @@ type ErrorRaiserPngEncoder struct {
 	err error
 }
 
-func (creator ErrorRaiserPngEncoder) Encode(w io.Writer, m image.Image) error {
+func (creator ErrorRaiserPngEncoder) Encode(_ io.Writer, _ image.Image) error {
 	return creator.err
 }
 
