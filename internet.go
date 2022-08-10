@@ -12,14 +12,17 @@ var (
 
 	tld = []string{"com", "com", "com", "com", "com", "com", "biz", "info", "net", "org"}
 
-	userFormats = []string{"{{lastName}}.{{firstName}}",
+	userFormats = []string{
+		"{{lastName}}.{{firstName}}",
 		"{{firstName}}.{{lastName}}",
 		"{{firstName}}",
-		"{{lastName}}"}
+		"{{lastName}}",
+	}
 
 	emailFormats = []string{"{{user}}@{{domain}}", "{{user}}@{{freeEmailDomain}}"}
 
-	urlFormats = []string{"http://www.{{domain}}/",
+	urlFormats = []string{
+		"http://www.{{domain}}/",
 		"http://{{domain}}/",
 		"http://www.{{domain}}/{{slug}}",
 		"http://www.{{domain}}/{{slug}}",
@@ -40,7 +43,7 @@ type Internet struct {
 	Faker *Faker
 }
 
-func (i Internet) transformIntoValidEmailName(name string) string {
+func (Internet) transformIntoValidEmailName(name string) string {
 	name = strings.ToLower(name)
 	onlyValidCharacters := regexp.MustCompile(`[^a-z0-9._%+\-]+`)
 	name = onlyValidCharacters.ReplaceAllString(name, "_")
@@ -80,7 +83,7 @@ func (i Internet) FreeEmailDomain() string {
 }
 
 // SafeEmailDomain returns a fake safe email domain for Internet
-func (i Internet) SafeEmailDomain() string {
+func (Internet) SafeEmailDomain() string {
 	return "example.org"
 }
 

@@ -236,7 +236,7 @@ func (f Faker) RandomIntElement(a []int) int {
 }
 
 // ShuffleString returns a fake shuffled string from a given string for Faker
-func (f Faker) ShuffleString(s string) string {
+func (Faker) ShuffleString(s string) string {
 	orig := strings.Split(s, "")
 	dest := make([]string, len(orig))
 
