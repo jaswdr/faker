@@ -20,11 +20,7 @@ var (
 func (Crypto) isInExclusionZone(ascii int) bool {
 	switch ascii {
 	// Ascii for uppercase letter "O", uppercase letter "I", lowercase letter "l", and the number "0"
-	case
-		48,
-		73,
-		79,
-		108:
+	case 48, 73, 79, 108:
 		return true
 	}
 	return false

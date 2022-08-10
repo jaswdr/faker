@@ -12,14 +12,17 @@ var (
 
 	tld = []string{"com", "com", "com", "com", "com", "com", "biz", "info", "net", "org"}
 
-	userFormats = []string{"{{lastName}}.{{firstName}}",
+	userFormats = []string{
+		"{{lastName}}.{{firstName}}",
 		"{{firstName}}.{{lastName}}",
 		"{{firstName}}",
-		"{{lastName}}"}
+		"{{lastName}}",
+	}
 
 	emailFormats = []string{"{{user}}@{{domain}}", "{{user}}@{{freeEmailDomain}}"}
 
-	urlFormats = []string{"http://www.{{domain}}/",
+	urlFormats = []string{
+		"http://www.{{domain}}/",
 		"http://{{domain}}/",
 		"http://www.{{domain}}/{{slug}}",
 		"http://www.{{domain}}/{{slug}}",

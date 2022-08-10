@@ -54,9 +54,11 @@ var (
 		"Synthpunk", "Tech house", "Tech trance", "Technical death metal", "Techno-DNB", "Techno-folk", "Techno", "Technopop", "Techstep",
 		"Tecno brega", "Terrorcore", "Third stream", "Thrash metal", "Thrashcore", "Toytown Techno", "Trad jazz", "Traditional doom", "Trance",
 		"Trap", "Tribal house", "Trip hop", "Turbofolk", "Twee Pop", "Uplifting trance", "Vaporwave", "Viking metal", "Vocal house",
-		"Vocal jazz", "Vocal trance", "West Coast jazz", "Western", "Witch House/Drag", "World fusion", "Worldbeat", "Yacht rock", "Yorkshire Bleeps and Bass"}
+		"Vocal jazz", "Vocal trance", "West Coast jazz", "Western", "Witch House/Drag", "World fusion", "Worldbeat", "Yacht rock", "Yorkshire Bleeps and Bass",
+	}
 
-	musicNameAdverbs = []string{"Abnormally", "Absentmindedly", "Accidentally", "Acidly", "Actually", "Adventurously", "Afterwards", "Almost", "Always", "Angrily", "Annually", "Anxiously", "Arrogantly", "Awkwardly", "Badly",
+	musicNameAdverbs = []string{
+		"Abnormally", "Absentmindedly", "Accidentally", "Acidly", "Actually", "Adventurously", "Afterwards", "Almost", "Always", "Angrily", "Annually", "Anxiously", "Arrogantly", "Awkwardly", "Badly",
 		"Bashfully", "Beautifully", "Bitterly", "Bleakly", "Blindly", "Blissfully", "Boastfully", "Boldly", "Bravely", "Briefly", "Brightly", "Briskly", "Broadly", "Busily", "Calmly", "Carefully", "Carelessly", "Cautiously",
 		"Certainly", "Cheerfully", "Clearly", "Cleverly", "Closely", "Coaxingly", "Colorfully", "Commonly", "Continually", "Coolly", "Correctly", "Courageously", "Crossly", "Cruelly", "Curiously", "Daily", "Daintily", "Dearly",
 		"Deceivingly", "Deeply", "Defiantly", "Deliberately", "Delightfully", "Diligently", "Dimly", "Doubtfully", "Dreamily", "Easily", "Elegantly", "Energetically", "Enormously", "Enthusiastically", "Equally", "Especially",
@@ -74,9 +76,11 @@ var (
 		"Unaccountably", "Unbearably", "Unethically", "Unexpectedly", "Unfortunately", "Unimpressively", "Unnaturally", "Unnecessarily", "Upbeat", "Upliftingly", "Upright", "Upside-down", "Upward", "Upwardly", "Urgently",
 		"Usefully", "Uselessly", "Usually", "Utterly", "Vacantly", "Vaguely", "Vainly", "Valiantly", "Vastly", "Verbally", "Very", "Viciously", "Victoriously", "Violently", "Vivaciously", "Voluntarily", "Warmly", "Weakly",
 		"Wearily", "Well", "Wetly", "Wholly", "Wildly", "Willfully", "Wisely", "Woefully", "Wonderfully", "Worriedly", "Wrongly", "Yawningly", "Yearly", "Yearningly", "Yesterday", "Yieldingly", "Youthfully", "Zealously",
-		"Zestfully", "Zestily"}
+		"Zestfully", "Zestily",
+	}
 
-	musicNameVerbs = []string{"Abiding", "Accelerating", "Accepting", "Accomplishing", "Achieving", "Acquiring", "Acting", "Activating", "Adapting", "Adding", "Addressing", "Administering", "Admiring", "Admitting", "Adopting", "Advising", "Affording", "Agreeing", "Alerting", "Allowing", "Altering", "Amusing",
+	musicNameVerbs = []string{
+		"Abiding", "Accelerating", "Accepting", "Accomplishing", "Achieving", "Acquiring", "Acting", "Activating", "Adapting", "Adding", "Addressing", "Administering", "Admiring", "Admitting", "Adopting", "Advising", "Affording", "Agreeing", "Alerting", "Allowing", "Altering", "Amusing",
 		"Analyzing", "Announcing", "Annoying", "Answering", "Anticipating", "Apologizing", "Appearing", "Applauding", "Approving", "Arguing", "Arranging", "Arresting", "Arriving", "Asking", "Assembling", "Assisting", "Attaching", "Attacking", "Attracting", "Avoiding", "Awaking", "Backing",
 		"Baking", "Balancing", "Banging", "Baring", "Bathing", "Bating", "Battling", "Beaming", "Bearing", "Beating", "Becoming", "Beging", "Beginning", "Behaving", "Beholding", "Belonging", "Bending", "Beting", "Biding", "Binding", "Biting", "Bleaching", "Bleeding", "Blessing", "Blinding",
 		"Blinking", "Blowing", "Blushing", "Boasting", "Boiling", "Bolting", "Bombing", "Booking", "Boring", "Borrowing", "Bouncing", "Bowing", "Boxing", "Braking", "Branching", "Breaking", "Breathing", "Breeding", "Briefing", "Bring", "Broadcasting", "Bruising", "Brushing", "Bubbling",
@@ -118,17 +122,21 @@ var (
 		"Trembling", "Tricking", "Tripping", "Trotting", "Troubleshooting", "Troubling", "Trusting", "Trying", "Tugging", "Tumbling", "Turning", "Tutoring", "Twisting", "Typing", "Undergoing", "Understanding", "Undertaking", "Undressing", "Unfastening", "Unifying", "Uniting", "Unlocking", "Unpacking",
 		"Untidying", "Updating", "Upgrading", "Upholding", "Upsetting", "Using", "Utilizing", "Vanishing", "Verbalizing", "Verifying", "Vexing", "Visiting", "Wailing", "Waiting", "Waking", "Walking", "Wandering", "Wanting", "Warming", "Warning", "Washing", "Wasting", "Watching", "Watering", "Waving",
 		"Wearing", "Weaving", "Wedding", "Weeping", "Weighing", "Welcoming", "Wending", "Wetting", "Whining", "Whipping", "Whirling", "Whispering", "Whistling", "Winding", "Wining", "Winking", "Wiping", "Wishing", "Withdrawing", "Withholding", "Withstanding", "Wobbling", "Wondering", "Working",
-		"Worrying", "Wrapping", "Wrecking", "Wrestling", "Wriggling", "Writing", "Yawning", "Yelling"}
+		"Worrying", "Wrapping", "Wrecking", "Wrestling", "Wriggling", "Writing", "Yawning", "Yelling",
+	}
 
-	musicNameAdjectives = []string{"Acceptable", "Alcoholic", "Apathetic", "Barbarous", "Bashful", "Bawdy", "Beautiful", "Befitting", "Belligerent", "Beneficial", "Bent", "Berserk", "Best", "Better", "Bewildered", "Big", "Billowy", "Bite-sized", "Bitter", "Bizarre", "Black", "Black-and-white", "Bloody", "Blue", "Blue-Brown",
+	musicNameAdjectives = []string{
+		"Acceptable", "Alcoholic", "Apathetic", "Barbarous", "Bashful", "Bawdy", "Beautiful", "Befitting", "Belligerent", "Beneficial", "Bent", "Berserk", "Best", "Better", "Bewildered", "Big", "Billowy", "Bite-sized", "Bitter", "Bizarre", "Black", "Black-and-white", "Bloody", "Blue", "Blue-Brown",
 		"Cheap", "Coherent", "Crabby", "Damaged", "Defiant", "Direful", "Dull", "Elegant", "Evanescent", "Evasive", "Even", "Excellent", "Excited", "Exciting", "Exclusive", "Exotic", "Expensive", "Extra-large", "Extra-small", "Exuberant", "Exultant", "Fabulous", "Faded", "Faint", "Fair", "Faithful", "Fallacious",
 		"False", "Familiar", "Famous", "Fanatical", "Fancy", "Fantastic", "Far", "Far-Five", "Frail", "Gabby", "Good", "Grumpy", "Guarded", "Guiltless", "Gullible", "Gusty", "Guttural", "Habitual", "Half", "Hallowed", "Halting", "Handsome", "Handsomely", "Handy", "Hanging", "Hapless", "Happy", "Hard", "Hard-to-find", "Harmonious",
 		"Harsh", "Hateful", "Heady", "Healthy", "Heartbreaking", "Heavenly", "Heavy", "Hellish", "Helpful", "Helpless", "Hesitant", "Hideous", "High", "High-Hurt", "Hushed", "Husky", "Hypnotic", "Hysterical", "Icky", "Icy", "Idiotic", "Ignorant", "Ill", "Ill-fated", "Ill-Infamous", "Jolly", "Lame", "Limping", "Literate", "Little",
 		"Lively", "Living", "Lonely", "Long", "Long-Madly", "Measly", "Moaning", "Near", "Nonstop", "Obtainable", "Oceanic", "Odd", "Offbeat", "Old", "Old-Overt", "Perpetual", "Possessive", "Puffy", "Racial", "Remarkable", "Rough", "Scattered", "Scientific", "Scintillating", "Scrawny", "Screeching", "Second", "Second-Shut",
 		"Smart", "Spiteful", "Sticky", "Super", "Tart", "Tasteful", "Tasteless", "Tasty", "Tawdry", "Tearful", "Tedious", "Teeny", "Teeny-Thoughtful", "Trite", "Undesirable", "Uppity", "Victorious", "Watery", "Weak", "Wealthy", "Weary", "Well-groomed", "Well-made", "Well-off", "Well-to-do", "Wet", "Whimsical", "Whispering",
-		"White", "Whole", "Wholesale", "Wicked", "Wide", "Wide-Wretched", "Wrong", "Wry", "Xenophobic", "Yellow", "Yielding", "Young", "Youthful", "Yummy", "Zany", "Zealous", "Zesty", "Zippy", "Zonked"}
+		"White", "Whole", "Wholesale", "Wicked", "Wide", "Wide-Wretched", "Wrong", "Wry", "Xenophobic", "Yellow", "Yielding", "Young", "Youthful", "Yummy", "Zany", "Zealous", "Zesty", "Zippy", "Zonked",
+	}
 
-	musicNameNouns = []string{"Accounts", "Achievers", "Acoustics", "Actions", "Activities", "Actors", "Acts", "Additions", "Adjustments", "Advertisements", "Advices", "Aftermaths", "Afternoons", "Agreements", "Airplanes", "Airports", "Airs", "Alarms", "Amounts", "Amplifiers", "Amusements", "Angles", "Animals", "Answers", "Apparatus", "Apples", "Appliances", "Approvals", "Arguments",
+	musicNameNouns = []string{
+		"Accounts", "Achievers", "Acoustics", "Actions", "Activities", "Actors", "Acts", "Additions", "Adjustments", "Advertisements", "Advices", "Aftermaths", "Afternoons", "Agreements", "Airplanes", "Airports", "Airs", "Alarms", "Amounts", "Amplifiers", "Amusements", "Angles", "Animals", "Answers", "Apparatus", "Apples", "Appliances", "Approvals", "Arguments",
 		"Arithmetics", "Arms", "Arts", "Attacks", "Attempts", "Attentions", "Attractions", "Babys", "Backs", "Badges", "Bags", "Baits", "Balances", "Balloons", "Balls", "Bananas", "Bands", "Barrels", "Bars", "Baseballs", "Bases", "Basins", "Basketballs", "Baskets", "Baths", "Bats", "Battles", "Beads", "Beams", "Beans", "Bears", "Beasts", "Bedrooms", "Beds", "Beefs", "Bees", "Beetles",
 		"Beggars", "Beginners", "Behaviors", "Beliefs", "Believes", "Bell", "Bikes", "Birds", "Birthdays", "Births", "Bites", "Bits", "Blades", "Blankets", "Bloods", "Blows", "Boards", "Boats", "Bodys", "Bombs", "Bones", "Books", "Boots", "Borders", "Bottles", "Boxes", "Boys", "Brains", "Brakes", "Branches", "Breads", "Breakfasts", "Breaths", "Bricks", "Bridges", "Brothers", "Brushes",
 		"Bubbles", "Buckets", "Buildings", "Bulbs", "Bullets", "Buns", "Burns", "Bursts", "Bushes", "Buttons", "Cabbages", "Cables", "Cakes", "Calculators", "Calendars", "Cameras", "Camps", "Cannons", "Cans", "Canvass", "Caps", "Captions", "Cards", "Cares", "Carpenters", "Carriages", "Cars", "Cartoons", "Carts", "Casts", "Cats", "Causes", "Caves", "Cellars", "Cents", "Chains", "Chairs",
@@ -151,9 +159,11 @@ var (
 		"Streets", "Strings", "Structures", "Substances", "Sugars", "Suggestions", "Suits", "Summers", "Suns", "Supports", "Surprises", "Sweaters", "Swims", "Swings", "Systems", "Tables", "Tails", "Talks", "Tanks", "Tastes", "Teachings", "Teams", "Tempers", "Tents", "Tests", "Textures", "Theories", "Things", "Thoughts", "Threads", "Thrills", "Throats", "Thrones", "Thumbs",
 		"Thunders", "Tickets", "Tigers", "Times", "Tins", "Tips", "Titles", "Toads", "Toes", "Tomatoes", "Tongues", "Tops", "Touchs", "Towns", "Toys", "Trades", "Trails", "Trains", "Tramps", "Transports", "Trays", "Treatments", "Trees", "Trees", "Tricks", "Triggers", "Trips", "Troubles", "Trucks", "Tubs", "Turkeys", "Turns", "Twigs", "Twists", "Umbrellas", "Units", "Universes", "Vacations",
 		"Valleys", "Values", "Vans", "Vases", "Vegetables", "Veils", "Veins", "Verses", "Vessels", "Vests", "Views", "Villages", "Visitors", "Voices", "Volcanos", "Volleyballs", "Voyages", "Walks", "Walls", "Wars", "Waves", "Ways", "Weeks", "Weights", "Wheels", "Whips", "Whistles", "Windows", "Winds", "Wines", "Wings", "Winters", "Wires", "Wishes", "Women", "Words", "Works", "Worlds", "Worms",
-		"Worshippers", "Wounds", "Wrenches", "Wrens", "Wrists", "Writers", "Writings", "Yards", "Years", "Zebras", "Zippers"}
+		"Worshippers", "Wounds", "Wrenches", "Wrens", "Wrists", "Writers", "Writings", "Yards", "Years", "Zebras", "Zippers",
+	}
 
-	musicNameEndings = []string{"In Paradise", "On The Floor", "In Throwing Distance", "Still Standing", "In The Jungle", "On My Mind", "On Fire", "In This Club", "In This World", "On The Go", "At The Party", "In The Mix", "Filtered Past",
+	musicNameEndings = []string{
+		"In Paradise", "On The Floor", "In Throwing Distance", "Still Standing", "In The Jungle", "On My Mind", "On Fire", "In This Club", "In This World", "On The Go", "At The Party", "In The Mix", "Filtered Past",
 		"In The Fire", "In The Future", "In His Heart", "Above The Darkness", "Under It All", "From My Mind", "It Worked", "In The Thick Of It", "In A Minute", "From Somewhere", "Far Too Bright", "From Distant Love",
 		"Remember That Night", "All Our Money", "She Had It", "He Was Crazy", "Mama Always Said", "Having A Memory", "Treating You Well", "Knowing The Ropes", "In An Instant", "After Forever", "Under Attack",
 		"Above The Clouds", "In The Story", "Under You", "On The Fence", "In Crazy Times", "In Case", "In My Day", "Gone Forever", "Under Heaven", "In Your Eyes", "Of Nothing", "Of Life", "Always Shining", "Watching That Thing",
@@ -168,7 +178,8 @@ var (
 		"On Fire", "Putting It Out There", "After Dinner", "From Heaven", "Putting It On", "On Pause", "Delayed Reaction", "On The News", "Walking Around", "Writing It Down", "Ripping It Up", "Under It", "Coming Up Short",
 		"Making It Happen", "Planting A Seed", "Helping Them Out", "Sitting Down", "Standing Up", "Breathing Heavy", "Asking Nicely", "Having A Hot Meal", "From The Past", "Asking Nicely", "At Work", "Below The Shelf", "Off The Roof",
 		"Dancing All Night", "Blasting The Hillside", "Through The Window", "Leaving Town", "Breaking Down", "Making Noise", "Getting A Ride", "On My Brain", "Of My Dreams", "Loving It", "On My Watch", "From The Girl", "Running Off",
-		"Starting Over", "Zooming In"}
+		"Starting Over", "Zooming In",
+	}
 )
 
 // Music is a faker struct for Music
