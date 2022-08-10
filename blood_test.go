@@ -9,5 +9,3 @@ func TestBloodName(t *testing.T) {
 	NotExpect(t, "", v)
 	ExpectInString(t, v, bloodTypes)
 }
-
-
