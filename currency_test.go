@@ -24,7 +24,7 @@ func TestCurrencyNumber(t *testing.T) {
 
 func TestCurrencyCountry(t *testing.T) {
 	c := New().Currency()
-	country := c.Country() 
+	country := c.Country()
 	NotExpect(t, "", country)
 	ExpectInString(t, country, currenciesCountries)
 }

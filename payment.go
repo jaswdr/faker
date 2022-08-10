@@ -4,12 +4,11 @@ import (
 	"fmt"
 )
 
-var (
-	cardVendors = []string{
-		"Visa", "Visa", "Visa", "Visa", "Visa",
-		"MasterCard", "MasterCard", "MasterCard", "MasterCard", "MasterCard",
-		"American Express", "Discover Card", "Visa Retired"}
-)
+var cardVendors = []string{
+	"Visa", "Visa", "Visa", "Visa", "Visa",
+	"MasterCard", "MasterCard", "MasterCard", "MasterCard", "MasterCard",
+	"American Express", "Discover Card", "Visa Retired",
+}
 
 // Payment is a faker struct for Payment
 type Payment struct {

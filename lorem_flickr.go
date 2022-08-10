@@ -18,7 +18,6 @@ type LoremFlickr struct {
 
 // Image generates a *os.File with a random image using the loremflickr.com service
 func (lf LoremFlickr) Image(width, height int, categories []string, prefix string, categoriesStrict bool) *os.File {
-
 	url := loremFlickrBaseURL
 
 	switch prefix {

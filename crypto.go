@@ -20,18 +20,14 @@ var (
 func (c Crypto) isInExclusionZone(ascii int) bool {
 	switch ascii {
 	// Ascii for uppercase letter "O", uppercase letter "I", lowercase letter "l", and the number "0"
-	case
-		48,
-		73,
-		79,
-		108:
+	case 48, 73, 79, 108:
 		return true
 	}
 	return false
 }
 
 // algorithmRange decides whether to get digit, uppercase, or lowercase. returns the ascii range to do IntBetween on
-func (c Crypto)  algorithmRange() (int, int) {
+func (c Crypto) algorithmRange() (int, int) {
 	dec := c.Faker.IntBetween(0, 2)
 	if dec == 0 {
 		// digit

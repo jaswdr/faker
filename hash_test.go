@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-//Check if input is hex encoded string
+// Check if input is hex encoded string
 func checkIfHexString(s string) bool {
 	for i := 0; i < len(s); i++ {
 		if !((s[i] >= 97 && s[i] <= 102) || (s[i] >= 48 && s[i] <= 57)) {
@@ -15,7 +15,7 @@ func checkIfHexString(s string) bool {
 	return true
 }
 
-//tests SHA256()
+// tests SHA256()
 func TestSHA256(t *testing.T) {
 	hash := New().Hash()
 	s := hash.SHA256()
@@ -24,7 +24,7 @@ func TestSHA256(t *testing.T) {
 	Expect(t, true, checkIfHexString(s))
 }
 
-//tests SHA512()
+// tests SHA512()
 func TestSHA512(t *testing.T) {
 	hash := New().Hash()
 	s := hash.SHA512()
@@ -33,7 +33,7 @@ func TestSHA512(t *testing.T) {
 	Expect(t, true, checkIfHexString(s))
 }
 
-//tests MD5()
+// tests MD5()
 func TestMD5(t *testing.T) {
 	hash := New().Hash()
 	s := hash.MD5()

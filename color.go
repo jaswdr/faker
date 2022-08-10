@@ -8,11 +8,14 @@ import (
 var (
 	colorLetters = []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"}
 
-	safeColorNames = []string{"black", "maroon", "green", "navy", "olive",
+	safeColorNames = []string{
+		"black", "maroon", "green", "navy", "olive",
 		"purple", "teal", "lime", "blue", "silver",
-		"gray", "yellow", "fuchsia", "aqua", "white"}
+		"gray", "yellow", "fuchsia", "aqua", "white",
+	}
 
-	allColorNames = []string{"AliceBlue", "AntiqueWhite", "Aqua", "Aquamarine",
+	allColorNames = []string{
+		"AliceBlue", "AntiqueWhite", "Aqua", "Aquamarine",
 		"Azure", "Beige", "Bisque", "Black", "BlanchedAlmond",
 		"Blue", "BlueViolet", "Brown", "BurlyWood", "CadetBlue",
 		"Chartreuse", "Chocolate", "Coral", "CornflowerBlue",
@@ -37,7 +40,8 @@ var (
 		"PowderBlue", "Purple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon",
 		"SandyBrown", "SeaGreen", "SeaShell", "Sienna", "Silver", "SkyBlue", "SlateBlue",
 		"SlateGray", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle", "Tomato",
-		"Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen"}
+		"Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen",
+	}
 )
 
 // Color is a faker struct for Color
