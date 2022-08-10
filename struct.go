@@ -110,7 +110,7 @@ func (s Struct) rSlice(t reflect.Type, v reflect.Value, function string, size in
 	}
 }
 
-func (s Struct) rString(t reflect.Type, v reflect.Value, function string) {
+func (s Struct) rString(_ reflect.Type, v reflect.Value, function string) {
 	if function != "" {
 		v.SetString(s.Faker.Bothify(function))
 	} else {
@@ -184,6 +184,6 @@ func (s Struct) rFloat(t reflect.Type, v reflect.Value, function string) {
 	}
 }
 
-func (s Struct) rBool(t reflect.Type, v reflect.Value) {
+func (s Struct) rBool(_ reflect.Type, v reflect.Value) {
 	v.SetBool(s.Faker.Bool())
 }
