@@ -17,7 +17,7 @@ type PngEncoder interface {
 type PngEncoderImpl struct{}
 
 // Encode does the encoding of the image.Image to an io.Writer
-func (encoder PngEncoderImpl) Encode(w io.Writer, m image.Image) error {
+func (PngEncoderImpl) Encode(w io.Writer, m image.Image) error {
 	return png.Encode(w, m)
 }
 

@@ -14,7 +14,7 @@ type YouTube struct {
 }
 
 // GenerateVideoID returns a youtube video id
-func (y YouTube) GenerateVideoID() (videoID string) {
+func (YouTube) GenerateVideoID() (videoID string) {
 	b := make([]byte, 11)
 	for i := range b {
 		b[i] = charset[rand.Intn(len(charset))]

@@ -12,7 +12,7 @@ type UUID struct {
 }
 
 // V4 returns a fake UUID version 4
-func (u UUID) V4() (uuid string) {
+func (UUID) V4() (uuid string) {
 	var uiq [16]byte
 	io.ReadFull(rand.Reader, uiq[:])
 	uiq[6] = (uiq[6] & 0x0f) | 0x40           // Version 4
