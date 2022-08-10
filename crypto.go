@@ -17,7 +17,7 @@ var (
 )
 
 // Checks whether the ascii value provided is in the exclusion for bitcoin.
-func (c Crypto) isInExclusionZone(ascii int) bool {
+func (Crypto) isInExclusionZone(ascii int) bool {
 	switch ascii {
 	// Ascii for uppercase letter "O", uppercase letter "I", lowercase letter "l", and the number "0"
 	case
@@ -31,7 +31,7 @@ func (c Crypto) isInExclusionZone(ascii int) bool {
 }
 
 // algorithmRange decides whether to get digit, uppercase, or lowercase. returns the ascii range to do IntBetween on
-func (c Crypto)  algorithmRange() (int, int) {
+func (c Crypto) algorithmRange() (int, int) {
 	dec := c.Faker.IntBetween(0, 2)
 	if dec == 0 {
 		// digit

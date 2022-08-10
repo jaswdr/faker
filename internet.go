@@ -40,7 +40,7 @@ type Internet struct {
 	Faker *Faker
 }
 
-func (i Internet) transformIntoValidEmailName(name string) string {
+func (Internet) transformIntoValidEmailName(name string) string {
 	name = strings.ToLower(name)
 	onlyValidCharacters := regexp.MustCompile(`[^a-z0-9._%+\-]+`)
 	name = onlyValidCharacters.ReplaceAllString(name, "_")
@@ -80,7 +80,7 @@ func (i Internet) FreeEmailDomain() string {
 }
 
 // SafeEmailDomain returns a fake safe email domain for Internet
-func (i Internet) SafeEmailDomain() string {
+func (Internet) SafeEmailDomain() string {
 	return "example.org"
 }
 
