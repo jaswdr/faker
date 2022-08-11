@@ -27,7 +27,7 @@ func (b Boolean) BoolInt() int {
 }
 
 // BoolString returns a fake bool for string Boolean
-func (b Boolean) BoolString(firstArg string, secondArg string) string {
+func (b Boolean) BoolString(firstArg, secondArg string) string {
 	boolean := []string{firstArg, secondArg}
 
 	return b.Faker.RandomStringElement(boolean)
