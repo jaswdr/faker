@@ -25,8 +25,7 @@ func TestRGB(t *testing.T) {
 func TestRGBAsArray(t *testing.T) {
 	c := New().Color()
 
-	color := c.RGBAsArray()
-	Expect(t, 3, len(color))
+	Expect(t, 3, len(c.RGBAsArray()))
 }
 
 func TestCSS(t *testing.T) {
