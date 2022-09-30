@@ -40,15 +40,15 @@ Use `faker.New()` to create and initialize a faker generator, which can generate
 import "github.com/jaswdr/faker"
 
 func main() {
-    faker := faker.New()
+    fake := faker.New()
 
-    faker.Person().Name()
+    fake.Person().Name()
     // Lucy Cechtelar
 
-    faker.Address().Address()
+    fake.Address().Address()
     // 426 Jordy Lodge
 
-    faker.Lorem().Text(100)
+    fake.Lorem().Text(100)
     // Dolores sit sint laboriosam dolorem culpa et autem. Beatae nam sunt fugit
     // et sit et mollitia sed.
     // Fuga deserunt tempora facere magni omnis. Omnis quia temporibus laudantium
@@ -56,10 +56,10 @@ func main() {
 }
 ```
 
-Even if this example shows a method access, each call to `faker.Name()` yields a different (random) result.
+Even if this example shows a method access, each call to `fake.Name()` yields a different (random) result.
 
 ```go
-p := faker.Person()
+p := fake.Person()
 
 for i:=0; i < 10; i++ {
   fmt.Println(p.Name())
