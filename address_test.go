@@ -104,6 +104,11 @@ func TestCountryAbbr(t *testing.T) {
 	Expect(t, true, len(a.CountryAbbr()) > 0)
 }
 
+func TestCountryCode(t *testing.T) {
+	a := New().Address()
+	Expect(t, true, len(a.CountryCode()) > 0)
+}
+
 func TestLatitude(t *testing.T) {
 	a := New().Address()
 	Expect(t, true, a.Latitude() > 0)
