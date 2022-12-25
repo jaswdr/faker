@@ -229,7 +229,8 @@ func (f Faker) RandomLetter() string {
 }
 
 func (f Faker) RandomStringWithLength(l int) string {
-	r := []string{}
+	var r []string
+
 	for i := 0; i < l; i++ {
 		r = append(r, f.RandomLetter())
 	}
@@ -344,7 +345,8 @@ func (f Faker) Boolean() Boolean {
 
 // Map returns a fake Map instance for Faker
 func (f Faker) Map() map[string]interface{} {
-	m := map[string]interface{}{}
+	var m map[string]interface{}
+
 	lorem := f.Lorem()
 
 	randWordType := func() string {
@@ -382,7 +384,8 @@ func (f Faker) Map() map[string]interface{} {
 		case "slice":
 			m[lorem.Word()] = randSlice()
 		case "map":
-			mm := map[string]interface{}{}
+			var mm map[string]interface{}
+
 			tt := f.RandomStringElement([]string{"string", "int", "float", "slice"})
 			switch tt {
 			case "string":
