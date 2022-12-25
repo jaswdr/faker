@@ -345,7 +345,7 @@ func (f Faker) Boolean() Boolean {
 
 // Map returns a fake Map instance for Faker
 func (f Faker) Map() map[string]interface{} {
-	var m map[string]interface{}
+	m := make(map[string]interface{})
 
 	lorem := f.Lorem()
 
@@ -384,7 +384,7 @@ func (f Faker) Map() map[string]interface{} {
 		case "slice":
 			m[lorem.Word()] = randSlice()
 		case "map":
-			var mm map[string]interface{}
+			mm := make(map[string]interface{})
 
 			tt := f.RandomStringElement([]string{"string", "int", "float", "slice"})
 			switch tt {
