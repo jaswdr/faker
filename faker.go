@@ -173,14 +173,49 @@ func (f Faker) IntBetween(min, max int) int {
 	return f.Generator.Intn(diff+1) + min
 }
 
-// Int64Between returns a fake Int64 between a given minimum and maximum values for Faker
-func (f Faker) Int64Between(min, max int64) int64 {
-	return int64(f.IntBetween(int(min), int(max)))
+// Int8Between returns a fake Int8 between a given minimum and maximum values for Faker
+func (f Faker) Int8Between(min, max int8) int8 {
+	return int8(f.IntBetween(int(min), int(max)))
+}
+
+// Int16Between returns a fake Int16 between a given minimum and maximum values for Faker
+func (f Faker) Int16Between(min, max int16) int16 {
+	return int16(f.IntBetween(int(min), int(max)))
 }
 
 // Int32Between returns a fake Int32 between a given minimum and maximum values for Faker
 func (f Faker) Int32Between(min, max int32) int32 {
 	return int32(f.IntBetween(int(min), int(max)))
+}
+
+// Int64Between returns a fake Int64 between a given minimum and maximum values for Faker
+func (f Faker) Int64Between(min, max int64) int64 {
+	return int64(f.IntBetween(int(min), int(max)))
+}
+
+// UIntBetween returns a fake UInt between a given minimum and maximum values for Faker
+func (f Faker) UIntBetween(min, max uint) uint {
+	return uint(f.IntBetween(int(min), int(max)))
+}
+
+// UInt8Between returns a fake UInt8 between a given minimum and maximum values for Faker
+func (f Faker) UInt8Between(min, max int8) uint8 {
+	return uint8(f.IntBetween(int(min), int(max)))
+}
+
+// UInt16Between returns a fake UInt16 between a given minimum and maximum values for Faker
+func (f Faker) UInt16Between(min, max int16) uint16 {
+	return uint16(f.IntBetween(int(min), int(max)))
+}
+
+// UInt32Between returns a fake UInt32 between a given minimum and maximum values for Faker
+func (f Faker) UInt32Between(min, max uint32) uint32 {
+	return uint32(f.IntBetween(int(min), int(max)))
+}
+
+// UInt64Between returns a fake UInt64 between a given minimum and maximum values for Faker
+func (f Faker) UInt64Between(min, max uint64) uint64 {
+	return uint64(f.IntBetween(int(min), int(max)))
 }
 
 // Letter returns a fake single letter for Faker

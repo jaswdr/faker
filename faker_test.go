@@ -118,16 +118,28 @@ func TestInt(t *testing.T) {
 	Expect(t, fmt.Sprintf("%T", value), "int")
 }
 
-func TestInt64(t *testing.T) {
+func TestInt8(t *testing.T) {
 	f := New()
-	value := f.Int64()
-	Expect(t, fmt.Sprintf("%T", value), "int64")
+	value := f.Int8()
+	Expect(t, fmt.Sprintf("%T", value), "int8")
+}
+
+func TestInt16(t *testing.T) {
+	f := New()
+	value := f.Int16()
+	Expect(t, fmt.Sprintf("%T", value), "int16")
 }
 
 func TestInt32(t *testing.T) {
 	f := New()
 	value := f.Int32()
 	Expect(t, fmt.Sprintf("%T", value), "int32")
+}
+
+func TestInt64(t *testing.T) {
+	f := New()
+	value := f.Int64()
+	Expect(t, fmt.Sprintf("%T", value), "int64")
 }
 
 func TestIntBetween(t *testing.T) {
@@ -214,6 +226,46 @@ func TestUint64(t *testing.T) {
 	f := New()
 	value := f.UInt64()
 	Expect(t, fmt.Sprintf("%T", value), "uint64")
+}
+
+func TestUIntBetween(t *testing.T) {
+	f := New()
+	value := f.UIntBetween(1, 100)
+	Expect(t, fmt.Sprintf("%T", value), "uint")
+	Expect(t, true, value >= 1)
+	Expect(t, true, value <= 100)
+}
+
+func TestUInt8Between(t *testing.T) {
+	f := New()
+	value := f.UInt8Between(1, 100)
+	Expect(t, fmt.Sprintf("%T", value), "uint8")
+	Expect(t, true, value >= 1)
+	Expect(t, true, value <= 100)
+}
+
+func TestUInt16Between(t *testing.T) {
+	f := New()
+	value := f.UInt16Between(1, 100)
+	Expect(t, fmt.Sprintf("%T", value), "uint16")
+	Expect(t, true, value >= 1)
+	Expect(t, true, value <= 100)
+}
+
+func TestUInt32Between(t *testing.T) {
+	f := New()
+	value := f.UInt32Between(1, 100)
+	Expect(t, fmt.Sprintf("%T", value), "uint32")
+	Expect(t, true, value >= 1)
+	Expect(t, true, value <= 100)
+}
+
+func TestUInt64Between(t *testing.T) {
+	f := New()
+	value := f.UInt64Between(1, 100)
+	Expect(t, fmt.Sprintf("%T", value), "uint64")
+	Expect(t, true, value >= 1)
+	Expect(t, true, value <= 100)
 }
 
 func TestRandomFloat(t *testing.T) {
