@@ -626,6 +626,13 @@ func NewWithSeed(src rand.Source) (f Faker) {
 	return
 }
 
+// NewWithSeedNumber returns a new instance of Faker instance with a given seed
+func NewWithSeedNumber(src int64) (f Faker) {
+	generator := rand.New(rand.NewSource(src))
+	f = Faker{Generator: generator}
+	return
+}
+
 // Blood returns a fake Blood instance for Faker
 func (f Faker) Blood() Blood {
 	return Blood{&f}
