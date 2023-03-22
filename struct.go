@@ -111,11 +111,12 @@ func (s Struct) rSlice(t reflect.Type, v reflect.Value, function string, size in
 }
 
 func (s Struct) rString(_ reflect.Type, v reflect.Value, function string) {
-	if function != "" {
-		v.SetString(s.Faker.Bothify(function))
-	} else {
+	if function == "" {
 		v.SetString(s.Faker.UUID().V4())
+		return
 	}
+
+	v.SetString(s.Faker.Bothify(function))
 }
 
 func (s Struct) rInt(t reflect.Type, v reflect.Value, function string) {

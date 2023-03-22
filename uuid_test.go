@@ -15,7 +15,10 @@ func TestUUIDv4(t *testing.T) {
 
 func TestUUIDV4UniqueInSequence(t *testing.T) {
 	f := New()
-	last := f.UUID().V4()
-	current := f.UUID().V4()
-	Expect(t, true, last != current)
+	before := f.UUID().V4()
+	for i := 0; i < 100; i++ {
+		after := f.UUID().V4()
+		Expect(t, true, before != after)
+		before = after
+	}
 }
