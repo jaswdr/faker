@@ -26,7 +26,7 @@ func (creator ErrorRaiserTempFileCreator) TempFile(_ string) (*os.File, error) {
 
 func TestHTTPClientImplCanDoGetRequests(t *testing.T) {
 	client := HTTPClientImpl{}
-	resp, err := client.Get("https://www.google.com")
+	resp, err := client.Get("https://www.example.com")
 	Expect(t, err, nil)
 	Expect(t, resp.StatusCode, http.StatusOK)
 }

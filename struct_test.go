@@ -182,3 +182,26 @@ func TestStructToBool(t *testing.T) {
 	NotExpect(t, nil, sf.BoolConst)
 	NotExpect(t, nil, sf.BoolGenerate)
 }
+
+func TestStructUUID(t *testing.T) {
+	var st struct {
+		UUID string `fake`
+	}
+	New().Struct().Fill(&st)
+	NotExpect(t, "", st.UUID)
+}
+
+func TestStructUUIDInSequence(t *testing.T) {
+	var st struct {
+		UUID string `fake`
+	}
+	fake := New()
+	before := ""
+	for i := 0; i < 100; i++ {
+		fake.Struct().Fill(&st)
+		after := st.UUID
+		NotExpect(t, true, after == "")
+		Expect(t, false, before == after)
+		before = after
+	}
+}
