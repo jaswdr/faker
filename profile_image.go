@@ -1,14 +1,16 @@
 package faker
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"os"
-	"fmt"
 )
 
-const profileImageBaseURL = "https://randomuser.me"
-const portraitsEndpoint = "api/portraits"
+const (
+	profileImageBaseURL = "https://randomuser.me"
+	portraitsEndpoint   = "api/portraits"
+)
 
 // ProfileImage  is a faker struct for ProfileImage
 type ProfileImage struct {
