@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"fmt"
 )
 
 const (
@@ -30,8 +31,6 @@ func (pi ProfileImage) Image() *os.File {
 		panic(err)
 	}
 
-	defer resp.Body.Close()
-
 	f, err := pi.TempFileCreator.TempFile("profile-picture-img-*.jpg")
 	if err != nil {
 		log.Println("Error while creating a temp file:", err)
@@ -39,5 +38,6 @@ func (pi ProfileImage) Image() *os.File {
 	}
 
 	io.Copy(f, resp.Body)
+	resp.Body.Close()
 	return f
 }
