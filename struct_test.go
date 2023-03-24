@@ -225,7 +225,7 @@ func TestCanHandleChildStructs(t *testing.T) {
 				}
 			}
 		}
-		// ChildSlice []*Struct1
+		ChildSlice         []*Struct1
 		ChildStructPointer *Struct1
 		MultilevelAfter    struct {
 			Level1Id     string
@@ -248,7 +248,7 @@ func TestCanHandleChildStructs(t *testing.T) {
 	st1 := Struct1{}
 	handler := New().Struct()
 	handler.Fill(&st1)
-	// Expect(t, 0, len(st1.ChildSlice))
+	Expect(t, 0, len(st1.ChildSlice))
 	NotExpect(t, "", st1.Before)
 	NotExpect(t, 0, st1.BeforeInt)
 	NotExpect(t, "", st1.After)

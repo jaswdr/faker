@@ -15,16 +15,16 @@ type Struct struct {
 func (s Struct) Fill(value interface{}) {
 	reflectedType := reflect.TypeOf(value)
 	reflectedValue := reflect.ValueOf(value)
-	s.typeHandler(reflectedType, reflectedValue, "", 0, map[string]bool{})
+	s.typeHandler(reflectedType, reflectedValue, "", 0, "", map[string]bool{})
 }
 
-func (s Struct) typeHandler(valueType reflect.Type, value reflect.Value, function string, size int, typesSeen map[string]bool) bool {
+func (s Struct) typeHandler(valueType reflect.Type, value reflect.Value, function string, size int, parentName string, typesSeen map[string]bool) bool {
 	kind := valueType.Kind()
 	switch kind {
 	case reflect.Ptr:
-		return s.pointerHandler(valueType, value, function, typesSeen)
+		return s.pointerHandler(valueType, value, function, parentName, typesSeen)
 	case reflect.Struct:
-		return s.structHandler(valueType, value, typesSeen)
+		return s.structHandler(valueType, value, parentName, typesSeen)
 	case reflect.String:
 		return s.stringHandler(valueType, value, function)
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
@@ -36,13 +36,13 @@ func (s Struct) typeHandler(valueType reflect.Type, value reflect.Value, functio
 	case reflect.Bool:
 		return s.boolHandler(valueType, value)
 	case reflect.Array, reflect.Slice:
-		return s.sliceHandler(valueType, value, function, size, typesSeen)
+		return s.sliceHandler(valueType, value, function, size, parentName, typesSeen)
 	default:
 		return false
 	}
 }
 
-func (s Struct) structHandler(valueType reflect.Type, value reflect.Value, typesSeen map[string]bool) bool {
+func (s Struct) structHandler(valueType reflect.Type, value reflect.Value, parentName string, typesSeen map[string]bool) bool {
 	result := true
 	numberOfFields := valueType.NumField()
 	for fieldIndex := 0; fieldIndex < numberOfFields; fieldIndex++ {
@@ -51,7 +51,11 @@ func (s Struct) structHandler(valueType reflect.Type, value reflect.Value, types
 
 		// Check if type was seen before
 		if structType.Type.Name() == "" {
-			valueToCompare := fmt.Sprintf("%v", structType.Name)
+			if parentName == "" {
+				parentName = structType.Name
+			}
+
+			valueToCompare := fmt.Sprintf("%v.%v", parentName, structType.Name)
 			found := false
 			_, found = typesSeen[valueToCompare]
 			if found {
@@ -78,29 +82,33 @@ func (s Struct) structHandler(valueType reflect.Type, value reflect.Value, types
 				}
 			}
 
-			if !s.typeHandler(structType.Type, structValue, tag, size, typesSeen) {
+			if !s.typeHandler(structType.Type, structValue, tag, size, parentName, typesSeen) {
 				result = false
 			}
+		}
+
+		if structType.Name == parentName {
+			parentName = ""
 		}
 	}
 
 	return result
 }
 
-func (s Struct) pointerHandler(valueType reflect.Type, value reflect.Value, function string, typesSeen map[string]bool) bool {
+func (s Struct) pointerHandler(valueType reflect.Type, value reflect.Value, function string, parentName string, typesSeen map[string]bool) bool {
 	elementType := valueType.Elem()
 	if value.IsNil() {
 		newValue := reflect.New(elementType)
-		if !s.typeHandler(elementType, newValue.Elem(), function, 0, typesSeen) {
+		if !s.typeHandler(elementType, newValue.Elem(), function, 0, parentName, typesSeen) {
 			return false
 		}
 		value.Set(newValue)
 	}
 
-	return s.typeHandler(elementType, value.Elem(), function, 0, typesSeen)
+	return s.typeHandler(elementType, value.Elem(), function, 0, parentName, typesSeen)
 }
 
-func (s Struct) sliceHandler(valueType reflect.Type, value reflect.Value, function string, size int, typesSeen map[string]bool) bool {
+func (s Struct) sliceHandler(valueType reflect.Type, value reflect.Value, function string, size int, parentName string, typesSeen map[string]bool) bool {
 	// If you cant even set it dont even try
 	if !value.CanSet() {
 		return false
@@ -124,7 +132,7 @@ func (s Struct) sliceHandler(valueType reflect.Type, value reflect.Value, functi
 	elementValue := newValue.Elem()
 
 	for i := 0; i < size; i++ {
-		if !s.typeHandler(elementType, elementValue, function, originalSize, typesSeen) {
+		if !s.typeHandler(elementType, elementValue, function, originalSize, parentName, typesSeen) {
 			return false
 		}
 
