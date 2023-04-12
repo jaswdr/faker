@@ -272,7 +272,7 @@ func (a Address) Latitude() (latitude float64) {
 }
 
 // Longitude returns a fake longitude for Address
-func (a Address) Longitude() (latitude float64) {
-	latitude, _ = strconv.ParseFloat(a.Faker.Numerify("##.######"), 64)
+func (a Address) Longitude() (longitude float64) {
+	longitude, _ = strconv.ParseFloat(a.Faker.Numerify("##.######"), 64)
 	return
 }
