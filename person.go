@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 var (
@@ -114,6 +115,20 @@ var (
 	suffix = []string{"Jr.", "Sr.", "I", "II", "III", "IV", "V", "MD", "DDS", "PhD", "DVM"}
 )
 
+var (
+	cacheFirstNames     []string
+	cacheFirstNamesOnce sync.Once
+	cacheFirstNamesFunc = func() {
+		cacheFirstNames = append(firstNameMale, firstNameFemale...)
+	}
+
+	cacheNameFormats     []string
+	cacheNameFormatsOnce sync.Once
+	cacheNameFormatsFunc = func() {
+		cacheNameFormats = append(maleNameFormats, femaleNameFormats...)
+	}
+)
+
 // Person is a faker struct for Person
 type Person struct {
 	Faker *Faker
@@ -173,8 +188,8 @@ func (p Person) FirstNameFemale() string {
 
 // FirstName returns a fake first name for Person
 func (p Person) FirstName() string {
-	names := append(firstNameMale, firstNameFemale...)
-	return p.Faker.RandomStringElement(names)
+	cacheFirstNamesOnce.Do(cacheFirstNamesFunc)
+	return p.Faker.RandomStringElement(cacheFirstNames)
 }
 
 // LastName returns a fake last name for Person
@@ -185,8 +200,8 @@ func (p Person) LastName() string {
 
 // Name returns a fake name for Person
 func (p Person) Name() string {
-	formats := append(maleNameFormats, femaleNameFormats...)
-	name := formats[p.Faker.IntBetween(0, len(formats)-1)]
+	cacheNameFormatsOnce.Do(cacheNameFormatsFunc)
+	name := cacheNameFormats[p.Faker.IntBetween(0, len(cacheNameFormats)-1)]
 
 	// {{titleMale}}
 	name = strings.Replace(name, "{{titleMale}}", p.TitleMale(), 1)
