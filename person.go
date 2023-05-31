@@ -206,19 +206,19 @@ func (p Person) Name() string {
 	// {{titleMale}}
 	name = strings.Replace(name, "{{titleMale}}", p.TitleMale(), 1)
 
-	//{{firstNameMale}}
+	// {{firstNameMale}}
 	name = strings.Replace(name, "{{firstNameMale}}", p.FirstNameMale(), 1)
 
 	// {{titleFemale}}
 	name = strings.Replace(name, "{{titleFemale}}", p.TitleFemale(), 1)
 
-	//{{firstNameFemale}}
+	// {{firstNameFemale}}
 	name = strings.Replace(name, "{{firstNameFemale}}", p.FirstNameFemale(), 1)
 
-	//{{lastName}}
+	// {{lastName}}
 	name = strings.Replace(name, "{{lastName}}", p.LastName(), 1)
 
-	//{{suffix}}
+	// {{suffix}}
 	name = strings.Replace(name, "{{suffix}}", p.Suffix(), 1)
 
 	return name
