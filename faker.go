@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -249,6 +250,7 @@ func (f Faker) RandomStringMapKey(m map[string]string) string {
 	for k := range m {
 		keys = append(keys, k)
 	}
+	sort.Strings(keys)
 
 	i := f.IntBetween(0, len(keys)-1)
 	return keys[i]
@@ -260,6 +262,7 @@ func (f Faker) RandomStringMapValue(m map[string]string) string {
 	for k := range m {
 		values = append(values, m[k])
 	}
+	sort.Strings(values)
 
 	i := f.IntBetween(0, len(values)-1)
 	return values[i]
