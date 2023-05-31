@@ -171,7 +171,7 @@ func (i Internet) LocalIpv4() string {
 
 	if ips[0] == "10" {
 		for j := 0; j < 3; j++ {
-			ips = append(ips, strconv.Itoa(i.Faker.IntBetween(1, 255)))
+			ips = append(ips, strconv.Itoa(i.Faker.IntBetween(0, 255)))
 		}
 	}
 
@@ -179,7 +179,7 @@ func (i Internet) LocalIpv4() string {
 		ips = append(ips, strconv.Itoa(i.Faker.IntBetween(16, 31)))
 
 		for j := 0; j < 2; j++ {
-			ips = append(ips, strconv.Itoa(i.Faker.IntBetween(1, 255)))
+			ips = append(ips, strconv.Itoa(i.Faker.IntBetween(0, 255)))
 		}
 	}
 
@@ -187,7 +187,7 @@ func (i Internet) LocalIpv4() string {
 		ips = append(ips, "168")
 
 		for j := 0; j < 2; j++ {
-			ips = append(ips, strconv.Itoa(i.Faker.IntBetween(1, 255)))
+			ips = append(ips, strconv.Itoa(i.Faker.IntBetween(0, 255)))
 		}
 	}
 
