@@ -11,7 +11,7 @@ var (
 	cachePetNames     []string
 	cachePetNamesOnce sync.Once
 	cachePetNamesFunc = func() {
-		cachePetNames := make([]string, 0, len(catNames)+len(dogNames))
+		cachePetNames = make([]string, 0, len(catNames)+len(dogNames))
 		cachePetNames = append(cachePetNames, catNames...)
 		cachePetNames = append(cachePetNames, dogNames...)
 	}
