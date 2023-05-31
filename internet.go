@@ -157,8 +157,9 @@ func (i Internet) URL() string {
 func (i Internet) Ipv4() string {
 	ips := make([]string, 0, 4)
 
-	for j := 0; j < 4; j++ {
-		ips = append(ips, strconv.Itoa(i.Faker.IntBetween(1, 255)))
+	ips = append(ips, strconv.Itoa(i.Faker.IntBetween(1, 255)))
+	for j := 0; j < 3; j++ {
+		ips = append(ips, strconv.Itoa(i.Faker.IntBetween(0, 255)))
 	}
 
 	return strings.Join(ips, ".")
