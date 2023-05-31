@@ -230,7 +230,7 @@ func (f Faker) RandomLetter() string {
 }
 
 func (f Faker) RandomStringWithLength(l int) string {
-	var r []string
+	r := make([]string, 0, l)
 
 	for i := 0; i < l; i++ {
 		r = append(r, f.RandomLetter())
@@ -368,7 +368,7 @@ func (f Faker) Map() map[string]interface{} {
 	}
 
 	randSlice := func() []string {
-		var sl []string
+		sl := make([]string, 0, 10)
 		for ii := 0; ii < f.IntBetween(3, 10); ii++ {
 			sl = append(sl, lorem.Word())
 		}
