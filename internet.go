@@ -43,10 +43,11 @@ type Internet struct {
 	Faker *Faker
 }
 
+var validEmailOnlyValidCharacters = regexp.MustCompile(`[^a-z0-9._%+\-]+`)
+
 func (Internet) transformIntoValidEmailName(name string) string {
 	name = strings.ToLower(name)
-	onlyValidCharacters := regexp.MustCompile(`[^a-z0-9._%+\-]+`)
-	name = onlyValidCharacters.ReplaceAllString(name, "_")
+	name = validEmailOnlyValidCharacters.ReplaceAllString(name, "_")
 	return name
 }
 
@@ -155,10 +156,11 @@ func (i Internet) URL() string {
 
 // Ipv4 returns a fake ipv4 for Internet
 func (i Internet) Ipv4() string {
-	ips := []string{}
+	ips := make([]string, 0, 4)
 
-	for j := 0; j < 4; j++ {
-		ips = append(ips, strconv.Itoa(i.Faker.IntBetween(1, 255)))
+	ips = append(ips, strconv.Itoa(i.Faker.IntBetween(1, 255)))
+	for j := 0; j < 3; j++ {
+		ips = append(ips, strconv.Itoa(i.Faker.IntBetween(0, 255)))
 	}
 
 	return strings.Join(ips, ".")
@@ -166,11 +168,12 @@ func (i Internet) Ipv4() string {
 
 // LocalIpv4 returns a fake local ipv4 for Internet
 func (i Internet) LocalIpv4() string {
-	ips := []string{i.Faker.RandomStringElement([]string{"10", "172", "192"})}
+	ips := make([]string, 0, 4)
+	ips = append(ips, i.Faker.RandomStringElement([]string{"10", "172", "192"}))
 
 	if ips[0] == "10" {
 		for j := 0; j < 3; j++ {
-			ips = append(ips, strconv.Itoa(i.Faker.IntBetween(1, 255)))
+			ips = append(ips, strconv.Itoa(i.Faker.IntBetween(0, 255)))
 		}
 	}
 
@@ -178,7 +181,7 @@ func (i Internet) LocalIpv4() string {
 		ips = append(ips, strconv.Itoa(i.Faker.IntBetween(16, 31)))
 
 		for j := 0; j < 2; j++ {
-			ips = append(ips, strconv.Itoa(i.Faker.IntBetween(1, 255)))
+			ips = append(ips, strconv.Itoa(i.Faker.IntBetween(0, 255)))
 		}
 	}
 
@@ -186,7 +189,7 @@ func (i Internet) LocalIpv4() string {
 		ips = append(ips, "168")
 
 		for j := 0; j < 2; j++ {
-			ips = append(ips, strconv.Itoa(i.Faker.IntBetween(1, 255)))
+			ips = append(ips, strconv.Itoa(i.Faker.IntBetween(0, 255)))
 		}
 	}
 
@@ -195,7 +198,7 @@ func (i Internet) LocalIpv4() string {
 
 // Ipv6 returns a fake ipv6 for Internet
 func (i Internet) Ipv6() string {
-	ips := []string{}
+	ips := make([]string, 0, 8)
 
 	for j := 0; j < 8; j++ {
 		block := ""
@@ -213,7 +216,7 @@ func (i Internet) Ipv6() string {
 func (i Internet) MacAddress() string {
 	values := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"}
 
-	mac := []string{}
+	mac := make([]string, 0, 6)
 	for j := 0; j < 6; j++ {
 		m := i.Faker.RandomStringElement(values)
 		m = m + i.Faker.RandomStringElement(values)

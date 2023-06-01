@@ -1,5 +1,7 @@
 package faker
 
+import "sync"
+
 var (
 	internetExplorerUserAgents = []string{
 		"Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Geckoe$",
@@ -4279,6 +4281,18 @@ var (
 	}
 )
 
+var (
+	cacheUserAgents     []string
+	cacheUserAgentsOnce sync.Once
+	cacheUserAgentsFunc = func() {
+		cacheUserAgents = make([]string, 0, len(chromeUserAgents)+len(firefoxUserAgents)+len(operaUserAgents)+len(safariUserAgents))
+		cacheUserAgents = append(cacheUserAgents, chromeUserAgents...)
+		cacheUserAgents = append(cacheUserAgents, firefoxUserAgents...)
+		cacheUserAgents = append(cacheUserAgents, operaUserAgents...)
+		cacheUserAgents = append(cacheUserAgents, safariUserAgents...)
+	}
+)
+
 // UserAgent is a faker struct for UserAgent
 type UserAgent struct {
 	Faker *Faker
@@ -4311,10 +4325,6 @@ func (u UserAgent) Safari() string {
 
 // UserAgent returns a fake browser user agent for Internet
 func (u UserAgent) UserAgent() string {
-	userAgents := []string{}
-	userAgents = append(userAgents, chromeUserAgents...)
-	userAgents = append(userAgents, firefoxUserAgents...)
-	userAgents = append(userAgents, operaUserAgents...)
-	userAgents = append(userAgents, safariUserAgents...)
-	return u.Faker.RandomStringElement(userAgents)
+	cacheUserAgentsOnce.Do(cacheUserAgentsFunc)
+	return u.Faker.RandomStringElement(cacheUserAgents)
 }
