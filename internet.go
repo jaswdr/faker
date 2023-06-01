@@ -5,19 +5,13 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 var (
 	freeEmailDomain = []string{"gmail.com", "yahoo.com", "hotmail.com"}
 
 	tld = []string{"com", "com", "com", "com", "com", "com", "biz", "info", "net", "org"}
-
-	userFormats = []string{
-		"{{lastName}}.{{firstName}}",
-		"{{firstName}}.{{lastName}}",
-		"{{firstName}}",
-		"{{lastName}}",
-	}
 
 	emailFormats = []string{"{{user}}@{{domain}}", "{{user}}@{{freeEmailDomain}}"}
 
@@ -45,25 +39,51 @@ type Internet struct {
 
 var validEmailOnlyValidCharacters = regexp.MustCompile(`[^a-z0-9._%+\-]+`)
 
-func (Internet) transformIntoValidEmailName(name string) string {
+func transformIntoValidEmailName(name string) string {
 	name = strings.ToLower(name)
 	name = validEmailOnlyValidCharacters.ReplaceAllString(name, "_")
 	return name
 }
 
+var (
+	cacheInternetUserFirstName []string
+	cacheInternetUserLastName  []string
+	cacheInternetUserOnce      sync.Once
+	cacheInternetUserFunc      = func() {
+		cacheFirstNamesOnce.Do(cacheFirstNamesFunc)
+		for _, fn := range cacheFirstNames {
+			cacheInternetUserFirstName = append(cacheInternetUserFirstName, transformIntoValidEmailName(fn))
+		}
+
+		for _, ln := range lastName {
+			cacheInternetUserLastName = append(cacheInternetUserLastName, transformIntoValidEmailName(ln))
+		}
+	}
+)
+
 // User returns a fake user for Internet
 func (i Internet) User() string {
-	user := i.Faker.RandomStringElement(userFormats)
+	cacheInternetUserOnce.Do(cacheInternetUserFunc)
 
-	p := i.Faker.Person()
-
-	// {{firstName}}
-	user = strings.Replace(user, "{{firstName}}", i.transformIntoValidEmailName(p.FirstName()), 1)
-
-	// {{lastName}}
-	user = strings.Replace(user, "{{lastName}}", i.transformIntoValidEmailName(p.LastName()), 1)
-
-	return user
+	variant := i.Faker.IntBetween(0, 3)
+	switch variant {
+	case 0:
+		ln := i.Faker.RandomStringElement(cacheInternetUserLastName)
+		fn := i.Faker.RandomStringElement(cacheInternetUserFirstName)
+		return ln + "." + fn
+	case 1:
+		fn := i.Faker.RandomStringElement(cacheInternetUserFirstName)
+		ln := i.Faker.RandomStringElement(cacheInternetUserLastName)
+		return fn + "." + ln
+	case 2:
+		fn := i.Faker.RandomStringElement(cacheInternetUserFirstName)
+		return fn
+	case 3:
+		ln := i.Faker.RandomStringElement(cacheInternetUserLastName)
+		return ln
+	default:
+		panic("bad")
+	}
 }
 
 // Password returns a fake password for Internet
@@ -93,7 +113,7 @@ func (i Internet) Email() string {
 	email := i.Faker.RandomStringElement(emailFormats)
 
 	// {{user}}
-	email = strings.Replace(email, "{{user}}", i.transformIntoValidEmailName(i.User()), 1)
+	email = strings.Replace(email, "{{user}}", transformIntoValidEmailName(i.User()), 1)
 
 	// {{domain}}
 	email = strings.Replace(email, "{{domain}}", i.Domain(), 1)
@@ -108,23 +128,23 @@ func (i Internet) Email() string {
 func (i Internet) FreeEmail() string {
 	domain := i.Faker.RandomStringElement(freeEmailDomain)
 
-	return i.transformIntoValidEmailName(i.User()) + "@" + domain
+	return transformIntoValidEmailName(i.User()) + "@" + domain
 }
 
 // SafeEmail returns a fake safe email address for Internet
 func (i Internet) SafeEmail() string {
-	return i.transformIntoValidEmailName(i.User()) + "@" + i.SafeEmailDomain()
+	return transformIntoValidEmailName(i.User()) + "@" + i.SafeEmailDomain()
 }
 
 // CompanyEmail returns a fake company email address for Internet
 func (i Internet) CompanyEmail() string {
 	c := i.Faker.Company()
 
-	companyName := i.transformIntoValidEmailName(c.Name())
+	companyName := transformIntoValidEmailName(c.Name())
 
 	domain := companyName + "." + i.Domain()
 
-	return i.transformIntoValidEmailName(i.User()) + "@" + domain
+	return transformIntoValidEmailName(i.User()) + "@" + domain
 }
 
 // TLD returns a fake tld for Internet
