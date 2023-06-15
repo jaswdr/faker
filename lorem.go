@@ -18,12 +18,13 @@ func (l Lorem) Word() string {
 }
 
 // Words returns fake words for Lorem
-func (l Lorem) Words(nbWords int) (words []string) {
+func (l Lorem) Words(nbWords int) []string {
+	words := make([]string, 0, nbWords)
 	for i := 0; i < nbWords; i++ {
 		words = append(words, l.Word())
 	}
 
-	return
+	return words
 }
 
 // Sentence returns a fake sentence for Lorem
@@ -32,12 +33,13 @@ func (l Lorem) Sentence(nbWords int) string {
 }
 
 // Sentences returns fake sentences for Lorem
-func (l Lorem) Sentences(nbSentences int) (sentences []string) {
+func (l Lorem) Sentences(nbSentences int) []string {
+	sentences := make([]string, 0, nbSentences)
 	for i := 0; i < nbSentences; i++ {
 		sentences = append(sentences, l.Sentence(l.Faker.RandomNumber(2)))
 	}
 
-	return
+	return sentences
 }
 
 // Paragraph returns a fake paragraph for Lorem
@@ -46,12 +48,13 @@ func (l Lorem) Paragraph(nbSentences int) string {
 }
 
 // Paragraphs returns fake paragraphs for Lorem
-func (l Lorem) Paragraphs(nbParagraph int) (out []string) {
+func (l Lorem) Paragraphs(nbParagraph int) []string {
+	out := make([]string, 0, nbParagraph)
 	for i := 0; i < nbParagraph; i++ {
 		out = append(out, l.Paragraph(l.Faker.RandomNumber(2)))
 	}
 
-	return
+	return out
 }
 
 // Text returns a fake text for Lorem
