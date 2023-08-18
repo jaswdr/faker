@@ -1,8 +1,8 @@
 package faker
 
 import (
-	"strconv"
 	"encoding/json"
+	"strconv"
 )
 
 // Json is a faker struct for json files
@@ -11,7 +11,7 @@ type Json struct {
 }
 
 var (
-	attributesTypes = []string{"string", "number", "object", "array", "boolean", "null"}
+	attributesTypes                      = []string{"string", "number", "object", "array", "boolean", "null"}
 	attributesTypesWithoutArrayAndObject = []string{"string", "number", "boolean", "null"}
 )
 

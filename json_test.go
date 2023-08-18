@@ -1,8 +1,8 @@
 package faker
 
 import (
-	"testing"
 	"encoding/json"
+	"testing"
 )
 
 func TestJsonString(t *testing.T) {
