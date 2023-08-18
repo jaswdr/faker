@@ -595,3 +595,8 @@ func NewWithSeed(src rand.Source) (f Faker) {
 func (f Faker) Blood() Blood {
 	return Blood{&f}
 }
+
+// Json returns a fake Json instance for Faker
+func (f Faker) Json() Json {
+	return Json{&f}
+}
