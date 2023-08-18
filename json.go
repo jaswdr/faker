@@ -74,9 +74,6 @@ func (j *Json) String() string {
 func (j *Json) Object() map[string]interface{} {
 	result := j.String()
 	var data map[string]interface{}
-	err := json.Unmarshal([]byte(result), &data)
-	if err != nil {
-		panic(err)
-	}
+	json.Unmarshal([]byte(result), &data)
 	return data
 }

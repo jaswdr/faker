@@ -64,3 +64,16 @@ func TestJsonObject(t *testing.T) {
 		}
 	}
 }
+
+func TestRandomAttributeValueFromListAsStringPanicWhenUnsupportedTypeIsPassed(t *testing.T) {
+	faker := New()
+	j := faker.Json()
+
+	defer func() {
+		if r := recover(); r == nil {
+			NotExpect(t, r, nil)
+		}
+	}()
+
+	j.randomAttributeValueFromListAsString([]string{"unsupported"})
+}
