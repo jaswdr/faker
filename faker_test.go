@@ -23,6 +23,32 @@ func Expect(t *testing.T, expected, got interface{}, values ...interface{}) {
 	}
 }
 
+// ExpectIntWithSize checks if a value is an integer and has a specific size.
+func ExpectIntWithSize(t *testing.T, expectedSize int, v interface{}, values ...interface{}) {
+    t.Helper()
+
+    // Check if v is an integer.
+    intValue, ok := v.(int)
+    if !ok {
+        t.Errorf("Expected an integer, but got %T", v)
+        t.FailNow()
+    }
+
+    // Convert the integer to a string and check its length.
+    stringValue := fmt.Sprint(intValue)
+    if len(stringValue) != expectedSize {
+        t.Errorf("Expected an integer with %d digits, but got %s", expectedSize, stringValue)
+        t.FailNow()
+    }
+
+    // Optionally, you can print additional values.
+    if len(values) > 0 {
+        for _, val := range values {
+            t.Logf("%+v", val)
+        }
+    }
+}
+
 func NotExpect(t *testing.T, notExpected, got interface{}, values ...interface{}) {
 	t.Helper()
 	if notExpected == got {
