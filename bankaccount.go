@@ -34,11 +34,10 @@ var accountLengths = map[string]int{
 func (f BAccount) GenerateBankAccount(countryCode string) int {
 	cc := strings.ToUpper(countryCode)
 	if _, exists := accountLengths[cc]; exists {
-        AccountLength := accountLengths[cc]
-	   return f.Faker.RandomNumber(AccountLength)
-	}else{
-		AccountLength := accountLengths[""]
-	return f.Faker.RandomNumber(AccountLength)
+		AccountLength := accountLengths[cc]
+		return f.Faker.RandomNumber(AccountLength)
 	}
-	
+	AccountLength := accountLengths[""]
+	return f.Faker.RandomNumber(AccountLength)
+
 }
