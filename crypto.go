@@ -1,115 +1,80 @@
 package faker
 
-import (
-	"strings"
-)
-
 // Crypto is a faker struct for generating bitcoin data
 type Crypto struct {
 	Faker *Faker
 }
 
 var (
-	bitcoinMin = 26
-	bitcoinMax = 35
-	ethLen     = 42
-	ethPrefix  = "0x"
+	bitcoinAddresses = []string{
+		"1JyxpLZzvYP2TyXaQV3J3vwajJz4hbxtRC",
+		"1JyVFJVUNx8RQrjyNCGDe7BQ62wPyxU8bC",
+		"1JVcPDeBfGP5PmNZwnJSfms7hKLncMSenV",
+		"1FwiYqdgLH6w5XdB9QXgZGi7ZHGiyUYucT",
+		"1H3nknk2Pdav9LjXyfLd8umqPC57ZQbN4",
+		"1DMwH1FMx2yJ67az7ZTJqViBD6iz3vQkUK",
+		"1JzvBX9Q86LbEcBxT58npYXS31QexVVMGG",
+		"1HBTfs2QLK459tQrdpeQs4stR25GWwJTui",
+		"1NZMxDpqB1ehEdvGJeAs9Gdmh3dXfUfAZB",
+		"19ePAsmdkM4u9e3euzfnQa1AXEoD2UgmEj",
+	}
+
+	etheriumAddresses = []string{
+		"0x83e1e8f10092d42db425D81c2e99f312a7E011aA",
+		"0xd3E823D4C999e4ef9c92835eEF6906E519C13251",
+		"0x4e3adfcdD456DDe868B1225aA0ed103Dd188B5F6",
+		"0xbC39DCa632f8f7f2A94B095d48bcEE779d961728",
+		"0xE0A6c75e545947E7Bb4dde2D8182762a4C698E5c",
+		"0x45C20Fd8F6B07359750f92B79f1C41754Bd09Ac3",
+		"0xA882bE0b4C10E91c3565EE01878A48F9B940f2c5",
+		"0x8c2B7B23f01fcAD2946A3C214c4D96338A5eFD6D",
+		"0x271253c6B815a07506719116262c1673692eD76E",
+		"0x1e887dC08ba56e369E68987F9D82b44065677c87",
+	}
 )
 
-// Checks whether the ascii value provided is in the exclusion for bitcoin.
-func (Crypto) isInExclusionZone(ascii int) bool {
-	switch ascii {
-	// Ascii for uppercase letter "O", uppercase letter "I", lowercase letter "l", and the number "0"
-	case 48, 73, 79, 108:
-		return true
-	}
-	return false
+// BitcoinAddress returns a valid address of either Bech32, P2PKH, or P2SH type.
+func (c Crypto) BitcoinAddress() string {
+	return c.Faker.RandomStringElement(bitcoinAddresses)
 }
 
-// algorithmRange decides whether to get digit, uppercase, or lowercase. returns the ascii range to do IntBetween on
-func (c Crypto) algorithmRange() (int, int) {
-	dec := c.Faker.IntBetween(0, 2)
-	if dec == 0 {
-		// digit
-		return 48, 57
-	} else if dec == 1 {
-		// upper
-		return 65, 90
-	}
-	// lower
-	return 97, 122
-}
-
-// generateBicoinAddress returns a bitcoin address with a given prefix and length
-func (c Crypto) generateBicoinAddress(length int, prefix string, f *Faker) string {
-	address := []string{prefix}
-
-	for i := 0; i < length; i++ {
-		asciiStart, asciiEnd := c.algorithmRange()
-		val := f.IntBetween(asciiStart, asciiEnd)
-		if c.isInExclusionZone(val) {
-			val++
-		}
-		address = append(address, string(rune(val)))
-	}
-	return strings.Join(address, "")
+// EtheriumAddress returns a valid hexadecimal ethereum address of 42 characters.
+func (c Crypto) EtheriumAddress() string {
+	return c.Faker.RandomStringElement(etheriumAddresses)
 }
 
 // P2PKHAddress generates a P2PKH bitcoin address.
+// Deprecated: Use BitcoinAddress instead.
 func (c Crypto) P2PKHAddress() string {
-	length := c.Faker.IntBetween(bitcoinMin, bitcoinMax)
-	// subtract 1 for prefix
-	return c.generateBicoinAddress(length-1, "1", c.Faker)
+	return "1" + c.BitcoinAddress()[1:]
 }
 
 // P2PKHAddressWithLength generates a P2PKH bitcoin address with specified length.
+// Deprecated: Use BitcoinAddress instead.
 func (c Crypto) P2PKHAddressWithLength(length int) string {
-	return c.generateBicoinAddress(length-1, "1", c.Faker)
+	return "1" + c.P2PKHAddress()[1:length-1]
 }
 
 // P2SHAddress generates a P2SH bitcoin address.
+// Deprecated: Use BitcoinAddress instead.
 func (c Crypto) P2SHAddress() string {
-	length := c.Faker.IntBetween(bitcoinMin, bitcoinMax)
-	// subtract 1 for prefix
-	return c.generateBicoinAddress(length-1, "3", c.Faker)
+	return "3" + c.BitcoinAddress()[1:]
 }
 
 // P2SHAddressWithLength generates a P2PKH bitcoin address with specified length.
+// Deprecated: Use BitcoinAddress instead.
 func (c Crypto) P2SHAddressWithLength(length int) string {
-	return c.generateBicoinAddress(length-1, "3", c.Faker)
+	return "3" + c.P2SHAddress()[1:length-1]
 }
 
 // Bech32Address generates a Bech32 bitcoin address
+// Deprecated: Use BitcoinAddress instead.
 func (c Crypto) Bech32Address() string {
-	length := c.Faker.IntBetween(bitcoinMin, bitcoinMax)
-	// subtract 1 for prefix
-	return c.generateBicoinAddress(length-3, "bc1", c.Faker)
+	return "bc1" + c.BitcoinAddress()[3:]
 }
 
 // Bech32AddressWithLength generates a Bech32 bitcoin address with specified length.
+// Deprecated: Use BitcoinAddress instead.
 func (c Crypto) Bech32AddressWithLength(length int) string {
-	return c.generateBicoinAddress(length-3, "bc1", c.Faker)
-}
-
-// BitcoinAddress returns an address of either Bech32, P2PKH, or P2SH type.
-func (c Crypto) BitcoinAddress() string {
-	dec := c.Faker.IntBetween(0, 2)
-	if dec == 0 {
-		return c.Bech32Address()
-	} else if dec == 1 {
-		return c.P2SHAddress()
-	}
-	return c.P2PKHAddress()
-}
-
-// EtheriumAddress returns a hexadecimal ethereum address of 42 characters.
-func (c Crypto) EtheriumAddress() string {
-	address := []string{ethPrefix}
-
-	for i := 0; i < ethLen-2; i++ {
-		asciiStart, asciiEnd := c.algorithmRange()
-		val := c.Faker.IntBetween(asciiStart, asciiEnd)
-		address = append(address, string(rune(val)))
-	}
-	return strings.Join(address, "")
+	return "bc1" + c.Bech32Address()[3:length-3]
 }
