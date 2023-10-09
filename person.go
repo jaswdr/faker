@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 var (
@@ -32,7 +33,7 @@ var (
 		"Aaron", "Abdiel", "Abdul", "Abdullah", "Abe", "Abel", "Abelardo", "Abner", "Abraham", "Adalberto", "Adam", "Adan", "Adelbert", "Adolf", "Adolfo", "Adolph", "Adolphus", "Adonis", "Adrain", "Adrian", "Adriel", "Adrien", "Afton", "Agustin", "Ahmad", "Ahmed", "Aidan", "Aiden", "Akeem", "Al", "Alan", "Albert", "Alberto", "Albin", "Alden", "Alec", "Alejandrin", "Alek", "Alessandro", "Alex", "Alexander", "Alexandre", "Alexandro", "Alexie", "Alexis", "Alexys", "Alexzander", "Alf", "Alfonso", "Alfonzo", "Alford", "Alfred", "Alfredo", "Ali", "Allan", "Allen", "Alphonso", "Alvah", "Alvis", "Amani", "Amari", "Ambrose", "Americo", "Amir", "Amos", "Amparo", "Anastacio", "Anderson", "Andre", "Andres", "Andrew", "Andy", "Angel", "Angelo", "Angus", "Anibal", "Ansel", "Ansley", "Anthony", "Antone", "Antonio", "Antwan", "Antwon", "Arch", "Archibald", "Arden", "Arely", "Ari", "Aric", "Ariel", "Arjun", "Arlo", "Armand", "Armando", "Armani", "Arnaldo", "Arne", "Arno", "Arnold", "Arnoldo", "Arnulfo", "Aron", "Art", "Arthur", "Arturo", "Arvel", "Arvid", "Ashton", "August", "Augustus", "Aurelio", "Austen", "Austin", "Austyn", "Avery", "Axel", "Ayden",
 		"Bailey", "Barney", "Baron", "Barrett", "Barry", "Bart", "Bartholome", "Barton", "Baylee", "Beau", "Bell", "Ben", "Benedict", "Benjamin", "Bennett", "Bennie", "Benny", "Benton", "Bernard", "Bernardo", "Bernhard", "Bernie", "Berry", "Berta", "Bertha", "Bertram", "Bertrand", "Bill", "Billy", "Blair", "Blaise", "Blake", "Blaze", "Bo", "Bobbie", "Bobby", "Boris", "Boyd", "Brad", "Braden", "Bradford", "Bradley", "Bradly", "Brady", "Braeden", "Brain", "Brando", "Brandon", "Brandt", "Brannon", "Branson", "Brant", "Braulio", "Braxton", "Brayan", "Brendan", "Brenden", "Brendon", "Brennan", "Brennon", "Brent", "Bret", "Brett", "Brian", "Brice", "Brock", "Broderick", "Brody", "Brook", "Brooks", "Brown", "Bruce", "Bryce", "Brycen", "Bryon", "Buck", "Bud", "Buddy", "Buford", "Burley", "Buster",
 		"Cade", "Caden", "Caesar", "Cale", "Caleb", "Camden", "Cameron", "Camren", "Camron", "Camryn", "Candelario", "Candido", "Carey", "Carleton", "Carlo", "Carlos", "Carmel", "Carmelo", "Carmine", "Carol", "Carroll", "Carson", "Carter", "Cary", "Casey", "Casimer", "Casimir", "Casper", "Caesar", "Cecil", "Cedrick", "Celestino", "Cesar", "Chad", "Chadd", "Chadrick", "Chaim", "Chance", "Chandler", "Charles", "Charley", "Charlie", "Chase", "Chauncey", "Chaz", "Chelsey", "Chesley", "Chester", "Chet", "Chris", "Christ", "Christian", "Christop", "Christophe", "Christopher", "Cicero", "Cielo", "Clair", "Clark", "Claud", "Claude", "Clay", "Clemens", "Clement", "Cleo", "Cletus", "Cleve", "Cleveland", "Clifford", "Clifton", "Clint", "Clinton", "Clovis", "Cloyd", "Clyde", "Coby", "Cody", "Colby", "Cole", "Coleman", "Colin", "Collin", "Colt", "Colten", "Colton", "Columbus", "Conner", "Connor", "Conor", "Conrad", "Constantin", "Consuelo", "Cooper", "Corbin", "Cordelia", "Cordell", "Cornelius", "Cornell", "Cortez", "Cory", "Coty", "Coy", "Craig", "Crawford", "Cristian", "Cristina", "Cristobal", "Cristopher", "Cruz", "Cullen", "Curt", "Curtis", "Cyril", "Cyrus",
-		"Dagmar", "Dale", "Dallas", "Dallin", "Dalton", "Dameon", "Damian", "Damien", "Damion", "Damon", "Dan", "Dane", "D\"angelo", "Dangelo", "Danial", "Danny", "Dante", "Daren", "Darian", "Darien", "Dario", "Darion", "Darius", "Daron", "Darrel", "Darrell", "Darren", "Darrick", "Darrin", "Darrion", "Darron", "Darryl", "Darwin", "Daryl", "Dashawn", "Dave", "David", "Davin", "Davion", "Davon", "Davonte", "Dawson", "Dax", "Dayne", "Dayton", "Dean", "Deangelo", "Declan", "Dedric", "Dedrick", "Dee", "Deion", "Dejon", "Dejuan", "Delaney", "Delbert", "Dell", "Delmer", "Demarco", "Demarcus", "Demario", "Demetrius", "Demond", "Denis", "Dennis", "Deon", "Deondre", "Deontae", "Deonte", "Dereck", "Derek", "Derick", "Deron", "Derrick", "Deshaun", "Deshawn", "Desmond", "Destin", "Devan", "Devante", "Deven", "Devin", "Devon", "Devonte", "Devyn", "Dewayne", "Dewitt", "Dexter", "Diamond", "Diego", "Dillan", "Dillon", "Dimitri", "Dino", "Dion", "Dock", "Domenic", "Domenick", "Domenico", "Domingo", "Dominic", "Don", "Donald", "Donato", "Donavon", "Donnell", "Donnie", "Donny", "Dorcas", "Dorian", "Doris", "Dorthy", "Doug", "Douglas", "Doyle", "Drake", "Dudley", "Duncan", "Durward", "Dustin", "Dusty", "Dwight", "Dylan",
+		"Dagmar", "Dale", "Dallas", "Dallin", "Dalton", "Dameon", "Damian", "Damien", "Damion", "Damon", "Dan", "Dane", "D'angelo", "Dangelo", "Danial", "Danny", "Dante", "Daren", "Darian", "Darien", "Dario", "Darion", "Darius", "Daron", "Darrel", "Darrell", "Darren", "Darrick", "Darrin", "Darrion", "Darron", "Darryl", "Darwin", "Daryl", "Dashawn", "Dave", "David", "Davin", "Davion", "Davon", "Davonte", "Dawson", "Dax", "Dayne", "Dayton", "Dean", "Deangelo", "Declan", "Dedric", "Dedrick", "Dee", "Deion", "Dejon", "Dejuan", "Delaney", "Delbert", "Dell", "Delmer", "Demarco", "Demarcus", "Demario", "Demetrius", "Demond", "Denis", "Dennis", "Deon", "Deondre", "Deontae", "Deonte", "Dereck", "Derek", "Derick", "Deron", "Derrick", "Deshaun", "Deshawn", "Desmond", "Destin", "Devan", "Devante", "Deven", "Devin", "Devon", "Devonte", "Devyn", "Dewayne", "Dewitt", "Dexter", "Diamond", "Diego", "Dillan", "Dillon", "Dimitri", "Dino", "Dion", "Dock", "Domenic", "Domenick", "Domenico", "Domingo", "Dominic", "Don", "Donald", "Donato", "Donavon", "Donnell", "Donnie", "Donny", "Dorcas", "Dorian", "Doris", "Dorthy", "Doug", "Douglas", "Doyle", "Drake", "Dudley", "Duncan", "Durward", "Dustin", "Dusty", "Dwight", "Dylan",
 		"Earl", "Earnest", "Easter", "Easton", "Ed", "Edd", "Eddie", "Edgar", "Edgardo", "Edison", "Edmond", "Edmund", "Eduardo", "Edward", "Edwardo", "Edwin", "Efrain", "Efren", "Einar", "Eino", "Eladio", "Elbert", "Eldon", "Eldred", "Eleazar", "Eli", "Elian", "Elias", "Eliezer", "Elijah", "Eliseo", "Elliot", "Elliott", "Ellis", "Ellsworth", "Elmer", "Elmo", "Elmore", "Eloy", "Elroy", "Elton", "Elvis", "Elwin", "Elwyn", "Emanuel", "Emerald", "Emerson", "Emery", "Emil", "Emile", "Emiliano", "Emilio", "Emmanuel", "Emmet", "Emmett", "Emmitt", "Emory", "Enid", "Enoch", "Enos", "Enrico", "Enrique", "Ephraim", "Eriberto", "Eric", "Erich", "Erick", "Erik", "Erin", "Erling", "Ernest", "Ernesto", "Ernie", "Ervin", "Erwin", "Esteban", "Estevan", "Ethan", "Ethel", "Eugene", "Eusebio", "Evan", "Evans", "Everardo", "Everett", "Evert", "Ewald", "Ewell", "Ezekiel", "Ezequiel", "Ezra",
 		"Fabian", "Faustino", "Fausto", "Favian", "Federico", "Felipe", "Felix", "Felton", "Fermin", "Fern", "Fernando", "Ferne", "Fidel", "Filiberto", "Finn", "Flavio", "Fletcher", "Florencio", "Florian", "Floy", "Floyd", "Ford", "Forest", "Forrest", "Foster", "Francesco", "Francis", "Francisco", "Franco", "Frank", "Frankie", "Franz", "Fred", "Freddie", "Freddy", "Frederic", "Frederick", "Frederik", "Fredrick", "Fredy", "Freeman", "Friedrich", "Fritz", "Furman",
 		"Gabe", "Gabriel", "Gaetano", "Gage", "Gardner", "Garett", "Garfield", "Garland", "Garnet", "Garnett", "Garret", "Garrett", "Garrick", "Garrison", "Garry", "Garth", "Gaston", "Gavin", "Gay", "Gayle", "Gaylord", "Gene", "General", "Gennaro", "Geo", "Geoffrey", "George", "Geovanni", "Geovanny", "Geovany", "Gerald", "Gerard", "Gerardo", "Gerhard", "German", "Gerson", "Gianni", "Gideon", "Gilbert", "Gilberto", "Giles", "Gillian", "Gino", "Giovani", "Giovanni", "Giovanny", "Giuseppe", "Glen", "Glennie", "Godfrey", "Golden", "Gonzalo", "Gordon", "Grady", "Graham", "Grant", "Granville", "Grayce", "Grayson", "Green", "Greg", "Gregg", "Gregorio", "Gregory", "Greyson", "Griffin", "Grover", "Guido", "Guillermo", "Giuseppe", "Gunnar", "Gunner", "Gus", "Gussie", "Gust", "Gustave", "Guy",
@@ -88,7 +89,7 @@ var (
 		"Abbott", "Abernathy", "Abshire", "Adams", "Altenwerth", "Anderson", "Ankunding", "Armstrong", "Auer", "Aufderhar",
 		"Bahringer", "Bailey", "Balistreri", "Barrows", "Bartell", "Bartoletti", "Barton", "Bashirian", "Batz", "Bauch", "Baumbach", "Bayer", "Beahan", "Beatty", "Bechtelar", "Becker", "Bednar", "Beer", "Beier", "Berge", "Bergnaum", "Bergstrom", "Bernhard", "Bernier", "Bins", "Blanda", "Blick", "Block", "Bode", "Boehm", "Bogan", "Bogisich", "Borer", "Bosco", "Botsford", "Boyer", "Boyle", "Bradtke", "Brakus", "Braun", "Breitenberg", "Brekke", "Brown", "Bruen", "Buckridge",
 		"Carroll", "Carter", "Cartwright", "Casper", "Cassin", "Champlin", "Christiansen", "Cole", "Collier", "Collins", "Conn", "Connelly", "Conroy", "Considine", "Corkery", "Cormier", "Corwin", "Cremin", "Crist", "Crona", "Cronin", "Crooks", "Cruickshank", "Cummerata", "Cummings",
-		"Dach", "D\"Amore", "Daniel", "Dare", "Daugherty", "Davis", "Deckow", "Denesik", "Dibbert", "Dickens", "Dicki", "Dickinson", "Dietrich", "Donnelly", "Dooley", "Douglas", "Doyle", "DuBuque", "Durgan",
+		"Dach", "D'Amore", "Daniel", "Dare", "Daugherty", "Davis", "Deckow", "Denesik", "Dibbert", "Dickens", "Dicki", "Dickinson", "Dietrich", "Donnelly", "Dooley", "Douglas", "Doyle", "DuBuque", "Durgan",
 		"Ebert", "Effertz", "Eichmann", "Emard", "Emmerich", "Erdman", "Ernser", "Fadel",
 		"Fahey", "Farrell", "Fay", "Feeney", "Feest", "Feil", "Ferry", "Fisher", "Flatley", "Frami", "Franecki", "Friesen", "Fritsch", "Funk",
 		"Gaylord", "Gerhold", "Gerlach", "Gibson", "Gislason", "Gleason", "Gleichner", "Glover", "Goldner", "Goodwin", "Gorczany", "Gottlieb", "Goyette", "Grady", "Graham", "Grant", "Green", "Greenfelder", "Greenholt", "Grimes", "Gulgowski", "Gusikowski", "Gutkowski", "Gutmann",
@@ -98,7 +99,7 @@ var (
 		"Labadie", "Lakin", "Lang", "Langosh", "Langworth", "Larkin", "Larson", "Leannon", "Lebsack", "Ledner", "Leffler", "Legros", "Lehner", "Lemke", "Lesch", "Leuschke", "Lind", "Lindgren", "Little", "Lockman", "Lowe", "Lubowitz", "Lueilwitz", "Luettgen", "Lynch",
 		"Macejkovic", "Maggio", "Mann", "Mante", "Marks", "Marquardt", "Marvin", "Mayer", "Mayert", "McClure", "McCullough", "McDermott", "McGlynn", "McKenzie", "McLaughlin", "Medhurst", "Mertz", "Metz", "Miller", "Mills", "Mitchell", "Moen", "Mohr", "Monahan", "Moore", "Morar", "Morissette", "Mosciski", "Mraz", "Mueller", "Muller", "Murazik", "Murphy", "Murray",
 		"Nader", "Nicolas", "Nienow", "Nikolaus", "Nitzsche", "Nolan",
-		"Oberbrunner", "O\"Connell", "O\"Conner", "O\"Hara", "O\"Keefe", "O\"Kon", "Okuneva", "Olson", "Ondricka", "O\"Reilly", "Orn", "Ortiz", "Osinski",
+		"Oberbrunner", "O'Connell", "O'Conner", "O'Hara", "O'Keefe", "O'Kon", "Okuneva", "Olson", "Ondricka", "O'Reilly", "Orn", "Ortiz", "Osinski",
 		"Pacocha", "Padberg", "Pagac", "Parisian", "Parker", "Paucek", "Pfannerstill", "Pfeffer", "Pollich", "Pouros", "Powlowski", "Predovic", "Price", "Prohaska", "Prosacco", "Purdy",
 		"Quigley", "Quitzon",
 		"Rath", "Ratke", "Rau", "Raynor", "Reichel", "Reichert", "Reilly", "Reinger", "Rempel", "Renner", "Reynolds", "Rice", "Rippin", "Ritchie", "Robel", "Roberts", "Rodriguez", "Rogahn", "Rohan", "Rolfson", "Romaguera", "Roob", "Rosenbaum", "Rowe", "Ruecker", "Runolfsdottir", "Runolfsson", "Runte", "Russel", "Rutherford", "Ryan", "Sanford", "Satterfield", "Sauer", "Sawayn",
@@ -112,6 +113,20 @@ var (
 	}
 
 	suffix = []string{"Jr.", "Sr.", "I", "II", "III", "IV", "V", "MD", "DDS", "PhD", "DVM"}
+)
+
+var (
+	cacheFirstNames     []string
+	cacheFirstNamesOnce sync.Once
+	cacheFirstNamesFunc = func() {
+		cacheFirstNames = append(firstNameMale, firstNameFemale...)
+	}
+
+	cacheNameFormats     []string
+	cacheNameFormatsOnce sync.Once
+	cacheNameFormatsFunc = func() {
+		cacheNameFormats = append(maleNameFormats, femaleNameFormats...)
+	}
 )
 
 // Person is a faker struct for Person
@@ -173,8 +188,8 @@ func (p Person) FirstNameFemale() string {
 
 // FirstName returns a fake first name for Person
 func (p Person) FirstName() string {
-	names := append(firstNameMale, firstNameFemale...)
-	return p.Faker.RandomStringElement(names)
+	cacheFirstNamesOnce.Do(cacheFirstNamesFunc)
+	return p.Faker.RandomStringElement(cacheFirstNames)
 }
 
 // LastName returns a fake last name for Person
@@ -185,25 +200,25 @@ func (p Person) LastName() string {
 
 // Name returns a fake name for Person
 func (p Person) Name() string {
-	formats := append(maleNameFormats, femaleNameFormats...)
-	name := formats[p.Faker.IntBetween(0, len(formats)-1)]
+	cacheNameFormatsOnce.Do(cacheNameFormatsFunc)
+	name := cacheNameFormats[p.Faker.IntBetween(0, len(cacheNameFormats)-1)]
 
 	// {{titleMale}}
 	name = strings.Replace(name, "{{titleMale}}", p.TitleMale(), 1)
 
-	//{{firstNameMale}}
+	// {{firstNameMale}}
 	name = strings.Replace(name, "{{firstNameMale}}", p.FirstNameMale(), 1)
 
 	// {{titleFemale}}
 	name = strings.Replace(name, "{{titleFemale}}", p.TitleFemale(), 1)
 
-	//{{firstNameFemale}}
+	// {{firstNameFemale}}
 	name = strings.Replace(name, "{{firstNameFemale}}", p.FirstNameFemale(), 1)
 
-	//{{lastName}}
+	// {{lastName}}
 	name = strings.Replace(name, "{{lastName}}", p.LastName(), 1)
 
-	//{{suffix}}
+	// {{suffix}}
 	name = strings.Replace(name, "{{suffix}}", p.Suffix(), 1)
 
 	return name
