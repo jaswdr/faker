@@ -42,6 +42,7 @@ type StructArray struct {
 	Skips     []string  `fake:"skip"`
 	Strings   []string  `fake:"####" fakesize:"3"`
 	SetLen    [5]string `fake:"????"`
+	SetLenInt [4]int
 	SubStr    [][]string
 	SubStrLen [][2]string
 	Empty     []*Basic    `fakesize:"0"`
@@ -106,6 +107,10 @@ func TestStructArray(t *testing.T) {
 	Expect(t, 5, len(sa.SetLen))
 	for _, s := range sa.SetLen {
 		NotExpect(t, "", s)
+	}
+	Expect(t, 4, len(sa.SetLenInt))
+	for _, s := range sa.SetLenInt {
+		NotExpect(t, 0, s)
 	}
 	for _, s := range sa.SubStr {
 		for _, ss := range s {

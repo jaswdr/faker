@@ -102,6 +102,7 @@ func (s Struct) pointerHandler(valueType reflect.Type, value reflect.Value, func
 		if !s.typeHandler(elementType, newValue.Elem(), function, 0, parentName, typesSeen) {
 			return false
 		}
+		fmt.Printf("Setting %v to %v\n", valueType, newValue)
 		value.Set(newValue)
 	}
 
@@ -124,6 +125,11 @@ func (s Struct) sliceHandler(valueType reflect.Type, value reflect.Value, functi
 		size = s.Faker.IntBetween(1, 10)
 	} else if elementCapacity != 0 && (size == -1 || elementCapacity < size) {
 		size = elementCapacity
+	}
+
+	// If the value is empty and the size is not -1, create a new slice
+	if elementCapacity == 0 && size > 0 {
+		value.Set(reflect.MakeSlice(valueType, size, size))
 	}
 
 	// Get the element type
