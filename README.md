@@ -146,7 +146,7 @@ Push to your fork and send a new pull request from your fork to this repository.
 
 ## Versioning
 
-Faker is maintained under the [Semantic Versioning guidelines](http://semver.org/). Starting at `2.X`, we only support mtained versions of Go. Which according to [Go's Release Policy](https://go.dev/doc/devel/release) means that we only support the two newer major versions.
+Faker is maintained under the [Semantic Versioning guidelines](http://semver.org/). Starting at `2.X`, we only support maintained versions of Go. Which according to [Go's Release Policy](https://go.dev/doc/devel/release) means that we only support the two newer major versions.
 
 ## License
 
