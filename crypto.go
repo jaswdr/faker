@@ -56,6 +56,7 @@ func (c Crypto) generateBicoinAddress(length int, prefix string, f *Faker) strin
 }
 
 // P2PKHAddress generates a P2PKH bitcoin address.
+// Deprecated: Please use BitcoinAddress instead.
 func (c Crypto) P2PKHAddress() string {
 	length := c.Faker.IntBetween(bitcoinMin, bitcoinMax)
 	// subtract 1 for prefix
@@ -63,11 +64,13 @@ func (c Crypto) P2PKHAddress() string {
 }
 
 // P2PKHAddressWithLength generates a P2PKH bitcoin address with specified length.
+// Deprecated: Please use BitcoinAddress instead.
 func (c Crypto) P2PKHAddressWithLength(length int) string {
 	return c.generateBicoinAddress(length-1, "1", c.Faker)
 }
 
 // P2SHAddress generates a P2SH bitcoin address.
+// Deprecated: Please use BitcoinAddress instead.
 func (c Crypto) P2SHAddress() string {
 	length := c.Faker.IntBetween(bitcoinMin, bitcoinMax)
 	// subtract 1 for prefix
@@ -75,11 +78,13 @@ func (c Crypto) P2SHAddress() string {
 }
 
 // P2SHAddressWithLength generates a P2PKH bitcoin address with specified length.
+// Deprecated: Please use BitcoinAddress instead.
 func (c Crypto) P2SHAddressWithLength(length int) string {
 	return c.generateBicoinAddress(length-1, "3", c.Faker)
 }
 
 // Bech32Address generates a Bech32 bitcoin address
+// Deprecated: Please use BitcoinAddress instead.
 func (c Crypto) Bech32Address() string {
 	length := c.Faker.IntBetween(bitcoinMin, bitcoinMax)
 	// subtract 1 for prefix
@@ -87,6 +92,7 @@ func (c Crypto) Bech32Address() string {
 }
 
 // Bech32AddressWithLength generates a Bech32 bitcoin address with specified length.
+// Deprecated: Please use BitcoinAddress instead.
 func (c Crypto) Bech32AddressWithLength(length int) string {
 	return c.generateBicoinAddress(length-3, "bc1", c.Faker)
 }
