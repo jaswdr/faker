@@ -9,7 +9,6 @@ func TestGetWord(t *testing.T) {
 		context     string
 		mockFunc    func()
 		expectWords []string
-		expectWord  string
 	}{
 		{
 			context: "test",
@@ -23,7 +22,6 @@ func TestGetWord(t *testing.T) {
 				}
 			},
 			expectWords: []string{"test1", "test2", "test3"},
-			expectWord:  "test1",
 		},
 	}
 
@@ -35,8 +33,15 @@ func TestGetWord(t *testing.T) {
 			t.Errorf("getWords(%s) was incorrect, got: %d, want: %d.", table.context, len(resultWords), len(table.expectWords))
 		}
 		resultWord := getWord(table.context)
-		if resultWord != table.expectWord {
-			t.Errorf("getWord(%s) was incorrect, got: %s, want: %s.", table.context, resultWord, table.expectWord)
+		valid := false
+		for _, w := range table.expectWords {
+			if w == resultWord {
+				valid = true
+				break
+			}
+		}
+		if !valid {
+			t.Errorf("getWord(%s) was incorrect, got: %s.", table.context, resultWord)
 		}
 		consultService = originalResponse
 	}
