@@ -1,7 +1,6 @@
 package faker
 
 import (
-	"io/ioutil"
 	"net/http"
 	"os"
 	"runtime"
@@ -41,7 +40,7 @@ type TempFileCreatorImpl struct{}
 
 // TempFile creates a temporary file
 func (TempFileCreatorImpl) TempFile(prefix string) (f *os.File, err error) {
-	return ioutil.TempFile(os.TempDir(), prefix)
+	return os.CreateTemp(os.TempDir(), prefix)
 }
 
 // OSResolver returns the GOOS value for operating an operating system
