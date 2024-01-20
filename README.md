@@ -27,7 +27,7 @@ Start at https://play.golang.org/p/JpTagDGBaHK
 Add this to your Go file
 
 ```go
-import "github.com/jaswdr/faker"
+import "github.com/jaswdr/faker/v2"
 ```
 
 And run `go get` or `dep ensure` to get the package.
@@ -37,7 +37,7 @@ And run `go get` or `dep ensure` to get the package.
 Use `faker.New()` to create and initialize a faker generator, which can generate data by accessing properties named after the type of data you want.
 
 ```go
-import "github.com/jaswdr/faker"
+import "github.com/jaswdr/faker/v2"
 
 func main() {
     fake := faker.New()
@@ -131,7 +131,7 @@ See more formatters in [docs](https://pkg.go.dev/github.com/jaswdr/faker?tab=doc
 Create a fork and get the code.
 
 ```bash
-$ go get github.com/jaswdr/faker
+$ go get github.com/jaswdr/faker/v2
 ```
 
 Do your changes, add tests, run the tests.
@@ -139,7 +139,7 @@ Do your changes, add tests, run the tests.
 ```bash
 $ go test
 PASS
-ok      github.com/jaswdr/faker 0.010s
+ok      github.com/jaswdr/faker/v2 2.966s
 ```
 
 Push to your fork and send a new pull request from your fork to this repository.
