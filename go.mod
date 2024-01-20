@@ -1,3 +1,3 @@
-module github.com/jaswdr/faker
+module github.com/jaswdr/faker/v2
 
 go 1.20
