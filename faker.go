@@ -150,18 +150,17 @@ func (f Faker) UInt64() uint64 {
 // IntBetween returns a fake Int between a given minimum and maximum values for Faker
 func (f Faker) IntBetween(min, max int) int {
 	diff := max - min
-	var rndInt int
+
+	var value int
 	if diff == 0 {
 		return min
-	} else if diff < 0 {
-		diff = -1 * diff
-	} else if diff >= math.MaxInt {
-		rndInt = f.Generator.Intn(diff)
-	} else {
-		rndInt = f.Generator.Intn(diff + 1)
+	} else if diff == math.MaxInt {
+		value = f.Generator.Intn(diff)
+	} else if diff > 0 {
+		value = f.Generator.Intn(diff + 1)
 	}
 
-	return min + rndInt
+	return min + value
 }
 
 // Int8Between returns a fake Int8 between a given minimum and maximum values for Faker
