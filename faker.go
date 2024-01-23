@@ -10,6 +10,13 @@ import (
 	"time"
 )
 
+const (
+	maxUint = ^uint(0)
+	minUint = 0
+	maxInt  = int(maxUint >> 1)
+	minInt  = -maxInt - 1
+)
+
 // Faker is the Generator struct for Faker
 type Faker struct {
 	Generator GeneratorInterface
@@ -96,8 +103,8 @@ func (f Faker) Float64(maxDecimals, min, max int) float64 {
 
 // Int returns a fake Int number for Faker
 func (f Faker) Int() int {
-	max := math.MaxInt
-	min := math.MinInt
+	max := int(^uint(0)>>1) - 1
+	min := 0
 	return f.IntBetween(min, max)
 }
 
@@ -123,7 +130,8 @@ func (f Faker) Int64() int64 {
 
 // UInt returns a fake UInt number for Faker
 func (f Faker) UInt() uint {
-	max := math.MaxInt
+	maxU := ^uint(0) >> 1
+	max := int(maxU)
 	return uint(f.IntBetween(0, max))
 }
 
@@ -151,16 +159,19 @@ func (f Faker) UInt64() uint64 {
 func (f Faker) IntBetween(min, max int) int {
 	diff := max - min
 
-	var value int
-	if diff == 0 {
-		return min
-	} else if diff == math.MaxInt {
-		value = f.Generator.Intn(diff)
-	} else if diff > 0 {
-		value = f.Generator.Intn(diff + 1)
+	if diff < 0 {
+		diff = 0
 	}
 
-	return min + value
+	if diff == 0 {
+		return min
+	}
+
+	if diff == maxInt {
+		return f.Generator.Intn(diff)
+	}
+
+	return f.Generator.Intn(diff+1) + min
 }
 
 // Int8Between returns a fake Int8 between a given minimum and maximum values for Faker

@@ -2,7 +2,6 @@ package faker
 
 import (
 	"fmt"
-	"math"
 	"math/rand"
 	"reflect"
 	"strings"
@@ -161,10 +160,10 @@ func TestIntBetweenNegativeValues(t *testing.T) {
 
 func TestIntBetweenWithMaxValues(t *testing.T) {
 	f := New()
-	value := f.IntBetween(math.MinInt, math.MaxInt)
+	value := f.IntBetween(minInt, maxInt)
 	Expect(t, fmt.Sprintf("%T", value), "int")
-	Expect(t, true, value >= math.MinInt)
-	Expect(t, true, value <= math.MaxInt)
+	Expect(t, true, value >= minInt)
+	Expect(t, true, value <= maxInt)
 }
 
 func TestIntBetweenWithInvalidInterval(t *testing.T) {
