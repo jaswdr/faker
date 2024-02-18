@@ -103,53 +103,75 @@ func (f Faker) Int() int {
 
 // Int8 returns a fake Int8 number for Faker
 func (f Faker) Int8() int8 {
-	return int8(f.Int())
+	return int8(f.IntBetween(0, math.MaxInt8))
 }
 
 // Int16 returns a fake Int16 number for Faker
 func (f Faker) Int16() int16 {
-	return int16(f.Int())
+	return int16(f.IntBetween(0, math.MaxInt16))
 }
 
 // Int32 returns a fake Int32 number for Faker
 func (f Faker) Int32() int32 {
-	return int32(f.Int())
+	return int32(f.IntBetween(0, math.MaxInt32))
 }
 
 // Int64 returns a fake Int64 number for Faker
 func (f Faker) Int64() int64 {
-	return int64(f.Int())
+	return int64(f.IntBetween(0, math.MaxInt64))
 }
 
 // UInt returns a fake UInt number for Faker
 func (f Faker) UInt() uint {
-	max := math.MaxInt
-	return uint(f.IntBetween(0, max))
+	return uint(f.IntBetween(0, math.MaxInt))
 }
 
 // UInt8 returns a fake UInt8 number for Faker
 func (f Faker) UInt8() uint8 {
-	return uint8(f.Int())
+	return uint8(f.IntBetween(0, math.MaxUint8))
 }
 
 // UInt16 returns a fake UInt16 number for Faker
 func (f Faker) UInt16() uint16 {
-	return uint16(f.Int())
+	return uint16(f.IntBetween(0, math.MaxUint16))
 }
 
 // UInt32 returns a fake UInt32 number for Faker
 func (f Faker) UInt32() uint32 {
-	return uint32(f.Int())
+	return uint32(f.IntBetween(0, math.MaxUint32))
 }
 
 // UInt64 returns a fake UInt64 number for Faker
 func (f Faker) UInt64() uint64 {
-	return uint64(f.Int())
+	// Using MaxUint32 to avoid overflow
+	return uint64(f.IntBetween(0, math.MaxUint32))
 }
 
 // IntBetween returns a fake Int between a given minimum and maximum values for Faker
 func (f Faker) IntBetween(min, max int) int {
-	diff := max - min
+	if min > max {
+		// Swap values
+		return f.IntBetween(max, min)
+	}
+
+	diff := 0
+	// Edge case when min and max are actual min and max integers,
+	// since we cannot store 2 * math.MaxInt, we instead split the range in:
+	// - 50% chance to return a negative number
+	// - 50% chance to return a positive number
+	if min == math.MinInt64 && max == math.MaxInt64 {
+		if f.Bool() {
+			// negatives
+			max = 0
+			diff = math.MaxInt
+		} else {
+			// positives
+			min = 0
+			diff = math.MaxInt
+		}
+	} else {
+		diff = max - min
+	}
 
 	var value int
 	if diff == 0 {
