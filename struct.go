@@ -1,6 +1,7 @@
 package faker
 
 import (
+	"fmt"
 	"reflect"
 	"strconv"
 )
@@ -11,180 +12,236 @@ type Struct struct {
 }
 
 // Fill elements of a struct with random data
-func (s Struct) Fill(v interface{}) {
-	s.r(reflect.TypeOf(v), reflect.ValueOf(v), "", 0)
+func (s Struct) Fill(value interface{}) {
+	reflectedType := reflect.TypeOf(value)
+	reflectedValue := reflect.ValueOf(value)
+	s.typeHandler(reflectedType, reflectedValue, "", 0, "", map[string]bool{})
 }
 
-func (s Struct) r(t reflect.Type, v reflect.Value, function string, size int) {
-	switch t.Kind() {
+func (s Struct) typeHandler(valueType reflect.Type, value reflect.Value, function string, size int, parentName string, typesSeen map[string]bool) bool {
+	kind := valueType.Kind()
+	switch kind {
 	case reflect.Ptr:
-		s.rPointer(t, v, function)
+		return s.pointerHandler(valueType, value, function, parentName, typesSeen)
 	case reflect.Struct:
-		s.rStruct(t, v)
+		return s.structHandler(valueType, value, parentName, typesSeen)
 	case reflect.String:
-		s.rString(t, v, function)
+		return s.stringHandler(valueType, value, function)
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		s.rUint(t, v, function)
+		return s.uintHandler(valueType, value, function)
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		s.rInt(t, v, function)
+		return s.intHandler(valueType, value, function)
 	case reflect.Float32, reflect.Float64:
-		s.rFloat(t, v, function)
+		return s.floatHandler(valueType, value, function)
 	case reflect.Bool:
-		s.rBool(t, v)
+		return s.boolHandler(valueType, value)
 	case reflect.Array, reflect.Slice:
-		s.rSlice(t, v, function, size)
+		return s.sliceHandler(valueType, value, function, size, parentName, typesSeen)
+	default:
+		return false
 	}
 }
 
-func (s Struct) rStruct(t reflect.Type, v reflect.Value) {
-	n := t.NumField()
-	for i := 0; i < n; i++ {
-		elementT := t.Field(i)
-		elementV := v.Field(i)
-		t, ok := elementT.Tag.Lookup("fake")
-		if ok && t == "skip" {
-			// Do nothing, skip it
-		} else if elementV.CanSet() {
+func (s Struct) structHandler(valueType reflect.Type, value reflect.Value, parentName string, typesSeen map[string]bool) bool {
+	result := true
+	numberOfFields := valueType.NumField()
+	for fieldIndex := 0; fieldIndex < numberOfFields; fieldIndex++ {
+		structType := valueType.Field(fieldIndex)
+		structValue := value.Field(fieldIndex)
+
+		// Check if type was seen before
+		if structType.Type.Name() == "" {
+			if parentName == "" {
+				parentName = structType.Name
+			}
+
+			valueToCompare := fmt.Sprintf("%v.%v", parentName, structType.Name)
+			found := false
+			_, found = typesSeen[valueToCompare]
+			if found {
+				result = false
+				continue
+			}
+			typesSeen[valueToCompare] = true
+		}
+
+		tag, ok := structType.Tag.Lookup("fake")
+		if ok && tag == "skip" {
+			continue
+		}
+
+		if structValue.CanSet() {
 			// Check if fakesize is set
 			size := -1 // Set to -1 to indicate fakesize was not set
-			fs, ok := elementT.Tag.Lookup("fakesize")
+			fakeSize, ok := structType.Tag.Lookup("fakesize")
 			if ok {
 				var err error
-				size, err = strconv.Atoi(fs)
+				size, err = strconv.Atoi(fakeSize)
 				if err != nil {
 					size = s.Faker.IntBetween(1, 10)
 				}
 			}
-			s.r(elementT.Type, elementV, t, size)
+
+			if !s.typeHandler(structType.Type, structValue, tag, size, parentName, typesSeen) {
+				result = false
+			}
+		}
+
+		if structType.Name == parentName {
+			parentName = ""
 		}
 	}
+
+	return result
 }
 
-func (s Struct) rPointer(t reflect.Type, v reflect.Value, function string) {
-	elemT := t.Elem()
-	if v.IsNil() {
-		nv := reflect.New(elemT)
-		s.r(elemT, nv.Elem(), function, 0)
-		v.Set(nv)
-	} else {
-		s.r(elemT, v.Elem(), function, 0)
+func (s Struct) pointerHandler(valueType reflect.Type, value reflect.Value, function string, parentName string, typesSeen map[string]bool) bool {
+	elementType := valueType.Elem()
+	if value.IsNil() {
+		newValue := reflect.New(elementType)
+		if !s.typeHandler(elementType, newValue.Elem(), function, 0, parentName, typesSeen) {
+			return false
+		}
+		fmt.Printf("Setting %v to %v\n", valueType, newValue)
+		value.Set(newValue)
 	}
+
+	return s.typeHandler(elementType, value.Elem(), function, 0, parentName, typesSeen)
 }
 
-func (s Struct) rSlice(t reflect.Type, v reflect.Value, function string, size int) {
+func (s Struct) sliceHandler(valueType reflect.Type, value reflect.Value, function string, size int, parentName string, typesSeen map[string]bool) bool {
 	// If you cant even set it dont even try
-	if !v.CanSet() {
-		return
+	if !value.CanSet() {
+		return false
 	}
 
 	// Grab original size to use if needed for sub arrays
-	ogSize := size
+	originalSize := size
 
 	// If the value has a cap and is less than the size
 	// use that instead of the requested size
-	elemCap := v.Cap()
-	if elemCap == 0 && size == -1 {
+	elementCapacity := value.Cap()
+	if elementCapacity == 0 && size == -1 {
 		size = s.Faker.IntBetween(1, 10)
-	} else if elemCap != 0 && (size == -1 || elemCap < size) {
-		size = elemCap
+	} else if elementCapacity != 0 && (size == -1 || elementCapacity < size) {
+		size = elementCapacity
+	}
+
+	// If the value is empty and the size is not -1, create a new slice
+	if elementCapacity == 0 && size > 0 {
+		value.Set(reflect.MakeSlice(valueType, size, size))
 	}
 
 	// Get the element type
-	elemT := t.Elem()
+	elementType := valueType.Elem()
+	newValue := reflect.New(elementType)
+	elementValue := newValue.Elem()
 
-	// If values are already set fill them up, otherwise append
-	if v.Len() != 0 {
-		// Loop through the elements length and set based upon the index
-		for i := 0; i < size; i++ {
-			nv := reflect.New(elemT)
-			s.r(elemT, nv.Elem(), function, ogSize)
-			v.Index(i).Set(reflect.Indirect(nv))
+	for i := 0; i < size; i++ {
+		if !s.typeHandler(elementType, elementValue, function, originalSize, parentName, typesSeen) {
+			return false
 		}
-	} else {
-		// Loop through the size and append and set
-		for i := 0; i < size; i++ {
-			nv := reflect.New(elemT)
-			s.r(elemT, nv.Elem(), function, ogSize)
-			v.Set(reflect.Append(reflect.Indirect(v), reflect.Indirect(nv)))
+
+		value.Index(i).Set(reflect.Indirect(newValue))
+		if value.Len() != 0 {
+			value.Index(i).Set(reflect.Indirect(newValue))
+		} else {
+			value.Set(reflect.Append(reflect.Indirect(value), reflect.Indirect(newValue)))
 		}
 	}
+
+	return true
 }
 
-func (s Struct) rString(_ reflect.Type, v reflect.Value, function string) {
+func (s Struct) stringHandler(_ reflect.Type, value reflect.Value, function string) bool {
 	if function == "" {
-		v.SetString(s.Faker.UUID().V4())
-		return
+		value.SetString(s.Faker.UUID().V4())
+		return true
 	}
 
-	v.SetString(s.Faker.Bothify(function))
+	value.SetString(s.Faker.Bothify(function))
+	return true
 }
 
-func (s Struct) rInt(t reflect.Type, v reflect.Value, function string) {
+func (s Struct) intHandler(valueType reflect.Type, value reflect.Value, function string) bool {
 	if function != "" {
-		i, err := strconv.ParseInt(s.Faker.Numerify(function), 10, 64)
+		intValue, err := strconv.ParseInt(s.Faker.Numerify(function), 10, 64)
 		if err == nil {
-			v.SetInt(i)
-			return
+			value.SetInt(intValue)
+			return true
 		}
 	}
 
 	// If no function or error converting to int, set with random value
-	switch t.Kind() {
+	switch valueType.Kind() {
 	case reflect.Int:
-		v.SetInt(s.Faker.Int64())
+		value.SetInt(s.Faker.Int64())
 	case reflect.Int8:
-		v.SetInt(int64(s.Faker.Int8()))
+		value.SetInt(int64(s.Faker.Int8()))
 	case reflect.Int16:
-		v.SetInt(int64(s.Faker.Int16()))
+		value.SetInt(int64(s.Faker.Int16()))
 	case reflect.Int32:
-		v.SetInt(int64(s.Faker.Int32()))
+		value.SetInt(int64(s.Faker.Int32()))
 	case reflect.Int64:
-		v.SetInt(s.Faker.Int64())
+		value.SetInt(s.Faker.Int64())
+	default:
+		return false
 	}
+
+	return true
 }
 
-func (s Struct) rUint(t reflect.Type, v reflect.Value, function string) {
+func (s Struct) uintHandler(valueType reflect.Type, value reflect.Value, function string) bool {
 	if function != "" {
-		u, err := strconv.ParseUint(s.Faker.Numerify(function), 10, 64)
+		uintValue, err := strconv.ParseUint(s.Faker.Numerify(function), 10, 64)
 		if err == nil {
-			v.SetUint(u)
-			return
+			value.SetUint(uintValue)
+			return true
 		}
 	}
 
 	// If no function or error converting to uint, set with random value
-	switch t.Kind() {
+	switch valueType.Kind() {
 	case reflect.Uint:
-		v.SetUint(s.Faker.UInt64())
+		value.SetUint(s.Faker.UInt64())
 	case reflect.Uint8:
-		v.SetUint(uint64(s.Faker.UInt8()))
+		value.SetUint(uint64(s.Faker.UInt8()))
 	case reflect.Uint16:
-		v.SetUint(uint64(s.Faker.UInt16()))
+		value.SetUint(uint64(s.Faker.UInt16()))
 	case reflect.Uint32:
-		v.SetUint(uint64(s.Faker.UInt32()))
+		value.SetUint(uint64(s.Faker.UInt32()))
 	case reflect.Uint64:
-		v.SetUint(s.Faker.UInt64())
+		value.SetUint(s.Faker.UInt64())
+	default:
+		return false
 	}
+
+	return true
 }
 
-func (s Struct) rFloat(t reflect.Type, v reflect.Value, function string) {
+func (s Struct) floatHandler(valueType reflect.Type, value reflect.Value, function string) bool {
 	if function != "" {
-		f, err := strconv.ParseFloat(s.Faker.Numerify(function), 64)
+		floatValue, err := strconv.ParseFloat(s.Faker.Numerify(function), 64)
 		if err == nil {
-			v.SetFloat(f)
-			return
+			value.SetFloat(floatValue)
+			return true
 		}
 	}
 
 	// If no function or error converting to float, set with random value
-	switch t.Kind() {
+	switch valueType.Kind() {
 	case reflect.Float64:
-		v.SetFloat(s.Faker.Float64(2, 0, 100))
+		value.SetFloat(s.Faker.Float64(2, 0, 100))
 	case reflect.Float32:
-		v.SetFloat(s.Faker.Float64(2, 0, 100))
+		value.SetFloat(s.Faker.Float64(2, 0, 100))
+	default:
+		return false
 	}
+
+	return true
 }
 
-func (s Struct) rBool(_ reflect.Type, v reflect.Value) {
-	v.SetBool(s.Faker.Bool())
+func (s Struct) boolHandler(_ reflect.Type, value reflect.Value) bool {
+	value.SetBool(s.Faker.Bool())
+	return true
 }
