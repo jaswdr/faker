@@ -556,6 +556,13 @@ func TestMap(t *testing.T) {
 	Expect(t, true, len(mp) > 0)
 }
 
+func TestRandomStringElement(t *testing.T) {
+	f := New()
+	m := []string{"str1", "str2"}
+	randomStr := f.RandomStringElement(m)
+	Expect(t, true, randomStr == "str1" || randomStr == "str2")
+}
+
 func TestRandomStringMapKey(t *testing.T) {
 	f := New()
 	m := map[string]string{"k0": "v0", "k1": "v1"}

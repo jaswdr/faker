@@ -33,7 +33,7 @@ func (t Time) TimeBetween(min, max time.Time) time.Time {
 // ISO8601 returns a fake time in ISO8601 format for Time
 func (t Time) ISO8601(max time.Time) string {
 	t1 := t.Time(max)
-	return t1.Format("2006-02-01T15:04:05+000")
+	return t1.Format("2006-01-02T15:04:05+000")
 }
 
 // ANSIC returns a fake time in ANSIC format for Time
