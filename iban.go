@@ -104,7 +104,7 @@ func (p Payment) ibanForCountry(countryCode string) string {
 	}
 
 	bban := strings.ToUpper(p.bban(format))
-	checksum := p.ibanChecksum(countryCode + "00" + bban)
+	checksum := ibanChecksum(countryCode + "00" + bban)
 
 	return countryCode + checksum + bban
 }
@@ -125,7 +125,11 @@ func (p Payment) bban(format string) string {
 	return p.Faker.Bothify(format)
 }
 
-func (p Payment) ibanChecksum(iban string) string {
+func (p Payment) isIbanValid(iban string) bool {
+	return ibanChecksum(iban) == iban[2:4]
+}
+
+func ibanChecksum(iban string) string {
 	iban = strings.ToUpper(strings.ReplaceAll(iban, " ", ""))
 
 	// Move first 4 characters to the end, and set checksum to 00
@@ -154,8 +158,4 @@ func (p Payment) ibanChecksum(iban string) string {
 		return fmt.Sprintf("0%d", checksum)
 	}
 	return fmt.Sprintf("%d", checksum)
-}
-
-func (p Payment) isIbanValid(iban string) bool {
-	return p.ibanChecksum(iban) == iban[2:4]
 }

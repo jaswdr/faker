@@ -194,9 +194,8 @@ func TestIbanChecksum(t *testing.T) {
 		"ZZ00VLQT382332233206588011313776421": "25",
 	}
 
-	p := New().Payment()
 	for iban, checksum := range ibans {
-		Expect(t, checksum, p.ibanChecksum(iban))
+		Expect(t, checksum, ibanChecksum(iban))
 	}
 }
 
