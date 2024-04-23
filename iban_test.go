@@ -74,7 +74,7 @@ func TestIban(t *testing.T) {
 	p := New().Payment()
 
 	iban := p.Iban()
-	Expect(t, true, p.isIbanValid(iban))
+	Expect(t, true, isIbanValid(iban))
 	_, ok := ibanRegex[iban[:2]]
 	Expect(t, true, ok)
 }
@@ -88,7 +88,7 @@ func TestIbanPerCountry(t *testing.T) {
 		matched, err := regexp.MatchString(regex, iban)
 		Expect(t, nil, err)
 		Expect(t, true, matched)
-		Expect(t, true, p.isIbanValid(iban))
+		Expect(t, true, isIbanValid(iban))
 	}
 
 	Expect(t, "", p.ibanForCountry("unknown"))
@@ -338,8 +338,7 @@ func TestIsIbanValid(t *testing.T) {
 		"ZZ25VLQT38233223320658801131377642": false,
 	}
 
-	p := New().Payment()
 	for iban, expected := range ibans {
-		Expect(t, expected, p.isIbanValid(iban))
+		Expect(t, expected, isIbanValid(iban))
 	}
 }

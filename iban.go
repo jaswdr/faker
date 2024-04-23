@@ -125,10 +125,6 @@ func (p Payment) bban(format string) string {
 	return p.Faker.Bothify(format)
 }
 
-func (p Payment) isIbanValid(iban string) bool {
-	return ibanChecksum(iban) == iban[2:4]
-}
-
 func ibanChecksum(iban string) string {
 	iban = strings.ToUpper(strings.ReplaceAll(iban, " ", ""))
 
@@ -158,4 +154,8 @@ func ibanChecksum(iban string) string {
 		return fmt.Sprintf("0%d", checksum)
 	}
 	return fmt.Sprintf("%d", checksum)
+}
+
+func isIbanValid(iban string) bool {
+	return ibanChecksum(iban) == iban[2:4]
 }
