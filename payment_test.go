@@ -1,7 +1,7 @@
 package faker
 
 import (
-	"strings"
+	"regexp"
 	"testing"
 )
 
@@ -19,6 +19,6 @@ func TestCreditCardExpirationDateString(t *testing.T) {
 	p := New().Payment()
 
 	date := p.CreditCardExpirationDateString()
-	Expect(t, 5, len(date))
-	Expect(t, true, strings.Contains(date, "/"))
+	re := regexp.MustCompile(`^(0[1-9]|1[0-2])/\d{2}$`)
+	Expect(t, true, re.MatchString(date))
 }
