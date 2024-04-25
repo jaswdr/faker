@@ -124,7 +124,7 @@ func BenchmarkBban(b *testing.B) {
 }
 
 func TestIbanChecksum(t *testing.T) {
-	var ibans = map[string]string{
+	ibans := map[string]string{
 		"AL00212110090000000235698741":        "47",
 		"AD0000012030200359100100":            "12",
 		"AT001904300234573201":                "61",
