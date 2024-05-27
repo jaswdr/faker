@@ -20,7 +20,7 @@ Faker requires Go >= 1.11 and < 1.20 for 1.X and Go >= 1.20 for 2.X
 
 ## Test it directly from your browser
 
-Start at https://play.golang.org/p/JpTagDGBaHK
+Start at [https://play.golang.org/p/JpTagDGBaHK](https://go.dev/play/p/lMAvp_uyM8r)
 
 ## Installation
 
