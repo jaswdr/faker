@@ -42,6 +42,7 @@ type StructArray struct {
 	Skips     []string  `fake:"skip"`
 	Strings   []string  `fake:"####" fakesize:"3"`
 	SetLen    [5]string `fake:"????"`
+	SetLenInt [4]int
 	SubStr    [][]string
 	SubStrLen [][2]string
 	Empty     []*Basic    `fakesize:"0"`
@@ -106,6 +107,10 @@ func TestStructArray(t *testing.T) {
 	Expect(t, 5, len(sa.SetLen))
 	for _, s := range sa.SetLen {
 		NotExpect(t, "", s)
+	}
+	Expect(t, 4, len(sa.SetLenInt))
+	for _, s := range sa.SetLenInt {
+		NotExpect(t, 0, s)
 	}
 	for _, s := range sa.SubStr {
 		for _, ss := range s {
@@ -204,4 +209,62 @@ func TestStructUUIDInSequence(t *testing.T) {
 		Expect(t, false, before == after)
 		before = after
 	}
+}
+
+func TestCanHandleChildStructs(t *testing.T) {
+	type Struct1 struct {
+		Before           string
+		BeforeInt        int
+		MultilevelBefore struct {
+			Level1Id     string
+			Level2Struct struct {
+				Level2Id     string
+				Level3Struct struct {
+					Level3Id     string
+					Level4Struct struct {
+						Level4Id     string
+						Level5Struct struct {
+							Level5Id string
+						}
+					}
+				}
+			}
+		}
+		ChildSlice         []*Struct1
+		ChildStructPointer *Struct1
+		MultilevelAfter    struct {
+			Level1Id     string
+			Level2Struct struct {
+				Level2Id     string
+				Level3Struct struct {
+					Level3Id     string
+					Level4Struct struct {
+						Level4Id     string
+						Level5Struct struct {
+							Level5Id string
+						}
+					}
+				}
+			}
+		}
+		After string
+	}
+
+	st1 := Struct1{}
+	handler := New().Struct()
+	handler.Fill(&st1)
+	Expect(t, 0, len(st1.ChildSlice))
+	NotExpect(t, "", st1.Before)
+	NotExpect(t, 0, st1.BeforeInt)
+	NotExpect(t, "", st1.After)
+	NotExpect(t, "", st1.MultilevelBefore.Level1Id)
+	NotExpect(t, "", st1.MultilevelBefore.Level2Struct.Level2Id)
+	NotExpect(t, "", st1.MultilevelBefore.Level2Struct.Level3Struct.Level3Id)
+	NotExpect(t, "", st1.MultilevelBefore.Level2Struct.Level3Struct.Level4Struct.Level4Id)
+	NotExpect(t, "", st1.MultilevelBefore.Level2Struct.Level3Struct.Level4Struct.Level5Struct.Level5Id)
+	NotExpect(t, "", st1.MultilevelAfter.Level1Id)
+	NotExpect(t, "", st1.MultilevelAfter.Level2Struct.Level2Id)
+	NotExpect(t, "", st1.MultilevelAfter.Level2Struct.Level3Struct.Level3Id)
+	NotExpect(t, "", st1.MultilevelAfter.Level2Struct.Level3Struct.Level4Struct.Level4Id)
+	NotExpect(t, "", st1.MultilevelAfter.Level2Struct.Level3Struct.Level4Struct.Level5Struct.Level5Id)
 }
