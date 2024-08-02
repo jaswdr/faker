@@ -611,3 +611,8 @@ func (f Faker) Blood() Blood {
 func (f Faker) Json() Json {
 	return Json{&f}
 }
+
+// BankAccount returns a fake bank Account number for faker
+func (f Faker) BankAccount() BAccount {
+	return BAccount{&f}
+}
