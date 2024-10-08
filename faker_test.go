@@ -445,10 +445,39 @@ func TestUInt64Between(t *testing.T) {
 
 func TestRandomFloat(t *testing.T) {
 	f := New()
-	value := f.RandomFloat(1, 1, 100)
+	value := f.RandomFloat(2, 1, 100)
 	Expect(t, fmt.Sprintf("%T", value), "float64")
 	Expect(t, true, value >= 1)
 	Expect(t, true, value <= 100)
+	Expect(t, math.Round(value*100)/100, value)
+}
+
+func TestFloat(t *testing.T) {
+	f := New()
+	value := f.Float(2, 1, 100)
+	Expect(t, fmt.Sprintf("%T", value), "float64")
+	Expect(t, true, value >= 1)
+	Expect(t, true, value <= 100)
+	Expect(t, math.Round(value*100)/100, value)
+}
+
+func TestFloat32(t *testing.T) {
+	f := New()
+	value := f.Float32(2, 1, 100)
+	Expect(t, fmt.Sprintf("%T", value), "float32")
+	Expect(t, true, value >= 1)
+	Expect(t, true, value <= 100)
+	rounded := float32(math.Round(float64(value*100))/100)
+	Expect(t, rounded, value)
+}
+
+func TestFloat64(t *testing.T) {
+	f := New()
+	value := f.Float64(2, 1, 100)
+	Expect(t, fmt.Sprintf("%T", value), "float64")
+	Expect(t, true, value >= 1)
+	Expect(t, true, value <= 100)
+	Expect(t, math.Round(value*100)/100, value)
 }
 
 func TestLetter(t *testing.T) {
