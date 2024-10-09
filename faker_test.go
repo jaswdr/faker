@@ -467,7 +467,7 @@ func TestFloat32(t *testing.T) {
 	Expect(t, fmt.Sprintf("%T", value), "float32")
 	Expect(t, true, value >= 1)
 	Expect(t, true, value <= 100)
-	rounded := float32(math.Round(float64(value*100))/100)
+	rounded := float32(math.Round(float64(value*100)) / 100)
 	Expect(t, rounded, value)
 }
 
