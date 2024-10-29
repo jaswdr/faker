@@ -10,7 +10,7 @@ var (
 
 	citySuffix = []string{"town", "ton", "land", "ville", "berg", "burgh", "borough", "bury", "view", "port", "mouth", "stad", "furt", "chester", "mouth", "fort", "haven", "side", "shire"}
 
-	buildingNumber = []string{"%####", "%###", "%##"}
+	buildingNumber = []string{"####", "###", "##"}
 
 	streetSuffix = []string{
 		"Alley", "Avenue",
