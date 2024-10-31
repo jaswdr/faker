@@ -23,3 +23,27 @@ func TestRandomElementWeighted(t *testing.T) {
 		Expect(t, true, got != "zeroChance")
 	}
 }
+
+func TestRandomMapKey(t *testing.T) {
+	f := New()
+	m := map[int]string{
+		1:  "one",
+		5:  "five",
+		42: "forty two",
+	}
+
+	randomInt := RandomMapKey(f, m)
+	Expect(t, true, randomInt == 1 || randomInt == 5 || randomInt == 42)
+}
+
+func TestRandomMapValue(t *testing.T) {
+	f := New()
+	m := map[int]string{
+		1:  "one",
+		5:  "five",
+		42: "forty two",
+	}
+
+	randomStr := RandomMapValue(f, m)
+	Expect(t, true, randomStr == "one" || randomStr == "five" || randomStr == "forty two")
+}

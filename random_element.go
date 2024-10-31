@@ -24,3 +24,23 @@ func RandomElementWeighted[T any](f Faker, elements map[int]T) T {
 
 	return arrayOfElements[i]
 }
+
+func RandomMapKey[K comparable, V any](f Faker, m map[K]V) K {
+	keys := make([]K, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+
+	i := f.IntBetween(0, len(keys)-1)
+	return keys[i]
+}
+
+func RandomMapValue[K comparable, V any](f Faker, m map[K]V) V {
+	values := make([]V, 0, len(m))
+	for k := range m {
+		values = append(values, m[k])
+	}
+
+	i := f.IntBetween(0, len(values)-1)
+	return values[i]
+}
