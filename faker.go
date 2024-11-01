@@ -68,30 +68,54 @@ func (f Faker) RandomNumber(size int) int {
 
 // RandomFloat returns a fake random float number for Faker
 func (f Faker) RandomFloat(maxDecimals, min, max int) float64 {
-	s := fmt.Sprintf("%d.%d", f.IntBetween(min, max-1), f.IntBetween(1, maxDecimals))
-	value, _ := strconv.ParseFloat(s, 32)
-	return value
+	value := float64(f.IntBetween(min, max-1))
+	if maxDecimals < 1 {
+		return value
+	}
+
+	p := int(math.Pow10(maxDecimals))
+	decimals := float64(f.IntBetween(0, p)) / float64(p)
+
+	return value + decimals
 }
 
 // Float returns a fake random float number for Faker
 func (f Faker) Float(maxDecimals, min, max int) float64 {
-	s := fmt.Sprintf("%d.%d", f.IntBetween(min, max-1), f.IntBetween(1, maxDecimals))
-	value, _ := strconv.ParseFloat(s, 32)
-	return value
+	value := float64(f.IntBetween(min, max-1))
+	if maxDecimals < 1 {
+		return value
+	}
+
+	p := int(math.Pow10(maxDecimals))
+	decimals := float64(f.IntBetween(0, p)) / float64(p)
+
+	return value + decimals
 }
 
-// Float32 returns a fake random float64 number for Faker
+// Float32 returns a fake random float32 number for Faker
 func (f Faker) Float32(maxDecimals, min, max int) float32 {
-	s := fmt.Sprintf("%d.%d", f.IntBetween(min, max-1), f.IntBetween(1, maxDecimals))
-	value, _ := strconv.ParseFloat(s, 32)
-	return float32(value)
+	value := float32(f.IntBetween(min, max-1))
+	if maxDecimals < 1 {
+		return value
+	}
+
+	p := int(math.Pow10(maxDecimals))
+	decimals := float32(f.IntBetween(0, p)) / float32(p)
+
+	return value + decimals
 }
 
 // Float64 returns a fake random float64 number for Faker
 func (f Faker) Float64(maxDecimals, min, max int) float64 {
-	s := fmt.Sprintf("%d.%d", f.IntBetween(min, max-1), f.IntBetween(1, maxDecimals))
-	value, _ := strconv.ParseFloat(s, 32)
-	return float64(value)
+	value := float64(f.IntBetween(min, max-1))
+	if maxDecimals < 1 {
+		return value
+	}
+
+	p := int(math.Pow10(maxDecimals))
+	decimals := float64(f.IntBetween(0, p)) / float64(p)
+
+	return value + decimals
 }
 
 // Int returns a fake Int number for Faker
