@@ -5,112 +5,146 @@ import (
 	"strconv"
 )
 
-// Struct is a faker struct for Struct
+// Struct is a faker struct for generating random data for struct fields
 type Struct struct {
 	Faker *Faker
 }
 
-// Fill elements of a struct with random data
+// MaxRecursionDepth defines the default maximum depth for recursive structs
+const MaxRecursionDepth = 32
+
+// Fill populates a struct with random data based on its type and tags
 func (s Struct) Fill(v interface{}) {
-	s.r(reflect.TypeOf(v), reflect.ValueOf(v), "", 0)
+	if v == nil {
+		return
+	}
+
+	val := reflect.ValueOf(v)
+	if val.Kind() != reflect.Ptr || val.IsNil() {
+		return
+	}
+
+	s.fillValue(val.Elem(), "", 0, 0, MaxRecursionDepth)
 }
 
-func (s Struct) r(t reflect.Type, v reflect.Value, function string, size int) {
-	switch t.Kind() {
+func (s Struct) FillWithDepth(v interface{}, maxDepth int) {
+	if v == nil {
+		return
+	}
+
+	val := reflect.ValueOf(v)
+	if val.Kind() != reflect.Ptr || val.IsNil() {
+		return
+	}
+
+	s.fillValue(val.Elem(), "", 0, 0, maxDepth)
+}
+
+// fillValue recursively fills a reflect.Value with random data
+func (s Struct) fillValue(v reflect.Value, function string, size int, depth int, maxDepth int) {
+	if !v.CanSet() || depth > maxDepth {
+		return
+	}
+
+	switch v.Kind() {
 	case reflect.Ptr:
-		s.rPointer(t, v, function)
+		s.fillPointer(v, function, depth, maxDepth)
 	case reflect.Struct:
-		s.rStruct(t, v)
+		s.fillStruct(v, depth, maxDepth)
 	case reflect.String:
-		s.rString(t, v, function)
+		s.fillString(v.Type(), v, function)
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		s.rUint(t, v, function)
+		s.fillUint(v.Type(), v, function)
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		s.rInt(t, v, function)
+		s.fillInt(v.Type(), v, function)
 	case reflect.Float32, reflect.Float64:
-		s.rFloat(t, v, function)
+		s.fillFloat(v.Type(), v, function)
 	case reflect.Bool:
-		s.rBool(t, v)
+		s.fillBool(v.Type(), v)
 	case reflect.Array, reflect.Slice:
-		s.rSlice(t, v, function, size)
+		s.fillSlice(v, function, size, depth, maxDepth)
 	}
 }
 
-func (s Struct) rStruct(t reflect.Type, v reflect.Value) {
-	n := t.NumField()
-	for i := 0; i < n; i++ {
-		elementT := t.Field(i)
-		elementV := v.Field(i)
-		t, ok := elementT.Tag.Lookup("fake")
-		if ok && t == "skip" {
-			// Do nothing, skip it
-		} else if elementV.CanSet() {
-			// Check if fakesize is set
-			size := -1 // Set to -1 to indicate fakesize was not set
-			fs, ok := elementT.Tag.Lookup("fakesize")
-			if ok {
-				var err error
-				size, err = strconv.Atoi(fs)
-				if err != nil {
-					size = s.Faker.IntBetween(1, 10)
-				}
-			}
-			s.r(elementT.Type, elementV, t, size)
+// fillStruct fills a struct with random data for each field
+func (s Struct) fillStruct(v reflect.Value, depth int, maxDepth int) {
+	typ := v.Type()
+	for i := 0; i < typ.NumField(); i++ {
+		field := typ.Field(i)
+		fieldVal := v.Field(i)
+
+		// Skip fields with "skip" tag
+		if tag, ok := field.Tag.Lookup("fake"); ok && tag == "skip" {
+			continue
 		}
+
+		// Get size from fakesize tag if present
+		size := -1
+		if sizeStr, ok := field.Tag.Lookup("fakesize"); ok {
+			if parsedSize, err := strconv.Atoi(sizeStr); err == nil {
+				size = parsedSize
+			}
+		}
+
+		// Get function from fake tag if present
+		function := ""
+		if tag, ok := field.Tag.Lookup("fake"); ok {
+			function = tag
+		}
+
+		s.fillValue(fieldVal, function, size, depth+1, maxDepth)
 	}
 }
 
-func (s Struct) rPointer(t reflect.Type, v reflect.Value, function string) {
-	elemT := t.Elem()
+// fillPointer handles pointer types by creating new instances if needed
+func (s Struct) fillPointer(v reflect.Value, function string, depth int, maxDepth int) {
 	if v.IsNil() {
-		nv := reflect.New(elemT)
-		s.r(elemT, nv.Elem(), function, 0)
-		v.Set(nv)
-	} else {
-		s.r(elemT, v.Elem(), function, 0)
+		v.Set(reflect.New(v.Type().Elem()))
 	}
+	s.fillValue(v.Elem(), function, 0, depth+1, maxDepth)
 }
 
-func (s Struct) rSlice(t reflect.Type, v reflect.Value, function string, size int) {
-	// If you cant even set it dont even try
+// fillSlice handles array and slice types
+func (s Struct) fillSlice(v reflect.Value, function string, size int, depth int, maxDepth int) {
 	if !v.CanSet() {
 		return
 	}
 
-	// Grab original size to use if needed for sub arrays
-	ogSize := size
-
-	// If the value has a cap and is less than the size
-	// use that instead of the requested size
-	elemCap := v.Cap()
-	if elemCap == 0 && size == -1 {
-		size = s.Faker.IntBetween(1, 10)
-	} else if elemCap != 0 && (size == -1 || elemCap < size) {
-		size = elemCap
+	// Determine the size to use
+	actualSize := size
+	if actualSize == -1 {
+		actualSize = s.Faker.IntBetween(1, 10)
+	}
+	if v.Cap() > 0 && (size == -1 || v.Cap() < size) {
+		actualSize = v.Cap()
 	}
 
-	// Get the element type
-	elemT := t.Elem()
+	// Get element type
+	elemType := v.Type().Elem()
 
-	// If values are already set fill them up, otherwise append
-	if v.Len() != 0 {
-		// Loop through the elements length and set based upon the index
-		for i := 0; i < size; i++ {
-			nv := reflect.New(elemT)
-			s.r(elemT, nv.Elem(), function, ogSize)
-			v.Index(i).Set(reflect.Indirect(nv))
+	// Handle existing elements
+	if v.Len() > 0 {
+		for i := 0; i < actualSize; i++ {
+			if i < v.Len() {
+				s.fillValue(v.Index(i), function, size, depth+1, maxDepth)
+			} else {
+				elem := reflect.New(elemType).Elem()
+				s.fillValue(elem, function, size, depth+1, maxDepth)
+				v.Set(reflect.Append(v, elem))
+			}
 		}
-	} else {
-		// Loop through the size and append and set
-		for i := 0; i < size; i++ {
-			nv := reflect.New(elemT)
-			s.r(elemT, nv.Elem(), function, ogSize)
-			v.Set(reflect.Append(reflect.Indirect(v), reflect.Indirect(nv)))
-		}
+		return
+	}
+
+	// Create new elements
+	for i := 0; i < actualSize; i++ {
+		elem := reflect.New(elemType).Elem()
+		s.fillValue(elem, function, size, depth+1, maxDepth)
+		v.Set(reflect.Append(v, elem))
 	}
 }
 
-func (s Struct) rString(_ reflect.Type, v reflect.Value, function string) {
+func (s Struct) fillString(_ reflect.Type, v reflect.Value, function string) {
 	if function == "" {
 		v.SetString(s.Faker.UUID().V4())
 		return
@@ -119,7 +153,7 @@ func (s Struct) rString(_ reflect.Type, v reflect.Value, function string) {
 	v.SetString(s.Faker.Bothify(function))
 }
 
-func (s Struct) rInt(t reflect.Type, v reflect.Value, function string) {
+func (s Struct) fillInt(t reflect.Type, v reflect.Value, function string) {
 	if function != "" {
 		i, err := strconv.ParseInt(s.Faker.Numerify(function), 10, 64)
 		if err == nil {
@@ -143,7 +177,7 @@ func (s Struct) rInt(t reflect.Type, v reflect.Value, function string) {
 	}
 }
 
-func (s Struct) rUint(t reflect.Type, v reflect.Value, function string) {
+func (s Struct) fillUint(t reflect.Type, v reflect.Value, function string) {
 	if function != "" {
 		u, err := strconv.ParseUint(s.Faker.Numerify(function), 10, 64)
 		if err == nil {
@@ -167,7 +201,7 @@ func (s Struct) rUint(t reflect.Type, v reflect.Value, function string) {
 	}
 }
 
-func (s Struct) rFloat(t reflect.Type, v reflect.Value, function string) {
+func (s Struct) fillFloat(t reflect.Type, v reflect.Value, function string) {
 	if function != "" {
 		f, err := strconv.ParseFloat(s.Faker.Numerify(function), 64)
 		if err == nil {
@@ -185,6 +219,6 @@ func (s Struct) rFloat(t reflect.Type, v reflect.Value, function string) {
 	}
 }
 
-func (s Struct) rBool(_ reflect.Type, v reflect.Value) {
+func (s Struct) fillBool(_ reflect.Type, v reflect.Value) {
 	v.SetBool(s.Faker.Bool())
 }
