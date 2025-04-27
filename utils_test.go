@@ -55,3 +55,19 @@ func TestOSResolverImplReturnsGOOS(t *testing.T) {
 	resolver := OSResolverImpl{}
 	Expect(t, runtime.GOOS, resolver.OS())
 }
+
+func TestShuffle(t *testing.T) {
+	slice := []int{1, 2, 3, 4, 5}
+	Shuffle(slice)
+	Expect(t, false, (slice[0] == 1) &&
+		(slice[1] == 2) &&
+		(slice[2] == 3) &&
+		(slice[3] == 4) &&
+		(slice[4] == 5))
+}
+
+func TestShuffleWithSingleElement(t *testing.T) {
+	slice := []int{1}
+	Shuffle(slice)
+	Expect(t, slice[0], 1)
+}
