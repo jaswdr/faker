@@ -644,6 +644,13 @@ func NewWithSeed(src rand.Source) Faker {
 	return Faker{Generator: generator}
 }
 
+func NewWithSeedInt64(seed int64) Faker {
+	generator := &threadSafeRand{
+		rand: rand.New(rand.NewSource(seed)),
+	}
+	return Faker{Generator: generator}
+}
+
 // Blood returns a fake Blood instance for Faker
 func (f Faker) Blood() Blood {
 	return Blood{&f}
