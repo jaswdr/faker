@@ -102,25 +102,12 @@ func TestFormat(t *testing.T) {
 	Expect(t, "", format("ab12", "aa3", ""))
 }
 
-func BenchmarkFormat(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		format("n5", "n5", "c11", "n2")
-	}
-}
-
 func TestBban(t *testing.T) {
 	p := New().Payment()
 	bban := p.bban("nnnaaaaccaannccc")
 	matched, err := regexp.MatchString(`^\d{3}[a-z]{4}[a-z0-9]{2}[a-z]{2}\d{2}[a-z0-9]{3}$`, bban)
 	Expect(t, nil, err)
 	Expect(t, true, matched)
-}
-
-func BenchmarkBban(b *testing.B) {
-	p := New().Payment()
-	for i := 0; i < b.N; i++ {
-		_ = p.bban("nnnnnaaaaacccccccccccnn")
-	}
 }
 
 func TestIbanChecksum(t *testing.T) {
