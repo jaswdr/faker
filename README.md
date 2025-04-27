@@ -16,7 +16,6 @@ Faker requires Go >= 1.11 and < 1.20 for 1.X and Go >= 1.20 for 2.X
 [![CodeFactor](https://www.codefactor.io/repository/github/jaswdr/faker/badge)](https://www.codefactor.io/repository/github/jaswdr/faker)
 [![Release](https://img.shields.io/github/release/jaswdr/faker.svg?style=flat-square)](https://github.com/jaswdr/faker/releases)
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/jaswdr/faker)
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fjaswdr%2Ffaker&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
 ## Test it directly from your browser
 
