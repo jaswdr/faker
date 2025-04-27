@@ -13,7 +13,8 @@ func TestLorem(t *testing.T) {
 
 func TestWord(t *testing.T) {
 	l := New().Lorem()
-	Expect(t, true, len(l.Word()) > 0)
+	got := l.Word()
+	Expect(t, true, len(got) > 0)
 }
 
 func TestWords(t *testing.T) {
