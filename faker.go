@@ -312,13 +312,7 @@ func (f Faker) RandomIntElement(a []int) int {
 // ShuffleString returns a fake shuffled string from a given string for Faker
 func (Faker) ShuffleString(s string) string {
 	orig := strings.Split(s, "")
-	dest := make([]string, len(orig))
-
-	for i := 0; i < len(orig); i++ {
-		dest[i] = orig[len(orig)-i-1]
-	}
-
-	return strings.Join(dest, "")
+	return strings.Join(Shuffle(orig), "")
 }
 
 // Numerify returns a fake string that replace all "#" characters with numbers from a given string for Faker
