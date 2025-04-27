@@ -7,6 +7,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -22,6 +23,24 @@ type Faker struct {
 type GeneratorInterface interface {
 	Intn(n int) int
 	Int() int
+}
+
+// threadSafeRand wraps rand.Rand with a mutex for thread safety
+type threadSafeRand struct {
+	rand *rand.Rand
+	mu   sync.Mutex
+}
+
+func (t *threadSafeRand) Intn(n int) int {
+	t.mu.Lock()
+	defer t.mu.Unlock()
+	return t.rand.Intn(n)
+}
+
+func (t *threadSafeRand) Int() int {
+	t.mu.Lock()
+	defer t.mu.Unlock()
+	return t.rand.Int()
 }
 
 // RandomDigit returns a fake random digit for Faker
@@ -178,7 +197,7 @@ func (f Faker) IntBetween(min, max int) int {
 		return f.IntBetween(max, min)
 	}
 
-	diff := 0
+	diff := max - min
 	// Edge case when min and max are actual min and max integers,
 	// since we cannot store 2 * math.MaxInt, we instead split the range in:
 	// - 50% chance to return a negative number
@@ -193,15 +212,15 @@ func (f Faker) IntBetween(min, max int) int {
 			min = 0
 			diff = math.MaxInt
 		}
-	} else {
-		diff = max - min
 	}
 
 	var value int
 	if diff == 0 {
 		return min
 	} else if diff == math.MaxInt {
-		value = f.Generator.Intn(diff)
+		// Handle the case when diff is MaxInt by using a different approach
+		// Generate a random number between 0 and MaxInt-1, then add min
+		value = f.Generator.Intn(math.MaxInt - 1)
 	} else if diff > 0 {
 		value = f.Generator.Intn(diff + 1)
 	}
@@ -611,18 +630,18 @@ func (f Faker) ProgrammingLanguage() ProgrammingLanguage {
 	return ProgrammingLanguage{&f}
 }
 
-// New returns a new instance of Faker instance with a random seed
-func New() (f Faker) {
-	seed := rand.NewSource(time.Now().Unix())
-	f = NewWithSeed(seed)
-	return
+// New returns a new instance of Faker with a random seed
+func New() Faker {
+	seed := rand.NewSource(time.Now().UnixNano())
+	return NewWithSeed(seed)
 }
 
-// NewWithSeed returns a new instance of Faker instance with a given seed
-func NewWithSeed(src rand.Source) (f Faker) {
-	generator := rand.New(src)
-	f = Faker{Generator: generator}
-	return
+// NewWithSeed returns a new instance of Faker with a given seed
+func NewWithSeed(src rand.Source) Faker {
+	generator := &threadSafeRand{
+		rand: rand.New(src),
+	}
+	return Faker{Generator: generator}
 }
 
 // Blood returns a fake Blood instance for Faker
