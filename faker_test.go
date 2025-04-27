@@ -82,6 +82,12 @@ func TestNewWithSeed(t *testing.T) {
 	Expect(t, fmt.Sprintf("%T", f), "faker.Faker")
 }
 
+func TestNewWithSeedInt64(t *testing.T) {
+	var seed int64 = 0
+	f := NewWithSeedInt64(seed)
+	Expect(t, fmt.Sprintf("%T", f), "faker.Faker")
+}
+
 func TestRandomDigit(t *testing.T) {
 	f := New()
 	value := f.RandomDigit()
