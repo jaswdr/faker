@@ -1,6 +1,7 @@
 package faker
 
 import (
+	"math/rand"
 	"net/http"
 	"os"
 	"runtime"
@@ -54,4 +55,11 @@ type OSResolverImpl struct{}
 // OS returns the runtime.GOOS value for the host operating system
 func (OSResolverImpl) OS() string {
 	return runtime.GOOS
+}
+
+func Shuffle[T any](slice []T) []T {
+	rand.Shuffle(len(slice), func(i, j int) {
+		slice[i], slice[j] = slice[j], slice[i]
+	})
+	return slice
 }
