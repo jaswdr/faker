@@ -660,3 +660,8 @@ func (f Faker) Blood() Blood {
 func (f Faker) Json() Json {
 	return Json{&f}
 }
+
+// Pokemon returns a fake Pokemon instance for Faker
+func (f Faker) Pokemon() Pokemon {
+	return Pokemon{Faker: &f}
+}
