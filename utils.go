@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"reflect"
 	"runtime"
 )
 
@@ -57,9 +58,19 @@ func (OSResolverImpl) OS() string {
 	return runtime.GOOS
 }
 
+// Shuffle shuffles the slice in place
 func Shuffle[T any](slice []T) []T {
+	var before []T
+	reflect.Copy(reflect.ValueOf(before), reflect.ValueOf(slice))
+
 	rand.Shuffle(len(slice), func(i, j int) {
 		slice[i], slice[j] = slice[j], slice[i]
 	})
+
+	// Keep shuffling until the slice is not equal to the original slice
+	for len(slice) > 1 && reflect.DeepEqual(before, slice) {
+		Shuffle(slice)
+	}
+
 	return slice
 }
