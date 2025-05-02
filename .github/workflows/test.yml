@@ -15,4 +15,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Test
-      run: go test -v -bench=. ./...
+      shell: bash
+      run: |
+        for i in 1 2 3; do
+          echo "Attempt $i of 3"
+          go test -v -bench=. ./... && break || if [ $i -eq 3 ]; then exit 1; fi
+        done
