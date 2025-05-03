@@ -665,3 +665,8 @@ func (f Faker) Json() Json {
 func (f Faker) Pokemon() Pokemon {
 	return Pokemon{Faker: &f}
 }
+
+// Bank returns a fake Bank instance for Faker
+func (f Faker) Bank() Bank {
+	return Bank{&f}
+}
