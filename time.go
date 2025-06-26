@@ -25,7 +25,7 @@ func (t Time) Time(max time.Time) time.Time {
 
 // TimeBetween returns a fake time between for Time
 func (t Time) TimeBetween(min, max time.Time) time.Time {
-	diff := time.Nanosecond * time.Duration(t.Faker.IntBetween(0, int(max.Sub(min).Nanoseconds())))
+	diff := time.Nanosecond * time.Duration(t.Faker.Int64Between(0, max.Sub(min).Nanoseconds()))
 	duration := time.Nanosecond * diff
 	return min.Add(duration)
 }

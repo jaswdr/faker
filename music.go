@@ -229,6 +229,6 @@ func (f Music) Genre() string {
 
 // Length returns how long the song takes for Music
 func (f Music) Length() time.Duration {
-	r := f.Faker.IntBetween(128, 512) * int(time.Second)
+	r := f.Faker.Int64Between(128, 512) * int64(time.Second)
 	return time.Duration(r)
 }

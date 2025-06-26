@@ -3,7 +3,7 @@ package faker
 import (
 	"fmt"
 	"math"
-	"math/rand"
+	"math/rand/v2"
 	"reflect"
 	"strings"
 	"testing"
@@ -68,7 +68,7 @@ func ExpectInString(t *testing.T, expected string, in []string) {
 }
 
 func F(_ *testing.T) Faker {
-	return NewWithSeed(rand.NewSource(0))
+	return NewWithSeed(rand.NewPCG(0, 0))
 }
 
 func TestNew(t *testing.T) {
@@ -77,14 +77,15 @@ func TestNew(t *testing.T) {
 }
 
 func TestNewWithSeed(t *testing.T) {
-	seed := rand.NewSource(0)
+	seed := rand.NewPCG(0, 0)
 	f := NewWithSeed(seed)
 	Expect(t, fmt.Sprintf("%T", f), "faker.Faker")
 }
 
-func TestNewWithSeedInt64(t *testing.T) {
-	var seed int64 = 0
-	f := NewWithSeedInt64(seed)
+func TestNewWithSeedPCG(t *testing.T) {
+	var seed1 uint64 = 0
+	var seed2 uint64 = 0
+	f := NewWithSeedPCG(seed1, seed2)
 	Expect(t, fmt.Sprintf("%T", f), "faker.Faker")
 }
 
@@ -251,29 +252,29 @@ func TestIntBetweenWithMinMaxIntReturnDifferentValues(t *testing.T) {
 
 func TestIntBetweenWithMinMaxInt8ReturnDifferentValues(t *testing.T) {
 	f := New()
-	value1 := f.IntBetween(math.MinInt8, math.MaxInt8)
-	value2 := f.IntBetween(math.MinInt8, math.MaxInt8)
+	value1 := f.Int8Between(math.MinInt8, math.MaxInt8)
+	value2 := f.Int8Between(math.MinInt8, math.MaxInt8)
 	Expect(t, value1 != value2, true, value1, value2)
 }
 
 func TestIntBetweenWithMinMaxInt16ReturnDifferentValues(t *testing.T) {
 	f := New()
-	value1 := f.IntBetween(math.MinInt16, math.MaxInt16)
-	value2 := f.IntBetween(math.MinInt16, math.MaxInt16)
+	value1 := f.Int16Between(math.MinInt16, math.MaxInt16)
+	value2 := f.Int16Between(math.MinInt16, math.MaxInt16)
 	Expect(t, value1 != value2, true, value1, value2)
 }
 
 func TestIntBetweenWithMinMaxInt32ReturnDifferentValues(t *testing.T) {
 	f := New()
-	value1 := f.IntBetween(math.MinInt32, math.MaxInt32)
-	value2 := f.IntBetween(math.MinInt32, math.MaxInt32)
+	value1 := f.Int32Between(math.MinInt32, math.MaxInt32)
+	value2 := f.Int32Between(math.MinInt32, math.MaxInt32)
 	Expect(t, value1 != value2, true, value1, value2)
 }
 
 func TestIntBetweenWithMinMaxInt64ReturnDifferentValues(t *testing.T) {
 	f := New()
-	value1 := f.IntBetween(math.MinInt64, math.MaxInt64)
-	value2 := f.IntBetween(math.MinInt64, math.MaxInt64)
+	value1 := f.Int64Between(math.MinInt64, math.MaxInt64)
+	value2 := f.Int64Between(math.MinInt64, math.MaxInt64)
 	Expect(t, value1 != value2, true, value1, value2)
 }
 

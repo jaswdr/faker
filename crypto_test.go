@@ -20,8 +20,28 @@ type GeneratorMock struct {
 	local int
 }
 
-func (g GeneratorMock) Intn(_ int) int {
+func (g GeneratorMock) IntN(_ int) int {
 	return g.local
+}
+
+func (g GeneratorMock) Int32N(_ int32) int32 {
+	return int32(g.local)
+}
+
+func (g GeneratorMock) Int64N(_ int64) int64 {
+	return int64(g.local)
+}
+
+func (g GeneratorMock) UintN(_ uint) uint {
+	return uint(g.local)
+}
+
+func (g GeneratorMock) Uint32N(_ uint32) uint32 {
+	return uint32(g.local)
+}
+
+func (g GeneratorMock) Uint64N(_ uint64) uint64 {
+	return uint64(g.local)
 }
 
 func (g GeneratorMock) Int() int {
