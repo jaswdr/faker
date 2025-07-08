@@ -82,10 +82,9 @@ func TestNewWithSeed(t *testing.T) {
 	Expect(t, fmt.Sprintf("%T", f), "faker.Faker")
 }
 
-func TestNewWithSeedPCG(t *testing.T) {
-	var seed1 uint64 = 0
-	var seed2 uint64 = 0
-	f := NewWithSeedPCG(seed1, seed2)
+func TestNewWithSeedInt64(t *testing.T) {
+	var seed int64 = 0
+	f := NewWithSeedInt64(seed)
 	Expect(t, fmt.Sprintf("%T", f), "faker.Faker")
 }
 

@@ -20,12 +20,12 @@ type Faker struct {
 // implements these methods to control the returned value. If not in tests, rand.Rand implements
 // these methods and fufills the interface requirements.
 type GeneratorInterface interface {
-	IntN(n int) int
-	Int32N(n int32) int32
-	Int64N(n int64) int64
-	UintN(n uint) uint
-	Uint32N(n uint32) uint32
-	Uint64N(n uint64) uint64
+	Intn(n int) int
+	Int32n(n int32) int32
+	Int64n(n int64) int64
+	Uintn(n uint) uint
+	Uint32n(n uint32) uint32
+	Uint64n(n uint64) uint64
 	Int() int
 }
 
@@ -35,37 +35,37 @@ type threadSafeRand struct {
 	mu   sync.Mutex
 }
 
-func (t *threadSafeRand) IntN(n int) int {
+func (t *threadSafeRand) Intn(n int) int {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	return t.rand.IntN(n)
 }
 
-func (t *threadSafeRand) Int32N(n int32) int32 {
+func (t *threadSafeRand) Int32n(n int32) int32 {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	return t.rand.Int32N(n)
 }
 
-func (t *threadSafeRand) Int64N(n int64) int64 {
+func (t *threadSafeRand) Int64n(n int64) int64 {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	return t.rand.Int64N(n)
 }
 
-func (t *threadSafeRand) UintN(n uint) uint {
+func (t *threadSafeRand) Uintn(n uint) uint {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	return t.rand.UintN(n)
 }
 
-func (t *threadSafeRand) Uint32N(n uint32) uint32 {
+func (t *threadSafeRand) Uint32n(n uint32) uint32 {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	return t.rand.Uint32N(n)
 }
 
-func (t *threadSafeRand) Uint64N(n uint64) uint64 {
+func (t *threadSafeRand) Uint64n(n uint64) uint64 {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	return t.rand.Uint64N(n)
@@ -288,7 +288,7 @@ func between[T number](min, max T, rand GeneratorInterface) T {
 	// - 50% chance to return a negative number
 	// - 50% chance to return a positive number
 	if min == minInt(min) && max == maxInt(max) {
-		if rand.IntN(2) == 0 {
+		if rand.Intn(2) == 0 {
 			// negatives
 			max = 0
 			diff = maxInt(max)
@@ -307,32 +307,32 @@ func between[T number](min, max T, rand GeneratorInterface) T {
 		// Generate a random number between 0 and MaxInt-1, then add min
 		switch any(max).(type) {
 		case int:
-			value = T(rand.IntN(int(maxInt(max) - 1)))
+			value = T(rand.Intn(int(maxInt(max) - 1)))
 		case int8, int16, int32:
-			value = T(rand.Int32N(int32(maxInt(max) - 1)))
+			value = T(rand.Int32n(int32(maxInt(max) - 1)))
 		case int64:
-			value = T(rand.Int64N(int64(maxInt(max) - 1)))
+			value = T(rand.Int64n(int64(maxInt(max) - 1)))
 		case uint:
-			value = T(rand.UintN(uint(maxInt(max) - 1)))
+			value = T(rand.Uintn(uint(maxInt(max) - 1)))
 		case uint8, uint16, uint32:
-			value = T(rand.Uint32N(uint32(maxInt(max) - 1)))
+			value = T(rand.Uint32n(uint32(maxInt(max) - 1)))
 		case uint64:
-			value = T(rand.Uint64N(uint64(maxInt(max) - 1)))
+			value = T(rand.Uint64n(uint64(maxInt(max) - 1)))
 		}
 	} else if diff > 0 {
 		switch any(diff).(type) {
 		case int:
-			value = T(rand.IntN(int(diff + 1)))
+			value = T(rand.Intn(int(diff + 1)))
 		case int8, int16, int32:
-			value = T(rand.Int32N(int32(diff + 1)))
+			value = T(rand.Int32n(int32(diff + 1)))
 		case int64:
-			value = T(rand.Int64N(int64(diff + 1)))
+			value = T(rand.Int64n(int64(diff + 1)))
 		case uint:
-			value = T(rand.UintN(uint(diff + 1)))
+			value = T(rand.Uintn(uint(diff + 1)))
 		case uint8, uint16, uint32:
-			value = T(rand.Uint32N(uint32(diff + 1)))
+			value = T(rand.Uint32n(uint32(diff + 1)))
 		case uint64:
-			value = T(rand.Uint64N(uint64(diff + 1)))
+			value = T(rand.Uint64n(uint64(diff + 1)))
 		}
 	}
 
@@ -759,10 +759,10 @@ func NewWithSeed(src rand.Source) Faker {
 	return Faker{Generator: generator}
 }
 
-// NewWithSeedPCG returns a new instance of Faker seeded with the given values
-func NewWithSeedPCG(seed1 uint64, seed2 uint64) Faker {
+// NewWithSeedInt64 returns a new instance of Faker seeded with the given value
+func NewWithSeedInt64(seed int64) Faker {
 	generator := &threadSafeRand{
-		rand: rand.New(rand.NewPCG(seed1, seed2)),
+		rand: rand.New(rand.NewPCG(uint64(seed), uint64(seed))),
 	}
 	return Faker{Generator: generator}
 }
