@@ -24,6 +24,26 @@ func (g GeneratorMock) Intn(_ int) int {
 	return g.local
 }
 
+func (g GeneratorMock) Int32n(_ int32) int32 {
+	return int32(g.local)
+}
+
+func (g GeneratorMock) Int64n(_ int64) int64 {
+	return int64(g.local)
+}
+
+func (g GeneratorMock) Uintn(_ uint) uint {
+	return uint(g.local)
+}
+
+func (g GeneratorMock) Uint32n(_ uint32) uint32 {
+	return uint32(g.local)
+}
+
+func (g GeneratorMock) Uint64n(_ uint64) uint64 {
+	return uint64(g.local)
+}
+
 func (g GeneratorMock) Int() int {
 	return g.local
 }
