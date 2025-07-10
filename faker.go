@@ -113,8 +113,8 @@ func (f Faker) RandomNumber(size int) int {
 		return f.RandomDigit()
 	}
 
-	var minN int = int(math.Pow10(size - 1))
-	var maxN int = int(math.Pow10(size)) - 1
+	minN := int(math.Pow10(size - 1))
+	maxN := int(math.Pow10(size)) - 1
 
 	return f.IntBetween(minN, maxN)
 }
