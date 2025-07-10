@@ -113,15 +113,15 @@ func (f Faker) RandomNumber(size int) int {
 		return f.RandomDigit()
 	}
 
-	var min int = int(math.Pow10(size - 1))
-	var max int = int(math.Pow10(size)) - 1
+	var minN int = int(math.Pow10(size - 1))
+	var maxN int = int(math.Pow10(size)) - 1
 
-	return f.IntBetween(min, max)
+	return f.IntBetween(minN, maxN)
 }
 
 // RandomFloat returns a fake random float number for Faker
-func (f Faker) RandomFloat(maxDecimals, min, max int) float64 {
-	value := float64(f.IntBetween(min, max-1))
+func (f Faker) RandomFloat(maxDecimals, minN, maxN int) float64 {
+	value := float64(f.IntBetween(minN, maxN-1))
 	if maxDecimals < 1 {
 		return value
 	}
@@ -133,8 +133,8 @@ func (f Faker) RandomFloat(maxDecimals, min, max int) float64 {
 }
 
 // Float returns a fake random float number for Faker
-func (f Faker) Float(maxDecimals, min, max int) float64 {
-	value := float64(f.IntBetween(min, max-1))
+func (f Faker) Float(maxDecimals, minN, maxN int) float64 {
+	value := float64(f.IntBetween(minN, maxN-1))
 	if maxDecimals < 1 {
 		return value
 	}
@@ -146,8 +146,8 @@ func (f Faker) Float(maxDecimals, min, max int) float64 {
 }
 
 // Float32 returns a fake random float32 number for Faker
-func (f Faker) Float32(maxDecimals, min, max int) float32 {
-	value := float32(f.IntBetween(min, max-1))
+func (f Faker) Float32(maxDecimals, minN, maxN int) float32 {
+	value := float32(f.IntBetween(minN, maxN-1))
 	if maxDecimals < 1 {
 		return value
 	}
@@ -159,8 +159,8 @@ func (f Faker) Float32(maxDecimals, min, max int) float32 {
 }
 
 // Float64 returns a fake random float64 number for Faker
-func (f Faker) Float64(maxDecimals, min, max int) float64 {
-	value := float64(f.IntBetween(min, max-1))
+func (f Faker) Float64(maxDecimals, minN, maxN int) float64 {
+	value := float64(f.IntBetween(minN, maxN-1))
 	if maxDecimals < 1 {
 		return value
 	}
@@ -276,48 +276,48 @@ func maxInt[T number](num T) T {
 }
 
 // between returns a fake number between a given minimum and maximum value using generator
-func between[T number](min, max T, rand GeneratorInterface) T {
-	if min > max {
+func between[T number](minN, maxN T, rand GeneratorInterface) T {
+	if minN > maxN {
 		// Swap values
-		return between(max, min, rand)
+		return between(maxN, minN, rand)
 	}
 
-	diff := max - min
-	// Edge case when min and max are actual min and max integers,
+	diff := maxN - minN
+	// Edge case when minN and maxN are actual min and max integers,
 	// since we cannot store 2 * maxInt, we instead split the range in:
 	// - 50% chance to return a negative number
 	// - 50% chance to return a positive number
-	if min == minInt(min) && max == maxInt(max) {
+	if minN == minInt(minN) && maxN == maxInt(maxN) {
 		if rand.Intn(2) == 0 {
 			// negatives
-			max = 0
-			diff = maxInt(max)
+			maxN = 0
+			diff = maxInt(maxN)
 		} else {
 			// positives
-			min = 0
-			diff = maxInt(max)
+			minN = 0
+			diff = maxInt(maxN)
 		}
 	}
 
 	var value T
 	if diff == 0 {
-		return min
-	} else if diff == maxInt(max) {
+		return minN
+	} else if diff == maxInt(maxN) {
 		// Handle the case when diff is MaxInt by using a different approach
-		// Generate a random number between 0 and MaxInt-1, then add min
-		switch any(max).(type) {
+		// Generate a random number between 0 and MaxInt-1, then add minN
+		switch any(maxN).(type) {
 		case int:
-			value = T(rand.Intn(int(maxInt(max) - 1)))
+			value = T(rand.Intn(int(maxInt(maxN) - 1)))
 		case int8, int16, int32:
-			value = T(rand.Int32n(int32(maxInt(max) - 1)))
+			value = T(rand.Int32n(int32(maxInt(maxN) - 1)))
 		case int64:
-			value = T(rand.Int64n(int64(maxInt(max) - 1)))
+			value = T(rand.Int64n(int64(maxInt(maxN) - 1)))
 		case uint:
-			value = T(rand.Uintn(uint(maxInt(max) - 1)))
+			value = T(rand.Uintn(uint(maxInt(maxN) - 1)))
 		case uint8, uint16, uint32:
-			value = T(rand.Uint32n(uint32(maxInt(max) - 1)))
+			value = T(rand.Uint32n(uint32(maxInt(maxN) - 1)))
 		case uint64:
-			value = T(rand.Uint64n(uint64(maxInt(max) - 1)))
+			value = T(rand.Uint64n(uint64(maxInt(maxN) - 1)))
 		}
 	} else if diff > 0 {
 		switch any(diff).(type) {
@@ -336,57 +336,57 @@ func between[T number](min, max T, rand GeneratorInterface) T {
 		}
 	}
 
-	return min + value
+	return minN + value
 }
 
 // IntBetween returns a fake Int between a given minimum and maximum values for Faker
-func (f Faker) IntBetween(min, max int) int {
-	return between(min, max, f.Generator)
+func (f Faker) IntBetween(minN, maxN int) int {
+	return between(minN, maxN, f.Generator)
 }
 
 // Int8Between returns a fake Int8 between a given minimum and maximum values for Faker
-func (f Faker) Int8Between(min, max int8) int8 {
-	return between(min, max, f.Generator)
+func (f Faker) Int8Between(minN, maxN int8) int8 {
+	return between(minN, maxN, f.Generator)
 }
 
 // Int16Between returns a fake Int16 between a given minimum and maximum values for Faker
-func (f Faker) Int16Between(min, max int16) int16 {
-	return between(min, max, f.Generator)
+func (f Faker) Int16Between(minN, maxN int16) int16 {
+	return between(minN, maxN, f.Generator)
 }
 
 // Int32Between returns a fake Int32 between a given minimum and maximum values for Faker
-func (f Faker) Int32Between(min, max int32) int32 {
-	return between(min, max, f.Generator)
+func (f Faker) Int32Between(minN, maxN int32) int32 {
+	return between(minN, maxN, f.Generator)
 }
 
 // Int64Between returns a fake Int64 between a given minimum and maximum values for Faker
-func (f Faker) Int64Between(min, max int64) int64 {
-	return between(min, max, f.Generator)
+func (f Faker) Int64Between(minN, maxN int64) int64 {
+	return between(minN, maxN, f.Generator)
 }
 
 // UIntBetween returns a fake UInt between a given minimum and maximum values for Faker
-func (f Faker) UIntBetween(min, max uint) uint {
-	return between(min, max, f.Generator)
+func (f Faker) UIntBetween(minN, maxN uint) uint {
+	return between(minN, maxN, f.Generator)
 }
 
 // UInt8Between returns a fake UInt8 between a given minimum and maximum values for Faker
-func (f Faker) UInt8Between(min, max uint8) uint8 {
-	return between(min, max, f.Generator)
+func (f Faker) UInt8Between(minN, maxN uint8) uint8 {
+	return between(minN, maxN, f.Generator)
 }
 
 // UInt16Between returns a fake UInt16 between a given minimum and maximum values for Faker
-func (f Faker) UInt16Between(min, max uint16) uint16 {
-	return between(min, max, f.Generator)
+func (f Faker) UInt16Between(minN, maxN uint16) uint16 {
+	return between(minN, maxN, f.Generator)
 }
 
 // UInt32Between returns a fake UInt32 between a given minimum and maximum values for Faker
-func (f Faker) UInt32Between(min, max uint32) uint32 {
-	return between(min, max, f.Generator)
+func (f Faker) UInt32Between(minN, maxN uint32) uint32 {
+	return between(minN, maxN, f.Generator)
 }
 
 // UInt64Between returns a fake UInt64 between a given minimum and maximum values for Faker
-func (f Faker) UInt64Between(min, max uint64) uint64 {
-	return between(min, max, f.Generator)
+func (f Faker) UInt64Between(minN, maxN uint64) uint64 {
+	return between(minN, maxN, f.Generator)
 }
 
 // Letter returns a fake single letter for Faker
