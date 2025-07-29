@@ -96,7 +96,7 @@ func (f Faker) RandomDigitNot(ignore ...int) int {
 
 	for {
 		current := f.RandomDigit()
-		if inSlice(current, ignore) {
+		if !inSlice(current, ignore) {
 			return current
 		}
 	}
