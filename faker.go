@@ -292,7 +292,6 @@ func handleFullRange[T number](minN, maxN T, rand GeneratorInterface) T {
 	// Split range: 50% negative, 50% positive to avoid overflow
 	if rand.Intn(2) == 0 {
 		// Generate negative number in range [minN, 0]
-		maxVal := maxInt(maxN)
 		value := generateMaxRangeValue[T](maxN, rand)
 		return minN + value
 	}
