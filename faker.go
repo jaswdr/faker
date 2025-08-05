@@ -258,66 +258,88 @@ func maxInt[T number](num T) T {
 
 // between returns a fake number between a given minimum and maximum value using generator
 func between[T number](minN, maxN T, rand GeneratorInterface) T {
+	// Ensure minN <= maxN
 	if minN > maxN {
-		// Swap values
-		return between(maxN, minN, rand)
+		minN, maxN = maxN, minN
 	}
 
-	diff := maxN - minN
-	// Edge case when minN and maxN are actual min and max integers,
-	// since we cannot store 2 * maxInt, we instead split the range in:
-	// - 50% chance to return a negative number
-	// - 50% chance to return a positive number
+	// Handle edge case: full range of integer type
 	if minN == minInt(minN) && maxN == maxInt(maxN) {
-		if rand.Intn(2) == 0 {
-			// negatives
-			maxN = 0
-			diff = maxInt(maxN)
-		} else {
-			// positives
-			minN = 0
-			diff = maxInt(maxN)
-		}
+		return handleFullRange(minN, maxN, rand)
 	}
 
-	var value T
+	// Handle equal values
+	diff := maxN - minN
 	if diff == 0 {
 		return minN
-	} else if diff == maxInt(maxN) {
-		// Handle the case when diff is MaxInt by using a different approach
-		// Generate a random number between 0 and MaxInt-1, then add minN
-		switch any(maxN).(type) {
-		case int:
-			value = T(rand.Intn(int(maxInt(maxN) - 1)))
-		case int8, int16, int32:
-			value = T(rand.Int32n(int32(maxInt(maxN) - 1)))
-		case int64:
-			value = T(rand.Int64n(int64(maxInt(maxN) - 1)))
-		case uint:
-			value = T(rand.Uintn(uint(maxInt(maxN) - 1)))
-		case uint8, uint16, uint32:
-			value = T(rand.Uint32n(uint32(maxInt(maxN) - 1)))
-		case uint64:
-			value = T(rand.Uint64n(uint64(maxInt(maxN) - 1)))
-		}
-	} else if diff > 0 {
-		switch any(diff).(type) {
-		case int:
-			value = T(rand.Intn(int(diff + 1)))
-		case int8, int16, int32:
-			value = T(rand.Int32n(int32(diff + 1)))
-		case int64:
-			value = T(rand.Int64n(int64(diff + 1)))
-		case uint:
-			value = T(rand.Uintn(uint(diff + 1)))
-		case uint8, uint16, uint32:
-			value = T(rand.Uint32n(uint32(diff + 1)))
-		case uint64:
-			value = T(rand.Uint64n(uint64(diff + 1)))
-		}
+	}
+
+	// Generate random value based on type
+	var value T
+	if diff == maxInt(maxN) {
+		// Special case: diff equals max value
+		value = generateMaxRangeValue[T](maxN, rand)
+	} else {
+		// Normal case: generate value in range [0, diff]
+		value = generateRangeValue(diff, rand)
 	}
 
 	return minN + value
+}
+
+// handleFullRange handles the special case when range covers entire type
+func handleFullRange[T number](minN, maxN T, rand GeneratorInterface) T {
+	// Split range: 50% negative, 50% positive to avoid overflow
+	if rand.Intn(2) == 0 {
+		// Generate negative number in range [minInt, 0]
+		maxVal := maxInt(maxN)
+		value := generateMaxRangeValue[T](maxN, rand)
+		return value - maxVal
+	}
+	// Generate positive number in range [0, maxInt]
+	return generateMaxRangeValue[T](maxN, rand)
+}
+
+// generateMaxRangeValue generates a value when diff equals MaxInt
+func generateMaxRangeValue[T number](maxN T, rand GeneratorInterface) T {
+	maxVal := maxInt(maxN) - 1
+	switch any(maxN).(type) {
+	case int:
+		return T(rand.Intn(int(maxVal)))
+	case int8, int16, int32:
+		return T(rand.Int32n(int32(maxVal)))
+	case int64:
+		return T(rand.Int64n(int64(maxVal)))
+	case uint:
+		return T(rand.Uintn(uint(maxVal)))
+	case uint8, uint16, uint32:
+		return T(rand.Uint32n(uint32(maxVal)))
+	case uint64:
+		return T(rand.Uint64n(uint64(maxVal)))
+	default:
+		return 0
+	}
+}
+
+// generateRangeValue generates a value in range [0, diff]
+func generateRangeValue[T number](diff T, rand GeneratorInterface) T {
+	// Add 1 to diff to make range inclusive
+	switch any(diff).(type) {
+	case int:
+		return T(rand.Intn(int(diff + 1)))
+	case int8, int16, int32:
+		return T(rand.Int32n(int32(diff + 1)))
+	case int64:
+		return T(rand.Int64n(int64(diff + 1)))
+	case uint:
+		return T(rand.Uintn(uint(diff + 1)))
+	case uint8, uint16, uint32:
+		return T(rand.Uint32n(uint32(diff + 1)))
+	case uint64:
+		return T(rand.Uint64n(uint64(diff + 1)))
+	default:
+		return 0
+	}
 }
 
 // IntBetween returns a fake Int between a given minimum and maximum values for Faker
