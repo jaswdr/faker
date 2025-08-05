@@ -11,18 +11,37 @@ func RandomElement[T any](f Faker, elements ...T) T {
 //
 // Elements with higher weight have more chance to be returned.
 func RandomElementWeighted[T any](f Faker, elements map[int]T) T {
-	arrayOfElements := make([]T, 0)
+	if len(elements) == 0 {
+		var zero T
+		return zero
+	}
 
-	for weight, value := range elements {
-		// TODO: there is an accepted proposal for generic slices.Repeat function in Go 1.23
-		for i := 0; i < weight; i++ {
-			arrayOfElements = append(arrayOfElements, value)
+	totalWeight := 0
+	for weight := range elements {
+		totalWeight += weight
+	}
+
+	if totalWeight == 0 {
+		for _, value := range elements {
+			return value
 		}
 	}
 
-	i := f.IntBetween(0, len(arrayOfElements)-1)
+	target := f.IntBetween(0, totalWeight-1)
 
-	return arrayOfElements[i]
+	current := 0
+	for weight, value := range elements {
+		current += weight
+		if target < current {
+			return value
+		}
+	}
+
+	var zero T
+	for _, value := range elements {
+		return value
+	}
+	return zero
 }
 
 func RandomMapKey[K comparable, V any](f Faker, m map[K]V) K {
