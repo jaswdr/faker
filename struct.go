@@ -239,7 +239,7 @@ func (s Struct) fillBool(_ reflect.Type, v reflect.Value) {
 	v.SetBool(s.Faker.Bool())
 }
 
-func (s Struct) fillFunction(t reflect.Type, v reflect.Value, function string) bool {
+func (Struct) fillFunction(t reflect.Type, v reflect.Value, function string) bool {
 	f, ok := functions[function]
 
 	if !ok {
