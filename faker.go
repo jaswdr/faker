@@ -119,8 +119,8 @@ func (f Faker) RandomNumber(size int) int {
 	return f.IntBetween(minN, maxN)
 }
 
-// RandomFloat returns a fake random float number for Faker
-func (f Faker) RandomFloat(maxDecimals, minN, maxN int) float64 {
+// generateFloat is a helper function that generates a random float with the specified parameters
+func (f Faker) generateFloat(maxDecimals, minN, maxN int) float64 {
 	value := float64(f.IntBetween(minN, maxN-1))
 	if maxDecimals < 1 {
 		return value
@@ -130,45 +130,26 @@ func (f Faker) RandomFloat(maxDecimals, minN, maxN int) float64 {
 	decimals := float64(f.IntBetween(0, p)) / float64(p)
 
 	return value + decimals
+}
+
+// RandomFloat returns a fake random float number for Faker
+func (f Faker) RandomFloat(maxDecimals, minN, maxN int) float64 {
+	return f.generateFloat(maxDecimals, minN, maxN)
 }
 
 // Float returns a fake random float number for Faker
 func (f Faker) Float(maxDecimals, minN, maxN int) float64 {
-	value := float64(f.IntBetween(minN, maxN-1))
-	if maxDecimals < 1 {
-		return value
-	}
-
-	p := int(math.Pow10(maxDecimals))
-	decimals := float64(f.IntBetween(0, p)) / float64(p)
-
-	return value + decimals
+	return f.generateFloat(maxDecimals, minN, maxN)
 }
 
 // Float32 returns a fake random float32 number for Faker
 func (f Faker) Float32(maxDecimals, minN, maxN int) float32 {
-	value := float32(f.IntBetween(minN, maxN-1))
-	if maxDecimals < 1 {
-		return value
-	}
-
-	p := int(math.Pow10(maxDecimals))
-	decimals := float32(f.IntBetween(0, p)) / float32(p)
-
-	return value + decimals
+	return float32(f.generateFloat(maxDecimals, minN, maxN))
 }
 
 // Float64 returns a fake random float64 number for Faker
 func (f Faker) Float64(maxDecimals, minN, maxN int) float64 {
-	value := float64(f.IntBetween(minN, maxN-1))
-	if maxDecimals < 1 {
-		return value
-	}
-
-	p := int(math.Pow10(maxDecimals))
-	decimals := float64(f.IntBetween(0, p)) / float64(p)
-
-	return value + decimals
+	return f.generateFloat(maxDecimals, minN, maxN)
 }
 
 // Int returns a fake Int number for Faker
