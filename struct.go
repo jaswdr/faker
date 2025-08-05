@@ -56,10 +56,8 @@ func (s Struct) fillValue(v reflect.Value, function string, size int, depth int,
 		return
 	}
 
-	if strings.HasPrefix(function, "fn=") {
-		if ok := s.fillFunction(v.Type(), v, function); ok {
-			return
-		}
+	if strings.HasPrefix(function, "fn=") && s.fillFunction(v.Type(), v, function) {
+		return
 	}
 
 	switch v.Kind() {
@@ -239,7 +237,7 @@ func (s Struct) fillBool(_ reflect.Type, v reflect.Value) {
 	v.SetBool(s.Faker.Bool())
 }
 
-func (s Struct) fillFunction(t reflect.Type, v reflect.Value, function string) bool {
+func (Struct) fillFunction(t reflect.Type, v reflect.Value, function string) bool {
 	f, ok := functions[function]
 
 	if !ok {
