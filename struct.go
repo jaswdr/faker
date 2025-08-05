@@ -1,8 +1,10 @@
 package faker
 
 import (
+	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 )
 
 // Struct is a faker struct for generating random data for struct fields
@@ -12,6 +14,14 @@ type Struct struct {
 
 // MaxRecursionDepth defines the default maximum depth for recursive structs
 const MaxRecursionDepth = 32
+
+type fakerFunction func() interface{}
+
+var functions = map[string]fakerFunction{}
+
+func RegisterFunction(name string, function fakerFunction) {
+	functions[fmt.Sprintf("fn=%s", name)] = function
+}
 
 // Fill populates a struct with random data based on its type and tags
 func (s Struct) Fill(v interface{}) {
@@ -44,6 +54,12 @@ func (s Struct) FillWithDepth(v interface{}, maxDepth int) {
 func (s Struct) fillValue(v reflect.Value, function string, size int, depth int, maxDepth int) {
 	if !v.CanSet() || depth > maxDepth {
 		return
+	}
+
+	if strings.HasPrefix(function, "fn=") {
+		if ok := s.fillFunction(v.Type(), v, function); ok {
+			return
+		}
 	}
 
 	switch v.Kind() {
@@ -221,4 +237,23 @@ func (s Struct) fillFloat(t reflect.Type, v reflect.Value, function string) {
 
 func (s Struct) fillBool(_ reflect.Type, v reflect.Value) {
 	v.SetBool(s.Faker.Bool())
+}
+
+func (s Struct) fillFunction(t reflect.Type, v reflect.Value, function string) bool {
+	f, ok := functions[function]
+
+	if !ok {
+		return false
+	}
+
+	val := f()
+	vType := reflect.TypeOf(val)
+
+	if !vType.AssignableTo(t) {
+		return false
+	}
+
+	vVal := reflect.ValueOf(val)
+	v.Set(vVal)
+	return true
 }

@@ -53,6 +53,24 @@ type NestedArray struct {
 	NA []StructArray `fakesize:"2"`
 }
 
+type UserDefinedFunction struct {
+	String string   `fake:"fn=dyn_string"`
+	Int    int      `fake:"fn=dyn_int"`
+	UInt   uint     `fake:"fn=dyn_uint"`
+	Float  float64  `fake:"fn=dyn_float"`
+	Bool   bool     `fake:"fn=dyn_bool"`
+	Slice  []string `fake:"fn=dyn_slice"`
+	Struct struct {
+		String string
+		Int    int
+	} `fake:"fn=dyn_struct"`
+	Recursive struct {
+		String string `fake:"fn=dyn_string"`
+		Int    int    `fake:"fn=dyn_int"`
+	}
+	MismatchedType float64 `fake:"fn=dyn_string"`
+}
+
 // Test cases
 func TestStructBasic(t *testing.T) {
 	var basic Basic
@@ -356,4 +374,40 @@ func TestStructWithDepth(t *testing.T) {
 	NotExpect(t, "", n.Value)
 	NotExpect(t, "", n.Child.Value)
 	Expect(t, "", n.Child.Child.Value)
+}
+
+func TestStructWithUserDefinedFunctions(t *testing.T) {
+	var udf UserDefinedFunction
+
+	RegisterFunction("dyn_string", func() interface{} { return "a-string" })
+	RegisterFunction("dyn_int", func() interface{} { return -123 })
+	RegisterFunction("dyn_uint", func() interface{} { return uint(456) })
+	RegisterFunction("dyn_float", func() interface{} { return float64(1.234) })
+	RegisterFunction("dyn_bool", func() interface{} { return true })
+	RegisterFunction("dyn_slice", func() interface{} { return []string{"a", "b"} })
+	RegisterFunction("dyn_struct", func() interface{} {
+		return struct {
+			String string
+			Int    int
+		}{"other-string", 789}
+	})
+
+	New().Struct().Fill(&udf)
+	Expect(t, "a-string", udf.String)
+	Expect(t, -123, udf.Int)
+	Expect(t, uint(456), udf.UInt)
+	Expect(t, 1.234, udf.Float)
+	Expect(t, true, udf.Bool)
+	Expect(t, "a", udf.Slice[0])
+	Expect(t, "b", udf.Slice[1])
+
+	Expect(t, "other-string", udf.Struct.String)
+	Expect(t, 789, udf.Struct.Int)
+
+	Expect(t, "a-string", udf.Recursive.String)
+	Expect(t, -123, udf.Recursive.Int)
+
+	// The function result was not assignable to this field so normal logic should have been applied.
+	// In this case, we expect a random float64 that is not 0.
+	NotExpect(t, 0.0, udf.MismatchedType)
 }
