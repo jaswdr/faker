@@ -85,8 +85,8 @@ func (f Faker) RandomDigit() int {
 // RandomDigitNot returns a fake random digit for Faker that is not in a list of ignored
 func (f Faker) RandomDigitNot(ignore ...int) int {
 	inSlice := func(el int, list []int) bool {
-		for i := range list {
-			if i == el {
+		for _, v := range list {
+			if v == el {
 				return true
 			}
 		}
