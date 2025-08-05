@@ -433,28 +433,42 @@ func (Faker) ShuffleString(s string) string {
 
 // Numerify returns a fake string that replace all "#" characters with numbers from a given string for Faker
 func (f Faker) Numerify(in string) (out string) {
-	for _, c := range strings.Split(in, "") {
-		if c == "#" {
-			c = strconv.Itoa(f.RandomDigit())
-		}
-
-		out = out + c
+	if !strings.Contains(in, "#") {
+		return in
 	}
 
-	return
+	var builder strings.Builder
+	builder.Grow(len(in))
+
+	for _, c := range in {
+		if c == '#' {
+			builder.WriteString(strconv.Itoa(f.RandomDigit()))
+		} else {
+			builder.WriteRune(c)
+		}
+	}
+
+	return builder.String()
 }
 
 // Lexify  returns a fake string that replace all "?" characters with random letters from a given string for Faker
 func (f Faker) Lexify(in string) (out string) {
-	for _, c := range strings.Split(in, "") {
-		if c == "?" {
-			c = f.RandomLetter()
-		}
-
-		out = out + c
+	if !strings.Contains(in, "?") {
+		return in
 	}
 
-	return
+	var builder strings.Builder
+	builder.Grow(len(in))
+
+	for _, c := range in {
+		if c == '?' {
+			builder.WriteString(f.RandomLetter())
+		} else {
+			builder.WriteRune(c)
+		}
+	}
+
+	return builder.String()
 }
 
 // Bothify returns a fake string that apply Lexify() and Numerify() on a given string for Faker
@@ -466,14 +480,22 @@ func (f Faker) Bothify(in string) (out string) {
 
 // Asciify   returns a fake string that replace all "*" characters with random ASCII values from a given string for Faker
 func (f Faker) Asciify(in string) (out string) {
-	for _, c := range strings.Split(in, "") {
-		if c == "*" {
-			c = fmt.Sprintf("%c", f.IntBetween(97, 126))
-		}
-		out = out + c
+	if !strings.Contains(in, "*") {
+		return in
 	}
 
-	return
+	var builder strings.Builder
+	builder.Grow(len(in))
+
+	for _, c := range in {
+		if c == '*' {
+			builder.WriteByte(byte(f.IntBetween(97, 126)))
+		} else {
+			builder.WriteRune(c)
+		}
+	}
+
+	return builder.String()
 }
 
 // Bool returns a fake bool for Faker
