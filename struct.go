@@ -56,10 +56,8 @@ func (s Struct) fillValue(v reflect.Value, function string, size int, depth int,
 		return
 	}
 
-	if strings.HasPrefix(function, "fn=") {
-		if ok := s.fillFunction(v.Type(), v, function); ok {
-			return
-		}
+	if strings.HasPrefix(function, "fn=") && s.fillFunction(v.Type(), v, function) {
+		return
 	}
 
 	switch v.Kind() {
