@@ -218,32 +218,41 @@ func (i Internet) LocalIpv4() string {
 
 // Ipv6 returns a fake ipv6 for Internet
 func (i Internet) Ipv6() string {
-	ips := make([]string, 0, 8)
+	hexDigits := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"}
+
+	var builder strings.Builder
+	builder.Grow(39) // 8 blocks of 4 hex digits + 7 colons
 
 	for j := 0; j < 8; j++ {
-		block := ""
-		for w := 0; w < 4; w++ {
-			block = block + strconv.Itoa(i.Faker.RandomDigitNotNull())
+		if j > 0 {
+			builder.WriteByte(':')
 		}
-
-		ips = append(ips, block)
+		// Generate 4 hex digits for this block
+		for w := 0; w < 4; w++ {
+			builder.WriteString(i.Faker.RandomStringElement(hexDigits))
+		}
 	}
 
-	return strings.Join(ips, ":")
+	return builder.String()
 }
 
 // MacAddress returns a fake mac address for Internet
 func (i Internet) MacAddress() string {
-	values := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"}
+	hexDigits := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"}
 
-	mac := make([]string, 0, 6)
+	var builder strings.Builder
+	builder.Grow(17) // 6 blocks of 2 hex digits + 5 colons
+
 	for j := 0; j < 6; j++ {
-		m := i.Faker.RandomStringElement(values)
-		m = m + i.Faker.RandomStringElement(values)
-		mac = append(mac, m)
+		if j > 0 {
+			builder.WriteByte(':')
+		}
+		// Generate 2 hex digits for this block
+		builder.WriteString(i.Faker.RandomStringElement(hexDigits))
+		builder.WriteString(i.Faker.RandomStringElement(hexDigits))
 	}
 
-	return strings.Join(mac, ":")
+	return builder.String()
 }
 
 // HTTPMethod returns a fake http method for Internet
