@@ -60,16 +60,32 @@ func (OSResolverImpl) OS() string {
 
 // Shuffle shuffles the slice in place
 func Shuffle[T any](slice []T) []T {
-	var before []T
-	reflect.Copy(reflect.ValueOf(before), reflect.ValueOf(slice))
+	// Handle edge cases
+	if len(slice) <= 1 {
+		return slice
+	}
 
-	rand.Shuffle(len(slice), func(i, j int) {
-		slice[i], slice[j] = slice[j], slice[i]
-	})
+	// Make a copy of the original slice for comparison
+	original := make([]T, len(slice))
+	copy(original, slice)
 
-	// Keep shuffling until the slice is not equal to the original slice
-	for len(slice) > 1 && reflect.DeepEqual(before, slice) {
-		Shuffle(slice)
+	// Limit attempts to prevent infinite recursion
+	maxAttempts := 10
+	for attempts := 0; attempts < maxAttempts; attempts++ {
+		rand.Shuffle(len(slice), func(i, j int) {
+			slice[i], slice[j] = slice[j], slice[i]
+		})
+
+		// Check if the shuffle resulted in a different arrangement
+		if !reflect.DeepEqual(original, slice) {
+			break
+		}
+
+		// For small slices (2-3 elements), there's a high chance of getting the same order
+		// Accept the result after a few attempts even if unchanged
+		if attempts >= 3 && len(slice) <= 3 {
+			break
+		}
 	}
 
 	return slice
