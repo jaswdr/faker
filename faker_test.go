@@ -1732,7 +1732,7 @@ func TestBackwardCompatibilityAPI(t *testing.T) {
 		}
 	})
 
-	t.Run("NumericTypes", func(t *testing.T) {
+	t.Run("NumericTypes", func(*testing.T) {
 		// All numeric types should work
 		_ = f.Int()
 		_ = f.Int8()
@@ -1764,7 +1764,7 @@ func TestBackwardCompatibilityAPI(t *testing.T) {
 		_ = f.RandomFloat(2, 1, 100)
 	})
 
-	t.Run("StringMethods", func(t *testing.T) {
+	t.Run("StringMethods", func(*testing.T) {
 		// String manipulation methods
 		_ = f.RandomStringWithLength(10)
 		_ = f.RandomStringElement([]string{"a", "b", "c"})
@@ -2042,7 +2042,7 @@ func TestMapAndSliceCompatibility(t *testing.T) {
 func TestExistingBehaviorWithEdgeCases(t *testing.T) {
 	f := New()
 
-	t.Run("EmptyInputHandling", func(t *testing.T) {
+	t.Run("EmptyInputHandling", func(*testing.T) {
 		// These should work without panicking
 		_ = f.RandomStringElement([]string{})
 		_ = f.RandomIntElement([]int{})
