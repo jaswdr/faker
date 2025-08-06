@@ -5,8 +5,9 @@
       "Bash(gofmt:*)",
       "Bash(go vet:*)",
       "Bash(ls:*)",
-      "Bash(rm:*)"
+      "Bash(go fmt:*)"
     ],
     "deny": []
   }
 }
+

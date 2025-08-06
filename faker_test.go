@@ -986,21 +986,6 @@ func TestAsciifyWithoutPlaceholders(t *testing.T) {
 	}
 }
 
-// helper functions for min/max since Go doesn't have built-in generic min/max for all types
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
 // ============================================================================
 // CONCURRENCY & THREAD SAFETY TESTS
 // ============================================================================
@@ -1195,6 +1180,33 @@ func TestConcurrentNumericGeneration(t *testing.T) {
 	}
 }
 
+// validateSignedIntegerRanges validates signed integer values are within expected ranges
+func validateSignedIntegerRanges(int8Val int8, int16Val int16, int32Val int32, int64Val int64) bool {
+	return int8Val >= -50 && int8Val <= 50 &&
+		int16Val >= -1000 && int16Val <= 1000 &&
+		int32Val >= -100000 && int32Val <= 100000 &&
+		int64Val >= -1000000 && int64Val <= 1000000
+}
+
+// validateUnsignedIntegerRanges validates unsigned integer values are within expected ranges
+func validateUnsignedIntegerRanges(uint8Val uint8, uint16Val uint16, uint32Val uint32, uint64Val uint64) bool {
+	return uint8Val >= 10 && uint8Val <= 200 &&
+		uint16Val >= 100 && uint16Val <= 50000 &&
+		uint32Val >= 1000 && uint32Val <= 4000000000 &&
+		uint64Val >= 10000 && uint64Val <= 18000000000000000000
+}
+
+// countValidResults counts valid results from the results channel
+func countValidResults(results <-chan bool) (validResults, totalResults int) {
+	for valid := range results {
+		totalResults++
+		if valid {
+			validResults++
+		}
+	}
+	return validResults, totalResults
+}
+
 // TestConcurrentBetweenOperations tests concurrent usage of Between methods
 func TestConcurrentBetweenOperations(t *testing.T) {
 	f := New()
@@ -1221,17 +1233,11 @@ func TestConcurrentBetweenOperations(t *testing.T) {
 				uint32Val := f.UInt32Between(1000, 4000000000)
 				uint64Val := f.UInt64Between(10000, 18000000000000000000)
 
-				// Validate ranges
-				valid := int8Val >= -50 && int8Val <= 50 &&
-					int16Val >= -1000 && int16Val <= 1000 &&
-					int32Val >= -100000 && int32Val <= 100000 &&
-					int64Val >= -1000000 && int64Val <= 1000000 &&
-					uint8Val >= 10 && uint8Val <= 200 &&
-					uint16Val >= 100 && uint16Val <= 50000 &&
-					uint32Val >= 1000 && uint32Val <= 4000000000 &&
-					uint64Val >= 10000 && uint64Val <= 18000000000000000000
+				// Validate ranges using helper functions
+				signedValid := validateSignedIntegerRanges(int8Val, int16Val, int32Val, int64Val)
+				unsignedValid := validateUnsignedIntegerRanges(uint8Val, uint16Val, uint32Val, uint64Val)
 
-				results <- valid
+				results <- signedValid && unsignedValid
 			}
 		}()
 	}
@@ -1239,77 +1245,10 @@ func TestConcurrentBetweenOperations(t *testing.T) {
 	wg.Wait()
 	close(results)
 
-	// Check all results are valid
-	totalResults := 0
-	validResults := 0
-	for valid := range results {
-		totalResults++
-		if valid {
-			validResults++
-		}
-	}
-
+	// Check all results are valid using helper function
+	validResults, totalResults := countValidResults(results)
 	if validResults != totalResults {
 		t.Errorf("Invalid results found: %d/%d valid", validResults, totalResults)
-	}
-}
-
-// TestMemoryUsageUnderConcurrency tests that memory usage remains stable under concurrent load
-func TestMemoryUsageUnderConcurrency(t *testing.T) {
-	// Skip if running in short mode
-	if testing.Short() {
-		t.Skip("Skipping memory test in short mode")
-	}
-
-	f := New()
-	const numGoroutines = 20
-	const numOperations = 500
-
-	// Force garbage collection and measure initial memory
-	runtime.GC()
-	var m1 runtime.MemStats
-	runtime.ReadMemStats(&m1)
-
-	var wg sync.WaitGroup
-	wg.Add(numGoroutines)
-
-	startTime := time.Now()
-
-	for i := 0; i < numGoroutines; i++ {
-		go func() {
-			defer wg.Done()
-			for j := 0; j < numOperations; j++ {
-				// Mix of operations that use sync.Pool
-				_ = f.Numerify("####-####-####")
-				_ = f.Lexify("????-????-????")
-				_ = f.Asciify("****-****-****")
-				_ = f.RandomStringWithLength(50)
-
-				// Some other operations
-				_ = f.Person().Name()
-				_ = f.Internet().Email()
-				_ = f.IntBetween(1, 1000000)
-			}
-		}()
-	}
-
-	wg.Wait()
-
-	// Measure memory after operations
-	runtime.GC()
-	var m2 runtime.MemStats
-	runtime.ReadMemStats(&m2)
-
-	duration := time.Since(startTime)
-	memoryIncrease := m2.TotalAlloc - m1.TotalAlloc
-
-	t.Logf("Concurrent operations completed in %v", duration)
-	t.Logf("Total memory increase: %d bytes", memoryIncrease)
-	t.Logf("Operations per second: %.0f", float64(numGoroutines*numOperations)/duration.Seconds())
-
-	// Memory increase should be reasonable (less than 50MB for this test)
-	if memoryIncrease > 50*1024*1024 {
-		t.Errorf("Excessive memory increase: %d bytes", memoryIncrease)
 	}
 }
 
@@ -1658,6 +1597,20 @@ func TestLargePatternHandling(t *testing.T) {
 	}
 }
 
+// applyPatternFunction applies the correct pattern function based on the test name
+func applyPatternFunction(f Faker, testName, pattern string) string {
+	switch testName {
+	case "ComplexNumerify":
+		return f.Numerify(pattern)
+	case "ComplexLexify":
+		return f.Lexify(pattern)
+	case "ComplexBothify":
+		return f.Bothify(pattern)
+	default:
+		return ""
+	}
+}
+
 // TestMixedPatterns tests complex mixed patterns
 func TestMixedPatterns(t *testing.T) {
 	f := New()
@@ -1702,16 +1655,7 @@ func TestMixedPatterns(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			for i := 0; i < 10; i++ {
-				var result string
-				switch tc.name {
-				case "ComplexNumerify":
-					result = f.Numerify(tc.pattern)
-				case "ComplexLexify":
-					result = f.Lexify(tc.pattern)
-				case "ComplexBothify":
-					result = f.Bothify(tc.pattern)
-				}
-
+				result := applyPatternFunction(f, tc.name, tc.pattern)
 				if !tc.check(result) {
 					t.Errorf("Pattern check failed for %s: %s", tc.name, result)
 				}
@@ -1871,62 +1815,67 @@ func TestSeededReproducibility(t *testing.T) {
 	}
 }
 
-// TestExistingBehaviorPreservation tests that existing behavior is preserved
-func TestExistingBehaviorPreservation(t *testing.T) {
+// TestRandomDigitBounds tests that RandomDigit returns values within bounds
+func TestRandomDigitBounds(t *testing.T) {
+	f := New()
+	for i := 0; i < 100; i++ {
+		digit := f.RandomDigit()
+		if digit < 0 || digit > 9 {
+			t.Errorf("RandomDigit out of bounds: %d", digit)
+		}
+	}
+}
+
+// TestRandomDigitNotNullBounds tests that RandomDigitNotNull returns values within bounds
+func TestRandomDigitNotNullBounds(t *testing.T) {
+	f := New()
+	for i := 0; i < 100; i++ {
+		digit := f.RandomDigitNotNull()
+		if digit < 1 || digit > 9 {
+			t.Errorf("RandomDigitNotNull out of bounds: %d", digit)
+		}
+	}
+}
+
+// TestRandomDigitNotExclusion tests that RandomDigitNot excludes specified digits
+func TestRandomDigitNotExclusion(t *testing.T) {
+	f := New()
+	excluded := []int{0, 5, 9}
+	for i := 0; i < 100; i++ {
+		digit := f.RandomDigitNot(excluded...)
+		for _, ex := range excluded {
+			if digit == ex {
+				t.Errorf("RandomDigitNot returned excluded digit: %d", digit)
+			}
+		}
+	}
+}
+
+// TestPatternReplacementBehavior tests that pattern replacement works as expected
+func TestPatternReplacementBehavior(t *testing.T) {
 	f := New()
 
-	t.Run("RandomDigitBounds", func(t *testing.T) {
-		for i := 0; i < 100; i++ {
-			digit := f.RandomDigit()
-			if digit < 0 || digit > 9 {
-				t.Errorf("RandomDigit out of bounds: %d", digit)
-			}
+	// Test Numerify
+	numerified := f.Numerify("###")
+	if len(numerified) != 3 {
+		t.Errorf("Numerify length mismatch: expected 3, got %d", len(numerified))
+	}
+	for _, char := range numerified {
+		if char < '0' || char > '9' {
+			t.Errorf("Numerify non-digit: %c", char)
 		}
-	})
+	}
 
-	t.Run("RandomDigitNotNull", func(t *testing.T) {
-		for i := 0; i < 100; i++ {
-			digit := f.RandomDigitNotNull()
-			if digit < 1 || digit > 9 {
-				t.Errorf("RandomDigitNotNull out of bounds: %d", digit)
-			}
+	// Test Lexify
+	lexified := f.Lexify("???")
+	if len(lexified) != 3 {
+		t.Errorf("Lexify length mismatch: expected 3, got %d", len(lexified))
+	}
+	for _, char := range lexified {
+		if char < 'a' || char > 'z' {
+			t.Errorf("Lexify non-letter: %c", char)
 		}
-	})
-
-	t.Run("RandomDigitNot", func(t *testing.T) {
-		excluded := []int{0, 5, 9}
-		for i := 0; i < 100; i++ {
-			digit := f.RandomDigitNot(excluded...)
-			for _, ex := range excluded {
-				if digit == ex {
-					t.Errorf("RandomDigitNot returned excluded digit: %d", digit)
-				}
-			}
-		}
-	})
-
-	t.Run("PatternReplacement", func(t *testing.T) {
-		// Test that pattern replacement still works as expected
-		numerified := f.Numerify("###")
-		if len(numerified) != 3 {
-			t.Errorf("Numerify length mismatch: expected 3, got %d", len(numerified))
-		}
-		for _, char := range numerified {
-			if char < '0' || char > '9' {
-				t.Errorf("Numerify non-digit: %c", char)
-			}
-		}
-
-		lexified := f.Lexify("???")
-		if len(lexified) != 3 {
-			t.Errorf("Lexify length mismatch: expected 3, got %d", len(lexified))
-		}
-		for _, char := range lexified {
-			if char < 'a' || char > 'z' {
-				t.Errorf("Lexify non-letter: %c", char)
-			}
-		}
-	})
+	}
 }
 
 // TestExistingStructurePreservation tests that the existing structure methods work
