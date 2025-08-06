@@ -9,7 +9,6 @@ Faker is heavily inspired by PHP"s [Faker](https://github.com/fzaninotto/Faker)
 Faker requires Go >= 1.11 and < 1.20 for 1.X and Go >= 1.20 for 2.X 
 
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/jaswdr/faker)](https://pkg.go.dev/github.com/jaswdr/faker/v2)
-[![Test](https://github.com/jaswdr/faker/actions/workflows/test.yml/badge.svg)](https://github.com/jaswdr/faker/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/jaswdr/faker/branch/master/graph/badge.svg)](https://codecov.io/gh/jaswdr/faker)
 [![Go Report Card](https://goreportcard.com/badge/github.com/jaswdr/faker)](https://goreportcard.com/report/github.com/jaswdr/faker)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ba14f84a3f824410be0a6f6670de012a)](https://app.codacy.com/gh/jaswdr/faker?utm_source=github.com&utm_medium=referral&utm_content=jaswdr/faker&utm_campaign=Badge_Grade)
