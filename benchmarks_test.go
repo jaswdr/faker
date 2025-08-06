@@ -284,3 +284,98 @@ func BenchmarkAddressCityAllocs(b *testing.B) {
 		_ = addr.City()
 	}
 }
+
+// Benchmarks for new optimizations
+
+func BenchmarkRandomStringWithLength(b *testing.B) {
+	f := New()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = f.RandomStringWithLength(50)
+	}
+}
+
+func BenchmarkRandomStringWithLengthAllocs(b *testing.B) {
+	f := New()
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = f.RandomStringWithLength(50)
+	}
+}
+
+func BenchmarkLexify(b *testing.B) {
+	f := New()
+	pattern := "????-????-????"
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = f.Lexify(pattern)
+	}
+}
+
+func BenchmarkLexifyAllocs(b *testing.B) {
+	f := New()
+	pattern := "????-????-????"
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = f.Lexify(pattern)
+	}
+}
+
+func BenchmarkAsciify(b *testing.B) {
+	f := New()
+	pattern := "****-****-****"
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = f.Asciify(pattern)
+	}
+}
+
+func BenchmarkAsciifyAllocs(b *testing.B) {
+	f := New()
+	pattern := "****-****-****"
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = f.Asciify(pattern)
+	}
+}
+
+func BenchmarkPersonNameReplacer(b *testing.B) {
+	f := New()
+	p := f.Person()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = p.Name()
+	}
+}
+
+func BenchmarkPersonNameReplacerAllocs(b *testing.B) {
+	f := New()
+	p := f.Person()
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = p.Name()
+	}
+}
+
+func BenchmarkInternetURLReplacer(b *testing.B) {
+	f := New()
+	internet := f.Internet()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = internet.URL()
+	}
+}
+
+func BenchmarkInternetURLReplacerAllocs(b *testing.B) {
+	f := New()
+	internet := f.Internet()
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = internet.URL()
+	}
+}

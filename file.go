@@ -26,8 +26,12 @@ func (f File) FilenameWithExtension() string {
 	return fmt.Sprintf("%s.%s", text, extension)
 }
 
-// AbsoluteFilePath returns a fake absolute path to a fake file (style is dependent on OS)
+// AbsoluteFilePath returns a fake absolute path to a fake file (style is dependent on OS).
+// If levels is negative, it defaults to 1.
 func (f File) AbsoluteFilePath(levels int) string {
+	if levels < 0 {
+		levels = 1
+	}
 	switch f.OSResolver.OS() {
 	case "windows":
 		return f.AbsoluteFilePathForWindows(levels)
@@ -36,8 +40,12 @@ func (f File) AbsoluteFilePath(levels int) string {
 	}
 }
 
-// AbsoluteFilePathForUnix returns a fake absolute unix-style path to a fake file
+// AbsoluteFilePathForUnix returns a fake absolute unix-style path to a fake file.
+// If levels is negative, it defaults to 1.
 func (f File) AbsoluteFilePathForUnix(levels int) string {
+	if levels < 0 {
+		levels = 1
+	}
 	path := []string{
 		f.Faker.Directory().UnixDirectory(levels),
 		f.FilenameWithExtension(),
@@ -46,8 +54,12 @@ func (f File) AbsoluteFilePathForUnix(levels int) string {
 	return strings.Join(path, "/")
 }
 
-// AbsoluteFilePathForWindows returns a fake absolute win32-style path to a fake file
+// AbsoluteFilePathForWindows returns a fake absolute win32-style path to a fake file.
+// If levels is negative, it defaults to 1.
 func (f File) AbsoluteFilePathForWindows(levels int) string {
+	if levels < 0 {
+		levels = 1
+	}
 	path := []string{
 		f.Faker.Directory().WindowsDirectory(levels),
 		f.FilenameWithExtension(),

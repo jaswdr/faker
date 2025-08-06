@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	maxRetries = 7
+	maxRetries = maxRetriesDefault
 )
 
 // HTTPClient does HTTP requests to remote servers

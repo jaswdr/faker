@@ -203,25 +203,17 @@ func (p Person) Name() string {
 	cacheNameFormatsOnce.Do(cacheNameFormatsFunc)
 	name := cacheNameFormats[p.Faker.IntBetween(0, len(cacheNameFormats)-1)]
 
-	// {{titleMale}}
-	name = strings.Replace(name, "{{titleMale}}", p.TitleMale(), 1)
+	// Use strings.Replacer for efficient multiple replacements
+	replacer := strings.NewReplacer(
+		"{{titleMale}}", p.TitleMale(),
+		"{{firstNameMale}}", p.FirstNameMale(),
+		"{{titleFemale}}", p.TitleFemale(),
+		"{{firstNameFemale}}", p.FirstNameFemale(),
+		"{{lastName}}", p.LastName(),
+		"{{suffix}}", p.Suffix(),
+	)
 
-	// {{firstNameMale}}
-	name = strings.Replace(name, "{{firstNameMale}}", p.FirstNameMale(), 1)
-
-	// {{titleFemale}}
-	name = strings.Replace(name, "{{titleFemale}}", p.TitleFemale(), 1)
-
-	// {{firstNameFemale}}
-	name = strings.Replace(name, "{{firstNameFemale}}", p.FirstNameFemale(), 1)
-
-	// {{lastName}}
-	name = strings.Replace(name, "{{lastName}}", p.LastName(), 1)
-
-	// {{suffix}}
-	name = strings.Replace(name, "{{suffix}}", p.Suffix(), 1)
-
-	return name
+	return replacer.Replace(name)
 }
 
 // NameMale returns a fake NameMale for Person

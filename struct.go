@@ -127,7 +127,7 @@ func (s Struct) fillSlice(v reflect.Value, function string, size int, depth int,
 	// Determine the size to use
 	actualSize := size
 	if actualSize == -1 {
-		actualSize = s.Faker.IntBetween(1, 10)
+		actualSize = s.Faker.IntBetween(defaultSliceMinSize, defaultSliceMaxSize)
 	}
 	if v.Cap() > 0 && (size == -1 || v.Cap() < size) {
 		actualSize = v.Cap()

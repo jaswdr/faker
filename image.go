@@ -28,8 +28,25 @@ type Image struct {
 	PngEncoder      PngEncoder
 }
 
-// Image returns a fake image file
+// Image returns a fake image file.
+// Width and height must be positive values. Panics on file creation or encoding errors
+// to maintain backward compatibility with existing API contract.
 func (i Image) Image(width, height int) *os.File {
+	// Input validation - use reasonable defaults instead of nil to avoid breaking changes
+	if width <= 0 {
+		width = 100
+	}
+	if height <= 0 {
+		height = 100
+	}
+
+	// Reasonable limits to prevent excessive memory usage
+	if width > 10000 {
+		width = 10000
+	}
+	if height > 10000 {
+		height = 10000
+	}
 	upLeft := image.Point{0, 0}
 	lowRight := image.Point{width, height}
 	img := image.NewRGBA(image.Rectangle{upLeft, lowRight})
