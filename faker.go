@@ -1,3 +1,43 @@
+// Package faker is a comprehensive Go library for generating fake data for testing,
+// database seeding, and data anonymization. It provides thread-safe random data
+// generation across various data types including names, addresses, internet data,
+// payments, and more.
+//
+// Basic Usage:
+//
+//	f := faker.New()
+//	name := f.Person().Name()        // "John Doe"
+//	email := f.Internet().Email()    // "john.doe@example.com"
+//	phone := f.Phone().Number()      // "+1-555-123-4567"
+//
+// Seeded Generation (for reproducible results):
+//
+//	f := faker.NewWithSeedInt64(12345)
+//	name := f.Person().Name() // Always returns the same name for seed 12345
+//
+// Struct Filling (using struct tags):
+//
+//	type User struct {
+//		Name  string `fake:"{{person.first_name}} {{person.last_name}}"`
+//		Email string `fake:"{{internet.email}}"`
+//		Age   int    `fake:"{{number.number_int_between 18 65}}"`
+//	}
+//
+//	var user User
+//	f.Struct().Fill(&user)
+//
+// Performance Characteristics:
+//
+// - Thread-safe: All Faker instances can be used concurrently
+// - Memory efficient: Uses sync.Pool for frequently allocated objects
+// - Fast generation: Pre-compiled patterns and cached data structures
+// - Supports Go 1.22+ with math/rand/v2 for improved performance
+//
+// Error Handling:
+//
+// Most methods in this library are designed to never fail and will return
+// reasonable defaults. Methods that can fail (like file operations) return
+// errors explicitly. For struct filling, invalid tags are ignored silently.
 package faker
 
 import (
@@ -9,6 +49,44 @@ import (
 	"strings"
 	"sync"
 )
+
+// Constants for commonly used values
+const (
+	// defaultSliceMinSize is the minimum size for generated slices/arrays
+	defaultSliceMinSize = 1
+	// defaultSliceMaxSize is the maximum size for generated slices/arrays
+	defaultSliceMaxSize = 10
+
+	// ASCII character ranges
+	lowerCaseA = 97  // 'a'
+	lowerCaseZ = 122 // 'z'
+	asciiStart = 97  // start of ASCII printable range for Asciify
+	asciiEnd   = 126 // end of ASCII printable range for Asciify
+
+	// defaultStringLength is the default length for random strings
+	defaultStringLength = 10
+
+	// maxRetriesDefault is the default number of retries for operations
+	maxRetriesDefault = 7
+)
+
+// Pool for reusing strings.Builder instances to reduce allocations
+var stringBuilderPool = sync.Pool{
+	New: func() interface{} {
+		return &strings.Builder{}
+	},
+}
+
+// getStringBuilder gets a strings.Builder from the pool
+func getStringBuilder() *strings.Builder {
+	return stringBuilderPool.Get().(*strings.Builder)
+}
+
+// putStringBuilder returns a strings.Builder to the pool after resetting it
+func putStringBuilder(sb *strings.Builder) {
+	sb.Reset()
+	stringBuilderPool.Put(sb)
+}
 
 // Faker is the Generator struct for Faker
 type Faker struct {
@@ -82,11 +160,16 @@ func (f Faker) RandomDigit() int {
 	return f.Generator.Int() % 10
 }
 
-// RandomDigitNot returns a fake random digit for Faker that is not in a list of ignored
+// RandomDigitNot returns a fake random digit (0-9) that is not in the list of ignored values.
+// If all digits are ignored, this function will loop indefinitely, so use with caution.
+//
+// Example:
+//
+//	digit := f.RandomDigitNot(0, 5, 9) // Returns a digit that's not 0, 5, or 9
 func (f Faker) RandomDigitNot(ignore ...int) int {
 	inSlice := func(el int, list []int) bool {
-		for i := range list {
-			if i == el {
+		for _, v := range list {
+			if v == el {
 				return true
 			}
 		}
@@ -107,8 +190,12 @@ func (f Faker) RandomDigitNotNull() int {
 	return f.Generator.Int()%8 + 1
 }
 
-// RandomNumber returns a fake random integer number for Faker
+// RandomNumber returns a fake random integer number for Faker.
+// The size parameter must be positive. If size is invalid, returns a single digit.
 func (f Faker) RandomNumber(size int) int {
+	if size <= 0 {
+		return f.RandomDigit()
+	}
 	if size == 1 {
 		return f.RandomDigit()
 	}
@@ -119,9 +206,24 @@ func (f Faker) RandomNumber(size int) int {
 	return f.IntBetween(minN, maxN)
 }
 
-// RandomFloat returns a fake random float number for Faker
-func (f Faker) RandomFloat(maxDecimals, minN, maxN int) float64 {
-	value := float64(f.IntBetween(minN, maxN-1))
+// generateFloat is a helper function that generates a random float with the specified parameters.
+// Validates inputs to ensure reasonable values.
+func (f Faker) generateFloat(maxDecimals, minN, maxN int) float64 {
+	// Ensure minN <= maxN
+	if minN > maxN {
+		minN, maxN = maxN, minN
+	}
+
+	// Ensure valid decimal places
+	if maxDecimals < 0 {
+		maxDecimals = 0
+	}
+	if maxDecimals > 10 { // Reasonable limit
+		maxDecimals = 10
+	}
+
+	// Generate a value between minN and maxN-1 to leave room for decimals
+	value := float64(f.IntBetween(minN, maxN))
 	if maxDecimals < 1 {
 		return value
 	}
@@ -129,46 +231,45 @@ func (f Faker) RandomFloat(maxDecimals, minN, maxN int) float64 {
 	p := int(math.Pow10(maxDecimals))
 	decimals := float64(f.IntBetween(0, p)) / float64(p)
 
-	return value + decimals
+	// If we're at the maximum value, ensure decimals don't push us over
+	if int(value) == maxN && decimals > 0 {
+		// Scale down decimals to keep within bounds
+		return value
+	}
+
+	result := value + decimals
+	// Ensure we don't exceed maxN
+	if result > float64(maxN) {
+		return float64(maxN)
+	}
+
+	return result
+}
+
+// RandomFloat returns a fake random float number for Faker.
+// maxDecimals: number of decimal places (capped at 10 for performance)
+// minN, maxN: range boundaries (inclusive)
+//
+// Example:
+//
+//	price := f.RandomFloat(2, 10, 1000) // Returns a float like 123.45 between 10.00 and 1000.00
+func (f Faker) RandomFloat(maxDecimals, minN, maxN int) float64 {
+	return f.generateFloat(maxDecimals, minN, maxN)
 }
 
 // Float returns a fake random float number for Faker
 func (f Faker) Float(maxDecimals, minN, maxN int) float64 {
-	value := float64(f.IntBetween(minN, maxN-1))
-	if maxDecimals < 1 {
-		return value
-	}
-
-	p := int(math.Pow10(maxDecimals))
-	decimals := float64(f.IntBetween(0, p)) / float64(p)
-
-	return value + decimals
+	return f.generateFloat(maxDecimals, minN, maxN)
 }
 
 // Float32 returns a fake random float32 number for Faker
 func (f Faker) Float32(maxDecimals, minN, maxN int) float32 {
-	value := float32(f.IntBetween(minN, maxN-1))
-	if maxDecimals < 1 {
-		return value
-	}
-
-	p := int(math.Pow10(maxDecimals))
-	decimals := float32(f.IntBetween(0, p)) / float32(p)
-
-	return value + decimals
+	return float32(f.generateFloat(maxDecimals, minN, maxN))
 }
 
 // Float64 returns a fake random float64 number for Faker
 func (f Faker) Float64(maxDecimals, minN, maxN int) float64 {
-	value := float64(f.IntBetween(minN, maxN-1))
-	if maxDecimals < 1 {
-		return value
-	}
-
-	p := int(math.Pow10(maxDecimals))
-	decimals := float64(f.IntBetween(0, p)) / float64(p)
-
-	return value + decimals
+	return f.generateFloat(maxDecimals, minN, maxN)
 }
 
 // Int returns a fake Int number for Faker
@@ -277,66 +378,87 @@ func maxInt[T number](num T) T {
 
 // between returns a fake number between a given minimum and maximum value using generator
 func between[T number](minN, maxN T, rand GeneratorInterface) T {
+	// Ensure minN <= maxN
 	if minN > maxN {
-		// Swap values
-		return between(maxN, minN, rand)
+		minN, maxN = maxN, minN
 	}
 
-	diff := maxN - minN
-	// Edge case when minN and maxN are actual min and max integers,
-	// since we cannot store 2 * maxInt, we instead split the range in:
-	// - 50% chance to return a negative number
-	// - 50% chance to return a positive number
+	// Handle edge case: full range of integer type
 	if minN == minInt(minN) && maxN == maxInt(maxN) {
-		if rand.Intn(2) == 0 {
-			// negatives
-			maxN = 0
-			diff = maxInt(maxN)
-		} else {
-			// positives
-			minN = 0
-			diff = maxInt(maxN)
-		}
+		return handleFullRange(minN, maxN, rand)
 	}
 
-	var value T
+	// Handle equal values
+	diff := maxN - minN
 	if diff == 0 {
 		return minN
-	} else if diff == maxInt(maxN) {
-		// Handle the case when diff is MaxInt by using a different approach
-		// Generate a random number between 0 and MaxInt-1, then add minN
-		switch any(maxN).(type) {
-		case int:
-			value = T(rand.Intn(int(maxInt(maxN) - 1)))
-		case int8, int16, int32:
-			value = T(rand.Int32n(int32(maxInt(maxN) - 1)))
-		case int64:
-			value = T(rand.Int64n(int64(maxInt(maxN) - 1)))
-		case uint:
-			value = T(rand.Uintn(uint(maxInt(maxN) - 1)))
-		case uint8, uint16, uint32:
-			value = T(rand.Uint32n(uint32(maxInt(maxN) - 1)))
-		case uint64:
-			value = T(rand.Uint64n(uint64(maxInt(maxN) - 1)))
-		}
-	} else if diff > 0 {
-		switch any(diff).(type) {
-		case int:
-			value = T(rand.Intn(int(diff + 1)))
-		case int8, int16, int32:
-			value = T(rand.Int32n(int32(diff + 1)))
-		case int64:
-			value = T(rand.Int64n(int64(diff + 1)))
-		case uint:
-			value = T(rand.Uintn(uint(diff + 1)))
-		case uint8, uint16, uint32:
-			value = T(rand.Uint32n(uint32(diff + 1)))
-		case uint64:
-			value = T(rand.Uint64n(uint64(diff + 1)))
-		}
+	}
+
+	// Generate random value based on type
+	var value T
+	if diff == maxInt(maxN) {
+		// Special case: diff equals max value
+		value = generateMaxRangeValue[T](maxN, rand)
+	} else {
+		// Normal case: generate value in range [0, diff]
+		value = generateRangeValue(diff, rand)
 	}
 
 	return minN + value
+}
+
+// handleFullRange handles the special case when range covers entire type
+func handleFullRange[T number](minN, maxN T, rand GeneratorInterface) T {
+	// Split range: 50% negative, 50% positive to avoid overflow
+	if rand.Intn(2) == 0 {
+		// Generate negative number in range [minN, 0]
+		value := generateMaxRangeValue[T](maxN, rand)
+		return minN + value
+	}
+	// Generate positive number in range [0, maxInt]
+	return generateMaxRangeValue[T](maxN, rand)
+}
+
+// generateMaxRangeValue generates a value when diff equals MaxInt
+func generateMaxRangeValue[T number](maxN T, rand GeneratorInterface) T {
+	maxVal := maxInt(maxN) - 1
+	switch any(maxN).(type) {
+	case int:
+		return T(rand.Intn(int(maxVal)))
+	case int8, int16, int32:
+		return T(rand.Int32n(int32(maxVal)))
+	case int64:
+		return T(rand.Int64n(int64(maxVal)))
+	case uint:
+		return T(rand.Uintn(uint(maxVal)))
+	case uint8, uint16, uint32:
+		return T(rand.Uint32n(uint32(maxVal)))
+	case uint64:
+		return T(rand.Uint64n(uint64(maxVal)))
+	default:
+		return 0
+	}
+}
+
+// generateRangeValue generates a value in range [0, diff]
+func generateRangeValue[T number](diff T, rand GeneratorInterface) T {
+	// Add 1 to diff to make range inclusive
+	switch any(diff).(type) {
+	case int:
+		return T(rand.Intn(int(diff + 1)))
+	case int8, int16, int32:
+		return T(rand.Int32n(int32(diff + 1)))
+	case int64:
+		return T(rand.Int64n(int64(diff + 1)))
+	case uint:
+		return T(rand.Uintn(uint(diff + 1)))
+	case uint8, uint16, uint32:
+		return T(rand.Uint32n(uint32(diff + 1)))
+	case uint64:
+		return T(rand.Uint64n(uint64(diff + 1)))
+	default:
+		return 0
+	}
 }
 
 // IntBetween returns a fake Int between a given minimum and maximum values for Faker
@@ -396,20 +518,39 @@ func (f Faker) Letter() string {
 
 // RandomLetter returns a fake random string with a random number of letters for Faker
 func (f Faker) RandomLetter() string {
-	return fmt.Sprintf("%c", f.IntBetween(97, 122))
+	return fmt.Sprintf("%c", f.IntBetween(lowerCaseA, lowerCaseZ))
 }
 
+// RandomStringWithLength returns a fake random string with the specified length.
+// If length is negative or zero, returns an empty string.
+// If length is excessively large (>1000), caps it at 1000 for performance.
 func (f Faker) RandomStringWithLength(l int) string {
-	r := make([]string, 0, l)
+	if l <= 0 {
+		return ""
+	}
+
+	// Cap at reasonable limit for performance
+	if l > 1000 {
+		l = 1000
+	}
+
+	builder := getStringBuilder()
+	defer putStringBuilder(builder)
+
+	builder.Grow(l)
 
 	for i := 0; i < l; i++ {
-		r = append(r, f.RandomLetter())
+		builder.WriteString(f.RandomLetter())
 	}
-	return strings.Join(r, "")
+	return builder.String()
 }
 
-// RandomStringElement returns a fake random string element from a given list of strings for Faker
+// RandomStringElement returns a fake random string element from a given list of strings for Faker.
+// Returns empty string if slice is nil or empty.
 func (f Faker) RandomStringElement(s []string) string {
+	if len(s) == 0 {
+		return ""
+	}
 	i := f.IntBetween(0, len(s)-1)
 	return s[i]
 }
@@ -438,8 +579,12 @@ func (f Faker) RandomStringMapValue(m map[string]string) string {
 	return values[i]
 }
 
-// RandomIntElement returns a fake random int element form a given list of ints for Faker
+// RandomIntElement returns a fake random int element from a given list of ints for Faker.
+// Returns 0 if slice is nil or empty.
 func (f Faker) RandomIntElement(a []int) int {
+	if len(a) == 0 {
+		return 0
+	}
 	i := f.IntBetween(0, len(a)-1)
 	return a[i]
 }
@@ -450,49 +595,98 @@ func (Faker) ShuffleString(s string) string {
 	return strings.Join(Shuffle(orig), "")
 }
 
-// Numerify returns a fake string that replace all "#" characters with numbers from a given string for Faker
+// Numerify returns a fake string that replaces all "#" characters with random digits (0-9).
+// Uses sync.Pool for efficient string building to minimize allocations.
+//
+// Example:
+//
+//	orderID := f.Numerify("ORD-####-###") // Returns something like "ORD-1234-567"
 func (f Faker) Numerify(in string) (out string) {
-	for _, c := range strings.Split(in, "") {
-		if c == "#" {
-			c = strconv.Itoa(f.RandomDigit())
-		}
-
-		out = out + c
+	if !strings.Contains(in, "#") {
+		return in
 	}
 
-	return
+	builder := getStringBuilder()
+	defer putStringBuilder(builder)
+
+	builder.Grow(len(in))
+
+	for _, c := range in {
+		if c == '#' {
+			builder.WriteString(strconv.Itoa(f.RandomDigit()))
+		} else {
+			builder.WriteRune(c)
+		}
+	}
+
+	return builder.String()
 }
 
-// Lexify  returns a fake string that replace all "?" characters with random letters from a given string for Faker
+// Lexify returns a fake string that replaces all "?" characters with random lowercase letters (a-z).
+// Uses sync.Pool for efficient string building to minimize allocations.
+//
+// Example:
+//
+//	code := f.Lexify("???-???") // Returns something like "abc-xyz"
 func (f Faker) Lexify(in string) (out string) {
-	for _, c := range strings.Split(in, "") {
-		if c == "?" {
-			c = f.RandomLetter()
-		}
-
-		out = out + c
+	if !strings.Contains(in, "?") {
+		return in
 	}
 
-	return
+	builder := getStringBuilder()
+	defer putStringBuilder(builder)
+
+	builder.Grow(len(in))
+
+	for _, c := range in {
+		if c == '?' {
+			builder.WriteString(f.RandomLetter())
+		} else {
+			builder.WriteRune(c)
+		}
+	}
+
+	return builder.String()
 }
 
-// Bothify returns a fake string that apply Lexify() and Numerify() on a given string for Faker
+// Bothify returns a fake string that applies both Lexify() and Numerify() transformations.
+// First replaces "?" with letters, then "#" with numbers.
+//
+// Example:
+//
+//	serial := f.Bothify("??##-??##") // Returns something like "ab12-cd34"
 func (f Faker) Bothify(in string) (out string) {
 	out = f.Lexify(in)
 	out = f.Numerify(out)
 	return
 }
 
-// Asciify   returns a fake string that replace all "*" characters with random ASCII values from a given string for Faker
+// Asciify returns a fake string that replaces all "*" characters with random ASCII printable characters.
+// Uses characters from ASCII 97-126 (lowercase letters and symbols).
+// Uses sync.Pool for efficient string building to minimize allocations.
+//
+// Example:
+//
+//	password := f.Asciify("****-****") // Returns something like "a{7~-b}2@"
 func (f Faker) Asciify(in string) (out string) {
-	for _, c := range strings.Split(in, "") {
-		if c == "*" {
-			c = fmt.Sprintf("%c", f.IntBetween(97, 126))
-		}
-		out = out + c
+	if !strings.Contains(in, "*") {
+		return in
 	}
 
-	return
+	builder := getStringBuilder()
+	defer putStringBuilder(builder)
+
+	builder.Grow(len(in))
+
+	for _, c := range in {
+		if c == '*' {
+			builder.WriteByte(byte(f.IntBetween(asciiStart, asciiEnd)))
+		} else {
+			builder.WriteRune(c)
+		}
+	}
+
+	return builder.String()
 }
 
 // Bool returns a fake bool for Faker

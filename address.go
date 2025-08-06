@@ -3,6 +3,7 @@ package faker
 import (
 	"strconv"
 	"strings"
+	"sync"
 )
 
 var (
@@ -128,6 +129,100 @@ var (
 	secondaryAddressFormats = []string{"Apt. ###", "Suite ###"}
 )
 
+// Template cache for optimized processing
+var (
+	templateCache   = make(map[string][]templatePart)
+	templateCacheMu sync.RWMutex
+)
+
+// templatePart represents a part of a template - either literal text or a placeholder
+type templatePart struct {
+	isPlaceholder bool
+	text          string
+}
+
+// parseTemplate parses a template string into parts for efficient processing
+func parseTemplate(template string) []templatePart {
+	// Check cache first
+	templateCacheMu.RLock()
+	if parts, exists := templateCache[template]; exists {
+		templateCacheMu.RUnlock()
+		return parts
+	}
+	templateCacheMu.RUnlock()
+
+	// Parse the template
+	var parts []templatePart
+	remaining := template
+
+	for len(remaining) > 0 {
+		start := strings.Index(remaining, "{{")
+		if start == -1 {
+			// No more placeholders, add the rest as literal
+			if len(remaining) > 0 {
+				parts = append(parts, templatePart{false, remaining})
+			}
+			break
+		}
+
+		// Add literal text before placeholder
+		if start > 0 {
+			parts = append(parts, templatePart{false, remaining[:start]})
+		}
+
+		// Find end of placeholder
+		end := strings.Index(remaining[start:], "}}")
+		if end == -1 {
+			// Malformed template, treat rest as literal
+			parts = append(parts, templatePart{false, remaining})
+			break
+		}
+
+		// Add placeholder
+		placeholder := remaining[start+2 : start+end]
+		parts = append(parts, templatePart{true, placeholder})
+
+		remaining = remaining[start+end+2:]
+	}
+
+	// Cache the parsed template
+	templateCacheMu.Lock()
+	templateCache[template] = parts
+	templateCacheMu.Unlock()
+
+	return parts
+}
+
+// processTemplate efficiently processes a template with given replacements
+func processTemplate(template string, replacements map[string]func() string) string {
+	parts := parseTemplate(template)
+
+	if len(parts) == 0 {
+		return template
+	}
+
+	var builder strings.Builder
+	estimatedSize := len(template) + 50 // Estimate final size
+	builder.Grow(estimatedSize)
+
+	for _, part := range parts {
+		if part.isPlaceholder {
+			if fn, exists := replacements[part.text]; exists {
+				builder.WriteString(fn())
+			} else {
+				// Keep placeholder if no replacement found
+				builder.WriteString("{{")
+				builder.WriteString(part.text)
+				builder.WriteString("}}")
+			}
+		} else {
+			builder.WriteString(part.text)
+		}
+	}
+
+	return builder.String()
+}
+
 // Address is a faker struct for Address
 type Address struct {
 	Faker *Faker
@@ -172,57 +267,44 @@ func (a Address) BuildingNumber() (bn string) {
 
 // City returns a fake city for Address
 func (a Address) City() string {
-	city := a.Faker.RandomStringElement(cityFormats)
+	template := a.Faker.RandomStringElement(cityFormats)
+	p := a.Faker.Person()
 
-	// {{cityPrefix}}
-	city = strings.Replace(city, "{{cityPrefix}}", a.CityPrefix(), 1)
+	replacements := map[string]func() string{
+		"cityPrefix": a.CityPrefix,
+		"firstName":  p.FirstName,
+		"lastName":   p.LastName,
+		"citySuffix": a.CitySuffix,
+	}
 
-	var p Person = a.Faker.Person()
-
-	// {{firstName}}
-	city = strings.Replace(city, "{{firstName}}", p.FirstName(), 1)
-
-	// {{lastName}}
-	city = strings.Replace(city, "{{lastName}}", p.LastName(), 1)
-
-	// {{citySuffix}}
-	city = strings.Replace(city, "{{citySuffix}}", a.CitySuffix(), 1)
-
-	return city
+	return processTemplate(template, replacements)
 }
 
 // StreetName returns a fake street name for Address
 func (a Address) StreetName() string {
-	street := a.Faker.RandomStringElement(streetNameFormats)
+	template := a.Faker.RandomStringElement(streetNameFormats)
+	p := a.Faker.Person()
 
-	var p Person = a.Faker.Person()
+	replacements := map[string]func() string{
+		"firstName":    p.FirstName,
+		"lastName":     p.LastName,
+		"streetSuffix": a.StreetSuffix,
+	}
 
-	// {{firstName}}
-	street = strings.Replace(street, "{{firstName}}", p.FirstName(), 1)
-
-	// {{lastName}}
-	street = strings.Replace(street, "{{lastName}}", p.LastName(), 1)
-
-	// {{streetSuffix}}
-	street = strings.Replace(street, "{{streetSuffix}}", a.StreetSuffix(), 1)
-
-	return street
+	return processTemplate(template, replacements)
 }
 
 // StreetAddress returns a fake street address for Address
 func (a Address) StreetAddress() string {
-	streetAddress := a.Faker.RandomStringElement(streetAddressFormats)
+	template := a.Faker.RandomStringElement(streetAddressFormats)
 
-	// {{buildingNumber}}
-	streetAddress = strings.Replace(streetAddress, "{{buildingNumber}}", a.BuildingNumber(), 1)
+	replacements := map[string]func() string{
+		"buildingNumber":   a.BuildingNumber,
+		"streetName":       a.StreetName,
+		"secondaryAddress": a.SecondaryAddress,
+	}
 
-	// {{streetName}}
-	streetAddress = strings.Replace(streetAddress, "{{streetName}}", a.StreetName(), 1)
-
-	// {{secondaryAddress}}
-	streetAddress = strings.Replace(streetAddress, "{{secondaryAddress}}", a.SecondaryAddress(), 1)
-
-	return streetAddress
+	return processTemplate(template, replacements)
 }
 
 // PostCode returns a fake postal code for Address
@@ -233,21 +315,16 @@ func (a Address) PostCode() string {
 
 // Address returns a fake Address
 func (a Address) Address() string {
-	address := a.Faker.RandomStringElement(addressFormats)
+	template := a.Faker.RandomStringElement(addressFormats)
 
-	// {{streetAddress}}
-	address = strings.Replace(address, "{{streetAddress}}", a.StreetAddress(), 1)
+	replacements := map[string]func() string{
+		"streetAddress": a.StreetAddress,
+		"city":          a.City,
+		"stateAbbr":     a.StateAbbr,
+		"postCode":      a.PostCode,
+	}
 
-	// {{city}}
-	address = strings.Replace(address, "{{city}}", a.City(), 1)
-
-	// {{stateAbbr}}
-	address = strings.Replace(address, "{{stateAbbr}}", a.StateAbbr(), 1)
-
-	// {{postCode}}
-	address = strings.Replace(address, "{{postCode}}", a.PostCode(), 1)
-
-	return address
+	return processTemplate(template, replacements)
 }
 
 // Country returns a fake country for Address

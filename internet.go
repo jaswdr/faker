@@ -37,7 +37,10 @@ type Internet struct {
 	Faker *Faker
 }
 
-var validEmailOnlyValidCharacters = regexp.MustCompile(`[^a-z0-9._%+\-]+`)
+// Pre-compiled regular expressions for performance
+var (
+	validEmailOnlyValidCharacters = regexp.MustCompile(`[^a-z0-9._%+\-]+`)
+)
 
 func transformIntoValidEmailName(name string) string {
 	name = strings.ToLower(name)
@@ -112,16 +115,14 @@ func (Internet) SafeEmailDomain() string {
 func (i Internet) Email() string {
 	email := i.Faker.RandomStringElement(emailFormats)
 
-	// {{user}}
-	email = strings.Replace(email, "{{user}}", transformIntoValidEmailName(i.User()), 1)
+	// Use strings.Replacer for efficient multiple replacements
+	replacer := strings.NewReplacer(
+		"{{user}}", transformIntoValidEmailName(i.User()),
+		"{{domain}}", i.Domain(),
+		"{{freeEmailDomain}}", i.FreeEmailDomain(),
+	)
 
-	// {{domain}}
-	email = strings.Replace(email, "{{domain}}", i.Domain(), 1)
-
-	// {{freeEmailDomain}}
-	email = strings.Replace(email, "{{freeEmailDomain}}", i.FreeEmailDomain(), 1)
-
-	return email
+	return replacer.Replace(email)
 }
 
 // FreeEmail returns a fake free email address for Internet
@@ -165,13 +166,13 @@ func (i Internet) Slug() string {
 func (i Internet) URL() string {
 	url := i.Faker.RandomStringElement(urlFormats)
 
-	// {{domain}}
-	url = strings.Replace(url, "{{domain}}", i.Domain(), 1)
+	// Use strings.Replacer for efficient multiple replacements
+	replacer := strings.NewReplacer(
+		"{{domain}}", i.Domain(),
+		"{{slug}}", i.Slug(),
+	)
 
-	// {{slug}}
-	url = strings.Replace(url, "{{slug}}", i.Slug(), 1)
-
-	return url
+	return replacer.Replace(url)
 }
 
 // Ipv4 returns a fake ipv4 for Internet
@@ -216,34 +217,56 @@ func (i Internet) LocalIpv4() string {
 	return strings.Join(ips, ".")
 }
 
-// Ipv6 returns a fake ipv6 for Internet
+// hexDigits is a pre-allocated slice for hex characters to avoid repeated allocations
+var hexDigits = []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"}
+
+// Ipv6 returns a fake IPv6 address in full format (8 groups of 4 hex digits).
+// Uses sync.Pool for efficient string building to minimize allocations.
+//
+// Example:
+//
+//	ipv6 := internet.Ipv6() // Returns something like "2001:0db8:85a3:0000:0000:8a2e:0370:7334"
 func (i Internet) Ipv6() string {
-	ips := make([]string, 0, 8)
+	builder := getStringBuilder()
+	defer putStringBuilder(builder)
+
+	builder.Grow(39) // 8 blocks of 4 hex digits + 7 colons
 
 	for j := 0; j < 8; j++ {
-		block := ""
-		for w := 0; w < 4; w++ {
-			block = block + strconv.Itoa(i.Faker.RandomDigitNotNull())
+		if j > 0 {
+			builder.WriteByte(':')
 		}
-
-		ips = append(ips, block)
+		// Generate 4 hex digits for this block
+		for w := 0; w < 4; w++ {
+			builder.WriteString(i.Faker.RandomStringElement(hexDigits))
+		}
 	}
 
-	return strings.Join(ips, ":")
+	return builder.String()
 }
 
-// MacAddress returns a fake mac address for Internet
+// MacAddress returns a fake MAC address in standard format (6 groups of 2 hex digits).
+// Uses sync.Pool for efficient string building to minimize allocations.
+//
+// Example:
+//
+//	mac := internet.MacAddress() // Returns something like "2E:03:D1:54:A7:C9"
 func (i Internet) MacAddress() string {
-	values := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"}
+	builder := getStringBuilder()
+	defer putStringBuilder(builder)
 
-	mac := make([]string, 0, 6)
+	builder.Grow(17) // 6 blocks of 2 hex digits + 5 colons
+
 	for j := 0; j < 6; j++ {
-		m := i.Faker.RandomStringElement(values)
-		m = m + i.Faker.RandomStringElement(values)
-		mac = append(mac, m)
+		if j > 0 {
+			builder.WriteByte(':')
+		}
+		// Generate 2 hex digits for this block
+		builder.WriteString(i.Faker.RandomStringElement(hexDigits))
+		builder.WriteString(i.Faker.RandomStringElement(hexDigits))
 	}
 
-	return strings.Join(mac, ":")
+	return builder.String()
 }
 
 // HTTPMethod returns a fake http method for Internet
