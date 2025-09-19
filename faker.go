@@ -52,9 +52,9 @@ import (
 
 // Constants for commonly used values
 const (
-	// defaultSliceMinSize is the minimum size for generated slices/arrays
+	// defaultSliceMinSize is the minimum size for generated slices/arrays/maps
 	defaultSliceMinSize = 1
-	// defaultSliceMaxSize is the maximum size for generated slices/arrays
+	// defaultSliceMaxSize is the maximum size for generated slices/arrays/maps
 	defaultSliceMaxSize = 10
 
 	// ASCII character ranges

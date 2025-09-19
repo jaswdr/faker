@@ -39,6 +39,7 @@ type Function struct {
 
 type StructArray struct {
 	Bars      []*Basic
+	Optional  *[]Basic
 	Builds    []BuiltIn
 	Skips     []string  `fake:"skip"`
 	Strings   []string  `fake:"####" fakesize:"3"`
@@ -128,6 +129,8 @@ func TestStructArray(t *testing.T) {
 
 	// Check array fields
 	NotExpect(t, 0, len(sa.Bars))
+	NotExpect(t, nil, sa.Optional)
+	NotExpect(t, 0, len(*sa.Optional))
 	NotExpect(t, 0, len(sa.Builds))
 
 	// Check strings array with fakesize
@@ -410,4 +413,23 @@ func TestStructWithUserDefinedFunctions(t *testing.T) {
 	// The function result was not assignable to this field so normal logic should have been applied.
 	// In this case, we expect a random float64 that is not 0.
 	NotExpect(t, 0.0, udf.MismatchedType)
+}
+
+func TestStructWithMaps(t *testing.T) {
+	var m struct {
+		M             map[string]Basic
+		MValuePointer map[string]*Basic
+		PointerMap    *map[string]*Basic
+	}
+
+	New().Struct().Fill(&m)
+
+	NotExpect(t, nil, m.M)
+	NotExpect(t, 0, len(m.M))
+	NotExpect(t, 0, len(m.MValuePointer))
+	for _, v := range m.MValuePointer {
+		NotExpect(t, nil, v)
+	}
+	NotExpect(t, nil, m.PointerMap)
+	NotExpect(t, 0, len(*m.PointerMap))
 }
