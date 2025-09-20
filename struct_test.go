@@ -1,7 +1,9 @@
 package faker
 
 import (
+	"math/big"
 	"testing"
+	"time"
 )
 
 // Test types
@@ -432,4 +434,43 @@ func TestStructWithMaps(t *testing.T) {
 	}
 	NotExpect(t, nil, m.PointerMap)
 	NotExpect(t, 0, len(*m.PointerMap))
+}
+
+func TestFillMap(t *testing.T) {
+	var m map[string]Basic
+	New().Struct().Fill(&m)
+	NotExpect(t, nil, m)
+	NotExpect(t, 0, len(m))
+}
+
+func TestFillSlice(t *testing.T) {
+	var m []Basic
+	New().Struct().Fill(&m)
+	NotExpect(t, nil, m)
+	NotExpect(t, 0, len(m))
+}
+
+type RedefinedTime time.Time
+
+func TestStructWithTime(t *testing.T) {
+	var m struct {
+		StartDateTime     time.Time
+		EndDateTime       *time.Time
+		StartDay          RedefinedTime
+		EndDay            *RedefinedTime
+		LargePrecision    big.Rat
+		OptionalPrecision *big.Rat
+	}
+
+	New().Struct().Fill(&m)
+	Expect(t, m.StartDateTime.After(time.Time{}), true)
+	NotExpect(t, nil, m.EndDateTime)
+	Expect(t, m.EndDateTime.After(time.Time{}), true)
+	Expect(t, time.Time(m.StartDay).After(time.Time{}), true)
+	NotExpect(t, nil, m.EndDay)
+	Expect(t, (*time.Time)(m.EndDay).After(time.Time{}), true)
+
+	NotExpect(t, "0", m.LargePrecision.RatString())
+	NotExpect(t, "0", m.OptionalPrecision.RatString())
+	NotExpect(t, nil, m.OptionalPrecision)
 }
