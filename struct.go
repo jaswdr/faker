@@ -87,7 +87,6 @@ func (s Struct) fillValue(v reflect.Value, function string, size int, depth int,
 
 // fillStruct fills a struct with random data for each field
 func (s Struct) fillStruct(v reflect.Value, depth int, maxDepth int) {
-
 	if v.Type().ConvertibleTo(reflect.TypeOf(time.Time{})) {
 		v.Set(reflect.ValueOf(time.Unix(int64(s.Faker.Int32()), 0)).Convert(v.Type()))
 		return
