@@ -2,9 +2,12 @@ package faker
 
 import (
 	"fmt"
+	"math"
+	"math/big"
 	"reflect"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // Struct is a faker struct for generating random data for struct fields
@@ -34,7 +37,7 @@ func (s Struct) Fill(v interface{}) {
 		return
 	}
 
-	s.fillValue(val.Elem(), "", 0, 0, MaxRecursionDepth)
+	s.fillValue(val.Elem(), "", -1, 0, MaxRecursionDepth)
 }
 
 func (s Struct) FillWithDepth(v interface{}, maxDepth int) {
@@ -47,7 +50,7 @@ func (s Struct) FillWithDepth(v interface{}, maxDepth int) {
 		return
 	}
 
-	s.fillValue(val.Elem(), "", 0, 0, maxDepth)
+	s.fillValue(val.Elem(), "", -1, 0, maxDepth)
 }
 
 // fillValue recursively fills a reflect.Value with random data
@@ -61,8 +64,8 @@ func (s Struct) fillValue(v reflect.Value, function string, size int, depth int,
 	}
 
 	switch v.Kind() {
-	case reflect.Ptr:
-		s.fillPointer(v, function, depth, maxDepth)
+	case reflect.Pointer:
+		s.fillPointer(v, function, size, depth, maxDepth)
 	case reflect.Struct:
 		s.fillStruct(v, depth, maxDepth)
 	case reflect.String:
@@ -77,11 +80,23 @@ func (s Struct) fillValue(v reflect.Value, function string, size int, depth int,
 		s.fillBool(v.Type(), v)
 	case reflect.Array, reflect.Slice:
 		s.fillSlice(v, function, size, depth, maxDepth)
+	case reflect.Map:
+		s.fillMap(v.Type(), v, function, size, depth, maxDepth)
 	}
 }
 
 // fillStruct fills a struct with random data for each field
 func (s Struct) fillStruct(v reflect.Value, depth int, maxDepth int) {
+
+	if v.Type().ConvertibleTo(reflect.TypeOf(time.Time{})) {
+		v.Set(reflect.ValueOf(time.Unix(int64(s.Faker.Int32()), 0)).Convert(v.Type()))
+		return
+	}
+	if v.Type().ConvertibleTo(reflect.TypeOf(big.Rat{})) {
+		v.Set(reflect.ValueOf(*big.NewRat(s.Faker.Int64Between(1, math.MaxInt64), s.Faker.Int64Between(1, math.MaxInt64))).Convert(v.Type()))
+		return
+	}
+
 	typ := v.Type()
 	for i := 0; i < typ.NumField(); i++ {
 		field := typ.Field(i)
@@ -111,11 +126,11 @@ func (s Struct) fillStruct(v reflect.Value, depth int, maxDepth int) {
 }
 
 // fillPointer handles pointer types by creating new instances if needed
-func (s Struct) fillPointer(v reflect.Value, function string, depth int, maxDepth int) {
+func (s Struct) fillPointer(v reflect.Value, function string, size int, depth int, maxDepth int) {
 	if v.IsNil() {
 		v.Set(reflect.New(v.Type().Elem()))
 	}
-	s.fillValue(v.Elem(), function, 0, depth+1, maxDepth)
+	s.fillValue(v.Elem(), function, size, depth+1, maxDepth)
 }
 
 // fillSlice handles array and slice types
@@ -254,4 +269,26 @@ func (Struct) fillFunction(t reflect.Type, v reflect.Value, function string) boo
 	vVal := reflect.ValueOf(val)
 	v.Set(vVal)
 	return true
+}
+
+func (s Struct) fillMap(t reflect.Type, v reflect.Value, function string, size int, depth int, maxDepth int) {
+	if !v.CanSet() {
+		return
+	}
+	mapType := reflect.MapOf(t.Key(), t.Elem())
+	newMap := reflect.MakeMap(mapType)
+
+	newSize := size
+	if newSize == -1 {
+		newSize = s.Faker.IntBetween(defaultSliceMinSize, defaultSliceMaxSize)
+	}
+
+	for i := 0; i < newSize; i++ {
+		mapIndex := reflect.New(t.Key())
+		s.fillValue(mapIndex.Elem(), function, size, depth+1, maxDepth)
+		mapValue := reflect.New(t.Elem())
+		s.fillValue(mapValue.Elem(), function, size, depth+1, maxDepth)
+		newMap.SetMapIndex(mapIndex.Elem(), mapValue.Elem())
+	}
+	v.Set(newMap)
 }

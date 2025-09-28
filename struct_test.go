@@ -1,7 +1,9 @@
 package faker
 
 import (
+	"math/big"
 	"testing"
+	"time"
 )
 
 // Test types
@@ -39,6 +41,7 @@ type Function struct {
 
 type StructArray struct {
 	Bars      []*Basic
+	Optional  *[]Basic
 	Builds    []BuiltIn
 	Skips     []string  `fake:"skip"`
 	Strings   []string  `fake:"####" fakesize:"3"`
@@ -128,6 +131,8 @@ func TestStructArray(t *testing.T) {
 
 	// Check array fields
 	NotExpect(t, 0, len(sa.Bars))
+	NotExpect(t, nil, sa.Optional)
+	NotExpect(t, 0, len(*sa.Optional))
 	NotExpect(t, 0, len(sa.Builds))
 
 	// Check strings array with fakesize
@@ -410,4 +415,62 @@ func TestStructWithUserDefinedFunctions(t *testing.T) {
 	// The function result was not assignable to this field so normal logic should have been applied.
 	// In this case, we expect a random float64 that is not 0.
 	NotExpect(t, 0.0, udf.MismatchedType)
+}
+
+func TestStructWithMaps(t *testing.T) {
+	var m struct {
+		M             map[string]Basic
+		MValuePointer map[string]*Basic
+		PointerMap    *map[string]*Basic
+	}
+
+	New().Struct().Fill(&m)
+
+	NotExpect(t, nil, m.M)
+	NotExpect(t, 0, len(m.M))
+	NotExpect(t, 0, len(m.MValuePointer))
+	for _, v := range m.MValuePointer {
+		NotExpect(t, nil, v)
+	}
+	NotExpect(t, nil, m.PointerMap)
+	NotExpect(t, 0, len(*m.PointerMap))
+}
+
+func TestFillMap(t *testing.T) {
+	var m map[string]Basic
+	New().Struct().Fill(&m)
+	NotExpect(t, nil, m)
+	NotExpect(t, 0, len(m))
+}
+
+func TestFillSlice(t *testing.T) {
+	var m []Basic
+	New().Struct().Fill(&m)
+	NotExpect(t, nil, m)
+	NotExpect(t, 0, len(m))
+}
+
+type RedefinedTime time.Time
+
+func TestStructWithTime(t *testing.T) {
+	var m struct {
+		StartDateTime     time.Time
+		EndDateTime       *time.Time
+		StartDay          RedefinedTime
+		EndDay            *RedefinedTime
+		LargePrecision    big.Rat
+		OptionalPrecision *big.Rat
+	}
+
+	New().Struct().Fill(&m)
+	Expect(t, m.StartDateTime.After(time.Time{}), true)
+	NotExpect(t, nil, m.EndDateTime)
+	Expect(t, m.EndDateTime.After(time.Time{}), true)
+	Expect(t, time.Time(m.StartDay).After(time.Time{}), true)
+	NotExpect(t, nil, m.EndDay)
+	Expect(t, (*time.Time)(m.EndDay).After(time.Time{}), true)
+
+	NotExpect(t, "0", m.LargePrecision.RatString())
+	NotExpect(t, "0", m.OptionalPrecision.RatString())
+	NotExpect(t, nil, m.OptionalPrecision)
 }

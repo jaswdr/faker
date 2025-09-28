@@ -71,7 +71,10 @@ func TestRFC850(t *testing.T) {
 func TestRFC1123(t *testing.T) {
 	tf := New().Time()
 	t1, _ := time.Parse("2006-01-02T15:04:05+000", "2017-01-02T15:04:05+000")
-	Expect(t, 29, len(tf.RFC1123(t1)))
+	s := tf.RFC1123(t1)
+	_, err := time.Parse(time.RFC1123, s)
+	Expect(t, true, err == nil)
+	Expect(t, true, len(s) >= 29)
 }
 
 func TestRFC1123Z(t *testing.T) {
