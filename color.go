@@ -71,15 +71,52 @@ func (c Color) RGB() string {
 	return color
 }
 
+// RGBA returns a fake color in rgba format for Color
+func (c Color) RGBA() string {
+	return c.RGB() + ", " + strconv.Itoa(c.Faker.IntBetween(0, 100)) + "% "
+}
+
+// OKLCH returns a fake color in OKLCH format for Color
+func (c Color) OKLCH() string {
+	oklch := ""
+
+	// lightness
+	oklch = oklch + strconv.Itoa(c.Faker.IntBetween(0, 100)) + "%, "
+
+	// chroma
+	oklch = oklch + strconv.Itoa(c.Faker.IntBetween(0, 100)) + "%, "
+
+	// hue
+	oklch = oklch + strconv.Itoa(c.Faker.IntBetween(0, 360)) + "deg "
+
+	return oklch
+}
+
 // RGBAsArray returns a fake rgb color in array format for Color
 func (c Color) RGBAsArray() [3]string {
 	split := strings.Split(c.RGB(), ",")
 	return [3]string{split[0], split[1], split[2]}
 }
 
+// OKLCHAsArray returns a fake OKLCH color in array format for Color
+func (c Color) OKLCHAsArray() [3]string {
+	split := strings.Split(c.OKLCH(), ",")
+	return [3]string{split[0], split[1], split[2]}
+}
+
 // CSS returns a fake color in CSS format for Color
 func (c Color) CSS() string {
 	return "rgb(" + c.RGB() + ")"
+}
+
+// CSSRGBA returns a fake color in CSS rgba format for Color
+func (c Color) CSSRGBA() string {
+	return "rgba(" + c.RGBA() + ")"
+}
+
+// CSSOKLCH returns a fake color in CSS oklch format for Color
+func (c Color) CSSOKLCH() string {
+	return "oklch(" + c.OKLCH() + ")"
 }
 
 // SafeColorName returns a fake safe color name for Color
