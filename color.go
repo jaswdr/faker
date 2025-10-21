@@ -73,7 +73,7 @@ func (c Color) RGB() string {
 
 // RGBA returns a fake color in rgba format for Color
 func (c Color) RGBA() string {
-	return c.RGB() + ", " + strconv.Itoa(c.Faker.IntBetween(0, 100)) + "% "
+	return c.RGB() + ", " + strconv.Itoa(c.Faker.IntBetween(0, 100)) + "%"
 }
 
 // OKLCH returns a fake color in OKLCH format for Color
@@ -87,7 +87,7 @@ func (c Color) OKLCH() string {
 	oklch = oklch + strconv.Itoa(c.Faker.IntBetween(0, 100)) + "%, "
 
 	// hue
-	oklch = oklch + strconv.Itoa(c.Faker.IntBetween(0, 360)) + "deg "
+	oklch = oklch + strconv.Itoa(c.Faker.IntBetween(0, 360)) + "deg"
 
 	return oklch
 }
@@ -96,6 +96,12 @@ func (c Color) OKLCH() string {
 func (c Color) RGBAsArray() [3]string {
 	split := strings.Split(c.RGB(), ",")
 	return [3]string{split[0], split[1], split[2]}
+}
+
+// RGBAAsArray returns a fake rgba color in array format for Color
+func (c Color) RGBAAsArray() [4]string {
+	split := strings.Split(c.RGBA(), ",")
+	return [4]string{split[0], split[1], split[2], split[3]}
 }
 
 // OKLCHAsArray returns a fake OKLCH color in array format for Color
