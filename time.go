@@ -171,3 +171,31 @@ func (t Time) Century() string {
 func (t Time) Timezone() string {
 	return t.Faker.RandomStringElement(timezones)
 }
+
+// Recent returns a fake time within the past 30 days from now
+func (t Time) Recent() time.Time {
+	now := time.Now()
+	past := now.Add(-30 * 24 * time.Hour)
+	return t.TimeBetween(past, now)
+}
+
+// Past returns a fake time within the past 5 years from now
+func (t Time) Past() time.Time {
+	now := time.Now()
+	past := now.Add(-5 * 365 * 24 * time.Hour)
+	return t.TimeBetween(past, now)
+}
+
+// Soon returns a fake time within the next 30 days from now
+func (t Time) Soon() time.Time {
+	now := time.Now()
+	future := now.Add(30 * 24 * time.Hour)
+	return t.TimeBetween(now, future)
+}
+
+// Future returns a fake time within the next 5 years from now
+func (t Time) Future() time.Time {
+	now := time.Now()
+	future := now.Add(5 * 365 * 24 * time.Hour)
+	return t.TimeBetween(now, future)
+}

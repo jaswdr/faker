@@ -177,3 +177,47 @@ func TestTimezone(t *testing.T) {
 	timezone := tf.Timezone()
 	Expect(t, true, len(timezone) > 0)
 }
+
+func TestRecent(t *testing.T) {
+	tf := New().Time()
+
+	recent := tf.Recent()
+	now := time.Now()
+	past := now.Add(-30 * 24 * time.Hour)
+
+	Expect(t, true, recent.After(past))
+	Expect(t, true, recent.Before(now) || recent.Equal(now))
+}
+
+func TestPast(t *testing.T) {
+	tf := New().Time()
+
+	past := tf.Past()
+	now := time.Now()
+	fiveYearsAgo := now.Add(-5 * 365 * 24 * time.Hour)
+
+	Expect(t, true, past.After(fiveYearsAgo))
+	Expect(t, true, past.Before(now) || past.Equal(now))
+}
+
+func TestSoon(t *testing.T) {
+	tf := New().Time()
+
+	soon := tf.Soon()
+	now := time.Now()
+	future := now.Add(30 * 24 * time.Hour)
+
+	Expect(t, true, soon.After(now) || soon.Equal(now))
+	Expect(t, true, soon.Before(future))
+}
+
+func TestFuture(t *testing.T) {
+	tf := New().Time()
+
+	future := tf.Future()
+	now := time.Now()
+	fiveYearsFromNow := now.Add(5 * 365 * 24 * time.Hour)
+
+	Expect(t, true, future.After(now) || future.Equal(now))
+	Expect(t, true, future.Before(fiveYearsFromNow))
+}
