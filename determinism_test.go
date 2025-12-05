@@ -31,3 +31,84 @@ func TestDeterminism(t *testing.T) {
 		t.Errorf("Expected same ID but got different values")
 	}
 }
+
+func TestDeterminismWithMultipleFields(t *testing.T) {
+	type ComplexStruct struct {
+		StringField1 string
+		StringField2 string
+		IntField     int
+		FloatField   float64
+		BoolField    bool
+		StringArray  []string `fakesize:"3"`
+	}
+
+	seed := int64(98765)
+
+	f1 := NewWithSeedInt64(seed)
+	var s1 ComplexStruct
+	f1.Struct().Fill(&s1)
+
+	f2 := NewWithSeedInt64(seed)
+	var s2 ComplexStruct
+	f2.Struct().Fill(&s2)
+
+	if s1.StringField1 != s2.StringField1 {
+		t.Errorf("StringField1 mismatch: %s != %s", s1.StringField1, s2.StringField1)
+	}
+	if s1.StringField2 != s2.StringField2 {
+		t.Errorf("StringField2 mismatch: %s != %s", s1.StringField2, s2.StringField2)
+	}
+	if s1.IntField != s2.IntField {
+		t.Errorf("IntField mismatch: %d != %d", s1.IntField, s2.IntField)
+	}
+	if s1.FloatField != s2.FloatField {
+		t.Errorf("FloatField mismatch: %f != %f", s1.FloatField, s2.FloatField)
+	}
+	if s1.BoolField != s2.BoolField {
+		t.Errorf("BoolField mismatch: %v != %v", s1.BoolField, s2.BoolField)
+	}
+	if len(s1.StringArray) != len(s2.StringArray) {
+		t.Errorf("StringArray length mismatch: %d != %d", len(s1.StringArray), len(s2.StringArray))
+	}
+	for i := range s1.StringArray {
+		if s1.StringArray[i] != s2.StringArray[i] {
+			t.Errorf("StringArray[%d] mismatch: %s != %s", i, s1.StringArray[i], s2.StringArray[i])
+		}
+	}
+}
+
+func TestDeterminismWithUUIDDirectCall(t *testing.T) {
+	seed := int64(54321)
+
+	f1 := NewWithSeedInt64(seed)
+	uuid1 := f1.UUID().V4()
+
+	f2 := NewWithSeedInt64(seed)
+	uuid2 := f2.UUID().V4()
+
+	if uuid1 != uuid2 {
+		t.Errorf("UUID mismatch: %s != %s", uuid1, uuid2)
+	}
+}
+
+func TestDeterminismAcrossMultipleCalls(t *testing.T) {
+	seed := int64(11111)
+
+	f1 := NewWithSeedInt64(seed)
+	uuids1 := make([]string, 5)
+	for i := 0; i < 5; i++ {
+		uuids1[i] = f1.UUID().V4()
+	}
+
+	f2 := NewWithSeedInt64(seed)
+	uuids2 := make([]string, 5)
+	for i := 0; i < 5; i++ {
+		uuids2[i] = f2.UUID().V4()
+	}
+
+	for i := 0; i < 5; i++ {
+		if uuids1[i] != uuids2[i] {
+			t.Errorf("UUID[%d] mismatch: %s != %s", i, uuids1[i], uuids2[i])
+		}
+	}
+}
