@@ -112,3 +112,30 @@ func TestDeterminismAcrossMultipleCalls(t *testing.T) {
 		}
 	}
 }
+
+func TestUUIDV4FormatValidation(t *testing.T) {
+	f := New()
+
+	for i := 0; i < 10; i++ {
+		uuid := f.UUID().V4()
+
+		if len(uuid) != 36 {
+			t.Errorf("UUID has incorrect length: %d (expected 36)", len(uuid))
+		}
+
+		if uuid[8] != '-' || uuid[13] != '-' || uuid[18] != '-' || uuid[23] != '-' {
+			t.Errorf("UUID has incorrect dash positions: %s", uuid)
+		}
+
+		if uuid[14] != '4' {
+			t.Errorf("UUID version should be 4, got: %c in UUID: %s", uuid[14], uuid)
+		}
+
+		variant := uuid[19]
+		if variant != '8' && variant != '9' && variant != 'a' && variant != 'b' {
+			t.Errorf("UUID variant should be 8, 9, a, or b, got: %c in UUID: %s", variant, uuid)
+		}
+
+		t.Logf("Valid UUID: %s", uuid)
+	}
+}
