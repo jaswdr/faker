@@ -7,7 +7,7 @@ type Boolean struct {
 
 // Bool returns a fake bool for Faker
 func (b Boolean) Bool() bool {
-	return b.Faker.IntBetween(0, 100) > 50
+	return b.Faker.IntBetween(0, 99) < 50
 }
 
 // BoolWithChance returns true with a given percentual chance that the value is true, otherwise returns false
@@ -18,7 +18,7 @@ func (b Boolean) BoolWithChance(chanceTrue int) bool {
 		return true
 	}
 
-	return b.Faker.IntBetween(0, 100) < chanceTrue
+	return b.Faker.IntBetween(0, 99) < chanceTrue
 }
 
 // BoolInt returns a fake bool for Integer Boolean
