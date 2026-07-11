@@ -1,7 +1,12 @@
 package faker
 
-// RandomElement returns a fake random element from a given list of elements
+// RandomElement returns a fake random element from a given list of elements.
+// Returns the zero value when elements is empty.
 func RandomElement[T any](f Faker, elements ...T) T {
+	if len(elements) == 0 {
+		var zero T
+		return zero
+	}
 	i := f.IntBetween(0, len(elements)-1)
 	return elements[i]
 }
@@ -45,6 +50,10 @@ func RandomElementWeighted[T any](f Faker, elements map[int]T) T {
 }
 
 func RandomMapKey[K comparable, V any](f Faker, m map[K]V) K {
+	if len(m) == 0 {
+		var zero K
+		return zero
+	}
 	keys := make([]K, 0, len(m))
 	for k := range m {
 		keys = append(keys, k)
@@ -55,6 +64,10 @@ func RandomMapKey[K comparable, V any](f Faker, m map[K]V) K {
 }
 
 func RandomMapValue[K comparable, V any](f Faker, m map[K]V) V {
+	if len(m) == 0 {
+		var zero V
+		return zero
+	}
 	values := make([]V, 0, len(m))
 	for k := range m {
 		values = append(values, m[k])

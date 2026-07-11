@@ -1,17 +1,16 @@
 package faker
 
 import (
+	"slices"
 	"testing"
 )
 
 func TestGenderName(t *testing.T) {
 	v := New().Gender().Name()
-	NotExpect(t, "", v)
-	Expect(t, true, v == "masculine" || v == "feminine")
+	Expect(t, true, slices.Contains([]string{"masculine", "feminine"}, v))
 }
 
 func TestGenderAbbr(t *testing.T) {
 	v := New().Gender().Abbr()
-	NotExpect(t, "", v)
-	Expect(t, true, v == "masc" || v == "fem")
+	Expect(t, true, slices.Contains([]string{"masc", "fem"}, v))
 }

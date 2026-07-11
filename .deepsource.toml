@@ -7,7 +7,7 @@ name = "go"
 enabled = true
 
   [analyzers.meta]
-  import_root = "github.com/jaswdr/faker"
+  import_root = "github.com/jaswdr/faker/v2"
 
 [[transformers]]
 name = "gofmt"

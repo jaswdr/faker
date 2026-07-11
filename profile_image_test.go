@@ -34,3 +34,21 @@ func TestProfileImagePanicIfTempFileCreationFails(t *testing.T) {
 	}()
 	service.Image()
 }
+
+func TestProfileImageFileErrorIfRequestFails(t *testing.T) {
+	f := New()
+	service := f.ProfileImage()
+	expected := fmt.Errorf("request failed")
+	service.HTTPClient = ErrorRaiserHTTPClient{err: expected}
+	_, err := service.ImageFile()
+	Expect(t, expected, err)
+}
+
+func TestProfileImageFileErrorIfTempFileCreationFails(t *testing.T) {
+	f := New()
+	service := f.ProfileImage()
+	expected := fmt.Errorf("temp file creation failed")
+	service.TempFileCreator = ErrorRaiserTempFileCreator{err: expected}
+	_, err := service.ImageFile()
+	Expect(t, expected, err)
+}

@@ -1,15 +1,16 @@
 package faker
 
 import (
+	"slices"
 	"testing"
 )
 
-func TestFoodFruit(t *testing.T) {
+func TestFruit(t *testing.T) {
 	v := New().Food().Fruit()
-	NotExpect(t, "", v)
+	Expect(t, true, slices.Contains(fruits, v))
 }
 
-func TestFoodVegetable(t *testing.T) {
+func TestVegetable(t *testing.T) {
 	v := New().Food().Vegetable()
-	NotExpect(t, "", v)
+	Expect(t, true, slices.Contains(vegetables, v))
 }
