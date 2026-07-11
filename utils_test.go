@@ -57,8 +57,9 @@ func TestOSResolverImplReturnsGOOS(t *testing.T) {
 }
 
 func TestShuffle(t *testing.T) {
+	f := New()
 	slice := []int{1, 2, 3, 4, 5}
-	Shuffle(slice)
+	Shuffle(f, slice)
 	Expect(t, false, (slice[0] == 1) &&
 		(slice[1] == 2) &&
 		(slice[2] == 3) &&
@@ -67,7 +68,8 @@ func TestShuffle(t *testing.T) {
 }
 
 func TestShuffleWithSingleElement(t *testing.T) {
+	f := New()
 	slice := []int{1}
-	Shuffle(slice)
+	Shuffle(f, slice)
 	Expect(t, slice[0], 1)
 }

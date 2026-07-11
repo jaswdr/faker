@@ -137,6 +137,7 @@ func TestEtheriumAddress(t *testing.T) {
 	addr := c.EtheriumAddress()
 	Expect(t, true, len(addr) == ethLen)
 	Expect(t, true, strings.HasPrefix(addr, ethPrefix))
+	Expect(t, true, len(c.EthereumAddress()) == ethLen)
 }
 
 func TestAlgorithmRange(t *testing.T) {

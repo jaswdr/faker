@@ -14,15 +14,15 @@ const (
 
 // ProfileImage  is a faker struct for ProfileImage
 type ProfileImage struct {
-	faker           *Faker
+	Faker           *Faker
 	HTTPClient      HTTPClient
 	TempFileCreator TempFileCreator
 }
 
 // Image generates a *os.File with a random profile image using the thispersondoesnotexist.com service
 func (pi ProfileImage) Image() *os.File {
-	gender := pi.faker.RandomStringElement([]string{"women", "men"})
-	profileId := pi.faker.IntBetween(1, 99)
+	gender := pi.Faker.RandomStringElement([]string{"women", "men"})
+	profileId := pi.Faker.IntBetween(1, 99)
 	url := fmt.Sprintf("%s/%s/%s/%d.jpg", profileImageBaseURL, portraitsEndpoint, gender, profileId)
 	resp, err := pi.HTTPClient.Get(url)
 	if err != nil {

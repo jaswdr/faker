@@ -115,16 +115,18 @@ func BenchmarkInternetEmail(b *testing.B) {
 // Benchmarks for utils.go Shuffle
 
 func BenchmarkShuffleSmallSlice(b *testing.B) {
+	f := New()
 	slice := []int{1, 2, 3, 4, 5}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		tmp := make([]int, len(slice))
 		copy(tmp, slice)
-		_ = Shuffle(tmp)
+		_ = Shuffle(f, tmp)
 	}
 }
 
 func BenchmarkShuffleLargeSlice(b *testing.B) {
+	f := New()
 	slice := make([]int, 100)
 	for i := range slice {
 		slice[i] = i
@@ -133,7 +135,7 @@ func BenchmarkShuffleLargeSlice(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		tmp := make([]int, len(slice))
 		copy(tmp, slice)
-		_ = Shuffle(tmp)
+		_ = Shuffle(f, tmp)
 	}
 }
 
