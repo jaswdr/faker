@@ -13,15 +13,15 @@ type Unique struct {
 }
 
 // Unique returns a Unique helper bound to this Faker instance.
-func (f Faker) Unique() Unique {
-	return Unique{
+func (f Faker) Unique() *Unique {
+	return &Unique{
 		Faker: &f,
 		seen:  make(map[string]struct{}),
 	}
 }
 
 // IntBetween returns a unique int between minN and maxN inclusive.
-func (u Unique) IntBetween(minN, maxN int) int {
+func (u *Unique) IntBetween(minN, maxN int) int {
 	for attempt := 0; attempt < 1000; attempt++ {
 		val := u.Faker.IntBetween(minN, maxN)
 		key := strconv.Itoa(val)
@@ -37,7 +37,7 @@ func (u Unique) IntBetween(minN, maxN int) int {
 }
 
 // StringElement returns a unique element from the given slice.
-func (u Unique) StringElement(elements []string) string {
+func (u *Unique) StringElement(elements []string) string {
 	for attempt := 0; attempt < len(elements)*10; attempt++ {
 		val := u.Faker.RandomStringElement(elements)
 		u.mu.Lock()
