@@ -8,26 +8,47 @@ import (
 
 func TestProfileImage(t *testing.T) {
 	f := New()
-	value, err := f.ProfileImage().Image()
-	Expect(t, nil, err)
+	value := f.ProfileImage().Image()
 	Expect(t, fmt.Sprintf("%T", value), "*os.File")
 	Expect(t, strings.HasSuffix(value.Name(), ".jpg"), true, value.Name())
 }
 
-func TestProfileImageErrorIfRequestFails(t *testing.T) {
+func TestProfileImagePanicIfRequestFails(t *testing.T) {
 	f := New()
 	service := f.ProfileImage()
 	expected := fmt.Errorf("request failed")
 	service.HTTPClient = ErrorRaiserHTTPClient{err: expected}
-	_, err := service.Image()
-	Expect(t, expected, err)
+	defer func() {
+		Expect(t, recover(), expected)
+	}()
+	service.Image()
 }
 
-func TestProfileImageErrorIfTempFileCreationFails(t *testing.T) {
+func TestProfileImagePanicIfTempFileCreationFails(t *testing.T) {
 	f := New()
 	service := f.ProfileImage()
 	expected := fmt.Errorf("temp file creation failed")
 	service.TempFileCreator = ErrorRaiserTempFileCreator{err: expected}
-	_, err := service.Image()
+	defer func() {
+		Expect(t, recover(), expected)
+	}()
+	service.Image()
+}
+
+func TestProfileImageFileErrorIfRequestFails(t *testing.T) {
+	f := New()
+	service := f.ProfileImage()
+	expected := fmt.Errorf("request failed")
+	service.HTTPClient = ErrorRaiserHTTPClient{err: expected}
+	_, err := service.ImageFile()
+	Expect(t, expected, err)
+}
+
+func TestProfileImageFileErrorIfTempFileCreationFails(t *testing.T) {
+	f := New()
+	service := f.ProfileImage()
+	expected := fmt.Errorf("temp file creation failed")
+	service.TempFileCreator = ErrorRaiserTempFileCreator{err: expected}
+	_, err := service.ImageFile()
 	Expect(t, expected, err)
 }

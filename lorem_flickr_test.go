@@ -8,8 +8,7 @@ import (
 
 func TestLoremFlickrImage(t *testing.T) {
 	f := New()
-	value, err := f.LoremFlickr().Image(300, 200, []string{}, "", false)
-	Expect(t, nil, err)
+	value := f.LoremFlickr().Image(300, 200, []string{}, "", false)
 	Expect(t, fmt.Sprintf("%T", value), "*os.File")
 	Expect(t, strings.HasSuffix(value.Name(), ".jpg"), true, value.Name())
 }
@@ -17,39 +16,58 @@ func TestLoremFlickrImage(t *testing.T) {
 func TestLoremFlickrImageWithPrefix(t *testing.T) {
 	f := New()
 	for _, prefix := range []string{"g", "p", "red", "green", "blue"} {
-		value, err := f.LoremFlickr().Image(300, 200, []string{}, prefix, false)
-		Expect(t, nil, err)
+		value := f.LoremFlickr().Image(300, 200, []string{}, prefix, false)
 		Expect(t, strings.HasSuffix(value.Name(), ".jpg"), true, value.Name())
 	}
 }
 
 func TestLoremFlickrImageWithCategories(t *testing.T) {
 	f := New()
-	value, err := f.LoremFlickr().Image(300, 200, []string{"cat", "dog"}, "", false)
-	Expect(t, nil, err)
+	value := f.LoremFlickr().Image(300, 200, []string{"cat", "dog"}, "", false)
 	Expect(t, fmt.Sprintf("%T", value), "*os.File")
 	Expect(t, strings.HasSuffix(value.Name(), ".jpg"), true, value.Name())
 
-	value, err = f.LoremFlickr().Image(300, 200, []string{"cat", "dog"}, "", true)
-	Expect(t, nil, err)
+	value = f.LoremFlickr().Image(300, 200, []string{"cat", "dog"}, "", true)
 	Expect(t, fmt.Sprintf("%T", value), "*os.File")
 	Expect(t, strings.HasSuffix(value.Name(), ".jpg"), true, value.Name())
 }
 
-func TestLoremFlickrImageErrorIfRequestFails(t *testing.T) {
+func TestLoremFlickrImagePanicIfRequestFails(t *testing.T) {
 	f := New()
 	service := f.LoremFlickr()
 	expected := fmt.Errorf("request failed")
 	service.HTTPClient = ErrorRaiserHTTPClient{err: expected}
-	_, err := service.Image(300, 200, []string{}, "", false)
-	Expect(t, expected, err)
+	defer func() {
+		Expect(t, recover(), expected)
+	}()
+	service.Image(300, 200, []string{}, "", false)
 }
 
-func TestLoremFlickrImageErrorIfTempFileCreationFails(t *testing.T) {
+func TestLoremFlickrImagePanicIfTempFileCreationFails(t *testing.T) {
 	f := New()
 	service := f.LoremFlickr()
 	expected := fmt.Errorf("temp file creation failed")
 	service.TempFileCreator = ErrorRaiserTempFileCreator{err: expected}
-	_, err := service.Image(300, 200, []string{}, "", false)
+	defer func() {
+		Expect(t, recover(), expected)
+	}()
+	service.Image(300, 200, []string{}, "", false)
+}
+
+func TestLoremFlickrImageFileErrorIfRequestFails(t *testing.T) {
+	f := New()
+	service := f.LoremFlickr()
+	expected := fmt.Errorf("request failed")
+	service.HTTPClient = ErrorRaiserHTTPClient{err: expected}
+	_, err := service.ImageFile(300, 200, []string{}, "", false)
+	Expect(t, expected, err)
+}
+
+func TestLoremFlickrImageFileErrorIfTempFileCreationFails(t *testing.T) {
+	f := New()
+	service := f.LoremFlickr()
+	expected := fmt.Errorf("temp file creation failed")
+	service.TempFileCreator = ErrorRaiserTempFileCreator{err: expected}
+	_, err := service.ImageFile(300, 200, []string{}, "", false)
 	Expect(t, expected, err)
 }

@@ -2,6 +2,7 @@ package faker
 
 import (
 	"io"
+	"log"
 	"os"
 	"strconv"
 )
@@ -16,7 +17,17 @@ type LoremFlickr struct {
 }
 
 // Image generates a *os.File with a random image using the loremflickr.com service.
-func (lf LoremFlickr) Image(width, height int, categories []string, prefix string, categoriesStrict bool) (*os.File, error) {
+// Panics on failure to maintain backward compatibility.
+func (lf LoremFlickr) Image(width, height int, categories []string, prefix string, categoriesStrict bool) *os.File {
+	f, err := lf.ImageFile(width, height, categories, prefix, categoriesStrict)
+	if err != nil {
+		panic(err)
+	}
+	return f
+}
+
+// ImageFile generates a *os.File with a random image using the loremflickr.com service.
+func (lf LoremFlickr) ImageFile(width, height int, categories []string, prefix string, categoriesStrict bool) (*os.File, error) {
 	url := loremFlickrBaseURL
 
 	switch prefix {
@@ -35,13 +46,10 @@ func (lf LoremFlickr) Image(width, height int, categories []string, prefix strin
 	url += string('/') + strconv.Itoa(width) + string('/') + strconv.Itoa(height)
 
 	if len(categories) > 0 {
-
 		url += string('/')
-
 		for _, category := range categories {
 			url += category + string(',')
 		}
-
 		if categoriesStrict {
 			url += "/all"
 		}
@@ -49,12 +57,14 @@ func (lf LoremFlickr) Image(width, height int, categories []string, prefix strin
 
 	resp, err := lf.HTTPClient.Get(url)
 	if err != nil {
+		log.Println("Error while requesting", url, ":", err)
 		return nil, err
 	}
 
 	defer resp.Body.Close()
 	f, err := lf.TempFileCreator.TempFile("loremflickr-img-*.jpg")
 	if err != nil {
+		log.Println("Error while creating a temp file:", err)
 		return nil, err
 	}
 
