@@ -262,7 +262,13 @@ func (p Person) Contact() ContactInfo {
 	}
 }
 
-// Image return the person profile image
+// Image return the person profile image.
+// Panics on failure to maintain backward compatibility.
 func (p Person) Image() *os.File {
 	return p.Faker.ProfileImage().Image()
+}
+
+// ImageFile return the person profile image without panicking on errors.
+func (p Person) ImageFile() (*os.File, error) {
+	return p.Faker.ProfileImage().ImageFile()
 }
