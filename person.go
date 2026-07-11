@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 )
 
 var (
@@ -271,4 +272,15 @@ func (p Person) Image() *os.File {
 // ImageFile return the person profile image without panicking on errors.
 func (p Person) ImageFile() (*os.File, error) {
 	return p.Faker.ProfileImage().ImageFile()
+}
+
+// DateOfBirth returns a birth date for a person between minAge and maxAge years old.
+func (p Person) DateOfBirth(minAge, maxAge int) time.Time {
+	if minAge > maxAge {
+		minAge, maxAge = maxAge, minAge
+	}
+	now := time.Now()
+	latest := now.AddDate(-minAge, 0, 0)
+	earliest := now.AddDate(-maxAge, 0, 0)
+	return p.Faker.Time().TimeBetween(earliest, latest)
 }
