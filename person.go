@@ -174,14 +174,20 @@ func (p Person) Title() string {
 	return p.TitleFemale()
 }
 
-// FirstNameMale returns a fake male first mame for Person
+// FirstNameMale returns a fake male first name for Person
 func (p Person) FirstNameMale() string {
+	if data := localeDataFor(p.Faker.Locale()); data != nil {
+		return p.Faker.RandomStringElement(data.FirstNameMale)
+	}
 	index := p.Faker.IntBetween(0, len(firstNameMale)-1)
 	return firstNameMale[index]
 }
 
 // FirstNameFemale returns a fake female first name for Person
 func (p Person) FirstNameFemale() string {
+	if data := localeDataFor(p.Faker.Locale()); data != nil {
+		return p.Faker.RandomStringElement(data.FirstNameFemale)
+	}
 	index := p.Faker.IntBetween(0, len(firstNameFemale)-1)
 	return firstNameFemale[index]
 }
@@ -194,6 +200,9 @@ func (p Person) FirstName() string {
 
 // LastName returns a fake last name for Person
 func (p Person) LastName() string {
+	if data := localeDataFor(p.Faker.Locale()); data != nil {
+		return p.Faker.RandomStringElement(data.LastName)
+	}
 	index := p.Faker.IntBetween(0, len(lastName)-1)
 	return lastName[index]
 }
