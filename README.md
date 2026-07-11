@@ -28,7 +28,7 @@ Add this to your Go file
 import "github.com/jaswdr/faker/v2"
 ```
 
-And run `go get` or `dep ensure` to get the package.
+And run `go get` to fetch the package.
 
 ## Basic Usage
 
@@ -122,7 +122,7 @@ fmt.Println(profileImage.Name())
 // /tmp/profil-picture-img-4022222298.jfif
 ```
 
-See more formatters in [docs](https://pkg.go.dev/github.com/jaswdr/faker?tab=doc)
+See more formatters in [docs](https://pkg.go.dev/github.com/jaswdr/faker/v2?tab=doc)
 
 ## Development
 
@@ -152,4 +152,4 @@ Faker is released under the MIT Licence. See the bundled LICENSE file for detail
 
 ## Maintainer
 
-Created and maitained by Jonathan Schweder ([@jaswdr](https://github.com/jaswdr)) and [many others](https://github.com/jaswdr/faker/graphs/contributors)
+Created and maintained by Jonathan Schweder ([@jaswdr](https://github.com/jaswdr)) and [many others](https://github.com/jaswdr/faker/graphs/contributors)
