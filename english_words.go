@@ -1,8 +1,8 @@
 package faker
 
 import (
-	"strings"
 	_ "embed"
+	"strings"
 )
 
 //go:embed data/english_words.txt
