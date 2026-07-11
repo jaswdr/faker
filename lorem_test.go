@@ -52,12 +52,15 @@ func TestText(t *testing.T) {
 	Expect(t, true, len(text) <= 255)
 }
 
-func TestTextNotEmpty(t *testing.T) {
-	l := New().Lorem()
-	for i := 1; i < 255; i++ {
-		text := l.Text(i)
-		Expect(t, true, text != "")
-	}
+func TestTextUsesRandomWords(t *testing.T) {
+	f1 := NewWithSeedInt64(42)
+	f2 := NewWithSeedInt64(99)
+	text1 := f1.Lorem().Text(50)
+	text2 := f2.Lorem().Text(50)
+	Expect(t, true, len(text1) > 0)
+	Expect(t, true, len(text1) <= 50)
+	Expect(t, true, text1 != text2)
+	Expect(t, true, strings.Contains(text1, " "))
 }
 
 func TestBytes(t *testing.T) {
