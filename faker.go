@@ -961,6 +961,11 @@ func NewWithSeedInt64(seed int64) Faker {
 	return Faker{Generator: generator}
 }
 
+// Barcode returns a fake Barcode instance for Faker
+func (f Faker) Barcode() Barcode {
+	return Barcode{&f}
+}
+
 // Blood returns a fake Blood instance for Faker
 func (f Faker) Blood() Blood {
 	return Blood{&f}
