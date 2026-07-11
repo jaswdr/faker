@@ -53,3 +53,21 @@ func TestLoremFlickrImagePanicIfTempFileCreationFails(t *testing.T) {
 	}()
 	service.Image(300, 200, []string{}, "", false)
 }
+
+func TestLoremFlickrImageFileErrorIfRequestFails(t *testing.T) {
+	f := New()
+	service := f.LoremFlickr()
+	expected := fmt.Errorf("request failed")
+	service.HTTPClient = ErrorRaiserHTTPClient{err: expected}
+	_, err := service.ImageFile(300, 200, []string{}, "", false)
+	Expect(t, expected, err)
+}
+
+func TestLoremFlickrImageFileErrorIfTempFileCreationFails(t *testing.T) {
+	f := New()
+	service := f.LoremFlickr()
+	expected := fmt.Errorf("temp file creation failed")
+	service.TempFileCreator = ErrorRaiserTempFileCreator{err: expected}
+	_, err := service.ImageFile(300, 200, []string{}, "", false)
+	Expect(t, expected, err)
+}
