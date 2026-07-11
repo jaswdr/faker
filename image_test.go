@@ -44,3 +44,21 @@ func TestImagePanicIfEncodingFails(t *testing.T) {
 	}()
 	img.Image(100, 100)
 }
+
+func TestImageFileErrorIfTempFileCreationFails(t *testing.T) {
+	f := New()
+	img := f.Image()
+	expected := fmt.Errorf("temp file creation failed")
+	img.TempFileCreator = ErrorRaiserTempFileCreator{err: expected}
+	_, err := img.ImageFile(100, 100)
+	Expect(t, expected, err)
+}
+
+func TestImageFileErrorIfEncodingFails(t *testing.T) {
+	f := New()
+	img := f.Image()
+	expected := fmt.Errorf("png encoding failed")
+	img.PngEncoder = ErrorRaiserPngEncoder{err: expected}
+	_, err := img.ImageFile(100, 100)
+	Expect(t, expected, err)
+}

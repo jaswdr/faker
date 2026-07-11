@@ -58,31 +58,53 @@ func (OSResolverImpl) OS() string {
 	return runtime.GOOS
 }
 
-// Shuffle shuffles the slice in place
+// Shuffle shuffles the slice in place.
 func Shuffle[T any](slice []T) []T {
-	// Handle edge cases
 	if len(slice) <= 1 {
 		return slice
 	}
 
-	// Make a copy of the original slice for comparison
 	original := make([]T, len(slice))
 	copy(original, slice)
 
-	// Limit attempts to prevent infinite recursion
 	maxAttempts := 10
 	for attempts := 0; attempts < maxAttempts; attempts++ {
 		rand.Shuffle(len(slice), func(i, j int) {
 			slice[i], slice[j] = slice[j], slice[i]
 		})
 
-		// Check if the shuffle resulted in a different arrangement
 		if !reflect.DeepEqual(original, slice) {
 			break
 		}
 
-		// For small slices (2-3 elements), there's a high chance of getting the same order
-		// Accept the result after a few attempts even if unchanged
+		if attempts >= 3 && len(slice) <= 3 {
+			break
+		}
+	}
+
+	return slice
+}
+
+// ShuffleWith shuffles the slice in place using the Faker's thread-safe random source.
+func ShuffleWith[T any](f Faker, slice []T) []T {
+	if len(slice) <= 1 {
+		return slice
+	}
+
+	original := make([]T, len(slice))
+	copy(original, slice)
+
+	maxAttempts := 10
+	for attempts := 0; attempts < maxAttempts; attempts++ {
+		for i := len(slice) - 1; i > 0; i-- {
+			j := f.IntBetween(0, i)
+			slice[i], slice[j] = slice[j], slice[i]
+		}
+
+		if !reflect.DeepEqual(original, slice) {
+			break
+		}
+
 		if attempts >= 3 && len(slice) <= 3 {
 			break
 		}

@@ -1,15 +1,16 @@
 package faker
 
 import (
+	"slices"
 	"testing"
 )
 
 func TestEmoji(t *testing.T) {
-	e := New().Emoji()
-	NotExpect(t, "", e.Emoji())
+	v := New().Emoji().Emoji()
+	Expect(t, true, slices.Contains(emojis, v))
 }
 
 func TestEmojiCode(t *testing.T) {
-	e := New().Emoji()
-	NotExpect(t, "", e.EmojiCode())
+	v := New().Emoji().EmojiCode()
+	Expect(t, true, slices.Contains(emojisCode, v))
 }
