@@ -101,7 +101,8 @@ func TestContact(t *testing.T) {
 
 func TestPersonImage(t *testing.T) {
 	p := New().Person()
-	image := p.Image()
+	image, err := p.Image()
+	Expect(t, nil, err)
 	Expect(t, fmt.Sprintf("%T", image), "*os.File")
 	Expect(t, strings.HasSuffix(image.Name(), ".jpg"), true, image.Name())
 }

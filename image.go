@@ -29,9 +29,8 @@ type Image struct {
 }
 
 // Image returns a fake image file.
-// Width and height must be positive values. Panics on file creation or encoding errors
-// to maintain backward compatibility with existing API contract.
-func (i Image) Image(width, height int) *os.File {
+// Width and height must be positive values; non-positive values default to 100.
+func (i Image) Image(width, height int) (*os.File, error) {
 	// Input validation - use reasonable defaults instead of nil to avoid breaking changes
 	if width <= 0 {
 		width = 100
@@ -73,13 +72,14 @@ func (i Image) Image(width, height int) *os.File {
 
 	f, err := i.TempFileCreator.TempFile("fake-img-*.png")
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	err = i.PngEncoder.Encode(f, img)
 	if err != nil {
-		panic(err)
+		f.Close()
+		return nil, err
 	}
 
-	return f
+	return f, nil
 }

@@ -18,29 +18,26 @@ func (creator ErrorRaiserPngEncoder) Encode(_ io.Writer, _ image.Image) error {
 
 func TestImage(t *testing.T) {
 	f := New()
-	value := f.Image().Image(100, 100)
+	value, err := f.Image().Image(100, 100)
+	Expect(t, nil, err)
 	Expect(t, fmt.Sprintf("%T", value), "*os.File")
 	Expect(t, strings.HasSuffix(value.Name(), ".png"), true, value.Name())
 }
 
-func TestImagePanicIfTempFileCreationFails(t *testing.T) {
+func TestImageErrorIfTempFileCreationFails(t *testing.T) {
 	f := New()
 	img := f.Image()
 	expected := fmt.Errorf("temp file creation failed")
 	img.TempFileCreator = ErrorRaiserTempFileCreator{err: expected}
-	defer func() {
-		Expect(t, recover(), expected)
-	}()
-	img.Image(100, 100)
+	_, err := img.Image(100, 100)
+	Expect(t, expected, err)
 }
 
-func TestImagePanicIfEncodingFails(t *testing.T) {
+func TestImageErrorIfEncodingFails(t *testing.T) {
 	f := New()
 	img := f.Image()
 	expected := fmt.Errorf("png encoding failed")
 	img.PngEncoder = ErrorRaiserPngEncoder{err: expected}
-	defer func() {
-		Expect(t, recover(), expected)
-	}()
-	img.Image(100, 100)
+	_, err := img.Image(100, 100)
+	Expect(t, expected, err)
 }

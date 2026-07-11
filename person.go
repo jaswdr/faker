@@ -254,6 +254,6 @@ func (p Person) Contact() ContactInfo {
 }
 
 // Image return the person profile image
-func (p Person) Image() *os.File {
+func (p Person) Image() (*os.File, error) {
 	return p.Faker.ProfileImage().Image()
 }
