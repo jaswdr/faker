@@ -71,3 +71,14 @@ func TestShuffleWithSingleElement(t *testing.T) {
 	Shuffle(slice)
 	Expect(t, slice[0], 1)
 }
+
+func TestShuffleWith(t *testing.T) {
+	f := New()
+	slice := []int{1, 2, 3, 4, 5}
+	ShuffleWith(f, slice)
+	Expect(t, false, (slice[0] == 1) &&
+		(slice[1] == 2) &&
+		(slice[2] == 3) &&
+		(slice[3] == 4) &&
+		(slice[4] == 5))
+}
