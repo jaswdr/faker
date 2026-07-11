@@ -41,6 +41,7 @@ func TestTollFreeNumber(t *testing.T) {
 	Expect(t, false, strings.Contains(number, "#"))
 	Expect(t, false, strings.Contains(number, "{{"))
 	Expect(t, false, strings.Contains(number, "}}"))
+	Expect(t, true, len(a.TollFreeNumber()) > 0)
 }
 
 func TestE164Number(t *testing.T) {
