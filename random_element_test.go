@@ -47,3 +47,21 @@ func TestRandomMapValue(t *testing.T) {
 	randomStr := RandomMapValue(f, m)
 	Expect(t, true, randomStr == "one" || randomStr == "five" || randomStr == "forty two")
 }
+
+func TestRandomElementEmpty(t *testing.T) {
+	f := New()
+	var zero string
+	Expect(t, zero, RandomElement[string](f))
+}
+
+func TestRandomMapKeyEmpty(t *testing.T) {
+	f := New()
+	var zero int
+	Expect(t, zero, RandomMapKey[int, string](f, map[int]string{}))
+}
+
+func TestRandomMapValueEmpty(t *testing.T) {
+	f := New()
+	var zero string
+	Expect(t, zero, RandomMapValue[int, string](f, map[int]string{}))
+}
