@@ -48,8 +48,9 @@ func (f Faker) Locale() LocaleCode {
 
 // WithLocale returns a copy of the Faker configured with the given locale.
 func (f Faker) WithLocale(code LocaleCode) Faker {
-	f.locale = code
-	return f
+	result := f
+	result.locale = code
+	return result
 }
 
 // NewWithLocale returns a new Faker instance with the given locale.
