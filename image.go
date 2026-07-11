@@ -23,7 +23,7 @@ func (PngEncoderImpl) Encode(w io.Writer, m image.Image) error {
 
 // Image is a faker struct for Image
 type Image struct {
-	Faker           *Faker
+	faker           *Faker
 	TempFileCreator TempFileCreator
 	PngEncoder      PngEncoder
 }

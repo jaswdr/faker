@@ -91,8 +91,8 @@ func (p Phone) TollFreeAreaCode() string {
 	return p.Faker.RandomStringElement(tollFreeAreaCodes)
 }
 
-// TollFreeNumber returns a fake toll free number for Phone
-func (p Phone) TollFreeNumber() string {
+// ToolFreeNumber returns a fake toll free number for Phone
+func (p Phone) ToolFreeNumber() string {
 	number := p.Faker.RandomStringElement(tollFreeFormats)
 
 	// {{tollFreeAreaCode}}
@@ -104,10 +104,9 @@ func (p Phone) TollFreeNumber() string {
 	return p.Faker.Numerify(number)
 }
 
-// ToolFreeNumber returns a fake toll free number for Phone.
-// Deprecated: Use TollFreeNumber instead.
-func (p Phone) ToolFreeNumber() string {
-	return p.TollFreeNumber()
+// TollFreeNumber returns a fake toll free number for Phone.
+func (p Phone) TollFreeNumber() string {
+	return p.ToolFreeNumber()
 }
 
 // E164Number returns a fake E164 phone number for Phone

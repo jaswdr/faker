@@ -11,7 +11,7 @@ const loremFlickrBaseURL = "https://loremflickr.com"
 
 // LoremFlickr is a faker struct for LoremFlickr
 type LoremFlickr struct {
-	Faker           *Faker
+	faker           *Faker
 	HTTPClient      HTTPClient
 	TempFileCreator TempFileCreator
 }

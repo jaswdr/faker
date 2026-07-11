@@ -590,9 +590,9 @@ func (f Faker) RandomIntElement(a []int) int {
 }
 
 // ShuffleString returns a fake shuffled string from a given string for Faker
-func (f Faker) ShuffleString(s string) string {
+func (Faker) ShuffleString(s string) string {
 	orig := strings.Split(s, "")
-	return strings.Join(Shuffle(f, orig), "")
+	return strings.Join(Shuffle(orig), "")
 }
 
 // Numerify returns a fake string that replaces all "#" characters with random digits (0-9).
@@ -827,7 +827,7 @@ func (f Faker) UUID() UUID {
 
 // Image returns a fake Image instance for Faker
 func (f Faker) Image() Image {
-	return Image{Faker: &f, TempFileCreator: TempFileCreatorImpl{}, PngEncoder: PngEncoderImpl{}}
+	return Image{&f, TempFileCreatorImpl{}, PngEncoderImpl{}}
 }
 
 // File returns a fake File instance for Faker
@@ -892,12 +892,12 @@ func (f Faker) Emoji() Emoji {
 
 // LoremFlickr returns a fake LoremFlickr instance for Faker
 func (f Faker) LoremFlickr() LoremFlickr {
-	return LoremFlickr{Faker: &f, HTTPClient: HTTPClientImpl{}, TempFileCreator: TempFileCreatorImpl{}}
+	return LoremFlickr{&f, HTTPClientImpl{}, TempFileCreatorImpl{}}
 }
 
 // ProfileImage returns a fake ProfileImage instance for Faker
 func (f Faker) ProfileImage() ProfileImage {
-	return ProfileImage{Faker: &f, HTTPClient: HTTPClientImpl{}, TempFileCreator: TempFileCreatorImpl{}}
+	return ProfileImage{&f, HTTPClientImpl{}, TempFileCreatorImpl{}}
 }
 
 // Genre returns a fake Genre instance for Faker
@@ -912,7 +912,7 @@ func (f Faker) Gender() Gender {
 
 // BinaryString returns a fake BinaryString instance for Faker
 func (f Faker) BinaryString() BinaryString {
-	return BinaryString{Faker: &f}
+	return BinaryString{&f}
 }
 
 // Hash returns a fake Hash instance for Faker

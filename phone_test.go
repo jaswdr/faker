@@ -33,15 +33,15 @@ func TestTollFreeAreaCode(t *testing.T) {
 }
 
 func TestTollFreeNumber(t *testing.T) {
-	a := NewWithSeedInt64(42).Phone()
-	number := a.TollFreeNumber()
+	a := New().Phone()
+	number := a.ToolFreeNumber()
 	Expect(t, true, len(number) > 0)
 	Expect(t, false, strings.Contains(number, "{{tollFreeAreaCode}}"))
 	Expect(t, false, strings.Contains(number, "{{exchangeCode}}"))
 	Expect(t, false, strings.Contains(number, "#"))
 	Expect(t, false, strings.Contains(number, "{{"))
 	Expect(t, false, strings.Contains(number, "}}"))
-	Expect(t, true, len(a.ToolFreeNumber()) > 0)
+	Expect(t, true, len(a.TollFreeNumber()) > 0)
 }
 
 func TestE164Number(t *testing.T) {
