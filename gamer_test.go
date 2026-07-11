@@ -1,10 +1,11 @@
 package faker
 
 import (
+	"slices"
 	"testing"
 )
 
 func TestTag(t *testing.T) {
 	v := New().Gamer().Tag()
-	NotExpect(t, "", v)
+	Expect(t, true, slices.Contains(gamerTags, v))
 }
