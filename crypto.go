@@ -119,3 +119,8 @@ func (c Crypto) EtheriumAddress() string {
 	}
 	return strings.Join(address, "")
 }
+
+// EthereumAddress returns a hexadecimal ethereum address of 42 characters.
+func (c Crypto) EthereumAddress() string {
+	return c.EtheriumAddress()
+}

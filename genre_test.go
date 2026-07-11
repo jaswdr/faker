@@ -6,11 +6,13 @@ import (
 
 func TestGenreName(t *testing.T) {
 	v := New().Genre().Name()
-	NotExpect(t, "", v)
+	_, ok := genres[v]
+	Expect(t, true, ok)
 }
 
 func TestGenreNameWithDescription(t *testing.T) {
-	name, description := New().Genre().NameWithDescription()
-	NotExpect(t, "", name)
-	NotExpect(t, "", description)
+	name, desc := New().Genre().NameWithDescription()
+	Expect(t, true, len(name) > 0)
+	Expect(t, true, len(desc) > 0)
+	Expect(t, genres[name], desc)
 }

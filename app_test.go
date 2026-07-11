@@ -1,15 +1,18 @@
 package faker
 
 import (
+	"regexp"
+	"slices"
 	"testing"
 )
 
 func TestAppName(t *testing.T) {
-	a := New().App()
-	NotExpect(t, "", a.Name())
+	v := New().App().Name()
+	Expect(t, true, slices.Contains(appNames, v))
 }
 
 func TestAppVersion(t *testing.T) {
-	a := New().App()
-	NotExpect(t, "", a.Version())
+	v := New().App().Version()
+	re := regexp.MustCompile(`^v\d\.\d\.\d$`)
+	Expect(t, true, re.MatchString(v))
 }
