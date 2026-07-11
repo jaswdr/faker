@@ -18,13 +18,17 @@
 // Struct Filling (using struct tags):
 //
 //	type User struct {
-//		Name  string `fake:"{{person.first_name}} {{person.last_name}}"`
-//		Email string `fake:"{{internet.email}}"`
-//		Age   int    `fake:"{{number.number_int_between 18 65}}"`
+//		Name  string `fake:"????????"`
+//		Email string `fake:"??????@??????.com"`
+//		Age   int    // filled automatically based on field type
 //	}
 //
 //	var user User
 //	f.Struct().Fill(&user)
+//
+// Pattern characters: # (digit), ? (letter), * (letter or digit).
+// Use fake:"skip" to skip a field, fakesize:"N" for slices/arrays/maps,
+// and RegisterFunction for custom generators via fake:"fn=name".
 //
 // Performance Characteristics:
 //
