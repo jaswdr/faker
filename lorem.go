@@ -55,17 +55,27 @@ func (l Lorem) Paragraphs(nbParagraph int) []string {
 	return out
 }
 
-// Text returns a fake text for Lorem
-func (Lorem) Text(maxNbChars int) (out string) {
-	for _, w := range englishWords {
-		if len(out)+len(w) > maxNbChars {
-			break
-		}
-
-		out = out + w
+// Text returns a fake text for Lorem using randomly selected words up to maxNbChars.
+func (l Lorem) Text(maxNbChars int) string {
+	if maxNbChars <= 0 {
+		return ""
 	}
 
-	return
+	var builder strings.Builder
+	for builder.Len() < maxNbChars {
+		word := l.Word()
+		if builder.Len() > 0 {
+			if builder.Len()+1+len(word) > maxNbChars {
+				break
+			}
+			builder.WriteByte(' ')
+		} else if len(word) > maxNbChars {
+			return word[:maxNbChars]
+		}
+		builder.WriteString(word)
+	}
+
+	return builder.String()
 }
 
 // Bytes returns fake bytes for Lorem
