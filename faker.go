@@ -91,6 +91,7 @@ func putStringBuilder(sb *strings.Builder) {
 // Faker is the Generator struct for Faker
 type Faker struct {
 	Generator GeneratorInterface
+	locale    LocaleCode
 }
 
 // GeneratorInterface presents an Interface that allows us to subsequently control
