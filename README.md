@@ -124,6 +124,30 @@ fmt.Println(profileImage.Name())
 
 See more formatters in [docs](https://pkg.go.dev/github.com/jaswdr/faker/v2?tab=doc)
 
+## Generator Catalog
+
+Access generators via `f := faker.New()` then `f.<Provider>().<Method>()`.
+
+| Provider | Key methods | Description |
+|----------|-------------|-------------|
+| `Person()` | `Name`, `FirstName`, `LastName`, `SSN`, `Contact`, `Image` | People and identity |
+| `Address()` | `Address`, `City`, `State`, `ZipCode`, `Latitude`, `Longitude` | US-style addresses |
+| `Phone()` | `Number`, `E164Number`, `TollFreeNumber` | Phone numbers |
+| `Internet()` | `Email`, `URL`, `IPv4`, `IPv6`, `Password`, `UserAgent` | Web and network data |
+| `Company()` | `Name`, `CatchPhrase`, `JobTitle`, `EIN` | Business data |
+| `Payment()` | `CreditCardType`, `CreditCardNumber`, `CreditCardExpirationDateString` | Payment cards |
+| `Lorem()` | `Word`, `Sentence`, `Paragraph`, `Text` | Placeholder text |
+| `Time()` | `Recent`, `Past`, `Soon`, `Future`, `ISO8601`, `RFC3339` | Dates and times |
+| `UUID()` | `V4` | UUID generation |
+| `Color()` | `Hex`, `RGB`, `SafeColorName` | Colors |
+| `File()` / `Directory()` | `Extension`, `Path`, `AbsolutePath` | File system paths |
+| `Struct()` | `Fill`, `FillWithDepth`, `RegisterFunction` | Struct tag filling |
+| `Crypto()` | `BitcoinAddress`, `EthereumAddress` | Crypto addresses |
+| `Image()` / `LoremFlickr()` / `ProfileImage()` | `Image` | Generated or remote images |
+| `Beer()`, `Car()`, `Food()`, `Pet()`, `Gamer()`, `Pokemon()`, `Music()`, `YouTube()` | various | Specialty datasets |
+
+Core formatting helpers on `Faker` itself: `Numerify`, `Lexify`, `Bothify`, `Asciify`, `IntBetween`, `Bool`, `BoolWithChance`.
+
 ## Development
 
 Create a fork and get the code.
