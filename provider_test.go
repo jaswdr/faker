@@ -22,7 +22,7 @@ func TestProviderUnknown(t *testing.T) {
 }
 
 func TestRegisteredProviders(t *testing.T) {
-	RegisterProvider("test_list_provider", func(f *Faker) string {
+	RegisterProvider("test_list_provider", func(_ *Faker) string {
 		return "x"
 	})
 	names := RegisteredProviders()
