@@ -600,14 +600,15 @@ func (Faker) ShuffleString(s string) string {
 	return strings.Join(Shuffle(orig), "")
 }
 
-// Numerify returns a fake string that replaces all "#" characters with random digits (0-9).
+// Numerify returns a fake string that replaces all "#" characters with random digits (0-9), and all "%" characters
+// with random non-zero digits (1-9).
 // Uses sync.Pool for efficient string building to minimize allocations.
 //
 // Example:
 //
-//	orderID := f.Numerify("ORD-####-###") // Returns something like "ORD-1234-567"
+//	orderID := f.Numerify("ORD-%###-###") // Returns something like "ORD-1234-567"
 func (f Faker) Numerify(in string) (out string) {
-	if !strings.Contains(in, "#") {
+	if !(strings.Contains(in, "#") || strings.Contains(in, "%")) {
 		return in
 	}
 
@@ -619,6 +620,8 @@ func (f Faker) Numerify(in string) (out string) {
 	for _, c := range in {
 		if c == '#' {
 			builder.WriteString(strconv.Itoa(f.RandomDigit()))
+		} else if c == '%' {
+			builder.WriteString(strconv.Itoa(f.RandomDigitNot(0)))
 		} else {
 			builder.WriteRune(c)
 		}
@@ -655,11 +658,11 @@ func (f Faker) Lexify(in string) (out string) {
 }
 
 // Bothify returns a fake string that applies both Lexify() and Numerify() transformations.
-// First replaces "?" with letters, then "#" with numbers.
+// First replaces "?" with letters, then "#" and "%" with numbers.
 //
 // Example:
 //
-//	serial := f.Bothify("??##-??##") // Returns something like "ab12-cd34"
+//	serial := f.Bothify("??%#-??##") // Returns something like "ab12-cd34"
 func (f Faker) Bothify(in string) (out string) {
 	out = f.Lexify(in)
 	out = f.Numerify(out)

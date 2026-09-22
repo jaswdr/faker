@@ -532,11 +532,12 @@ func TestShuffleString(t *testing.T) {
 
 func TestNumerify(t *testing.T) {
 	f := New()
-	value := f.Numerify("Hello ##?#")
+	value := f.Numerify("Hello #%?#")
 	Expect(t, 10, len(value))
 	Expect(t, true, strings.Contains(value, "Hello"))
 	Expect(t, true, strings.Contains(value, "?"))
 	Expect(t, false, strings.Contains(value, "#"))
+	Expect(t, false, strings.Contains(value, "%"))
 }
 
 func TestLexify(t *testing.T) {
@@ -550,11 +551,12 @@ func TestLexify(t *testing.T) {
 
 func TestBothify(t *testing.T) {
 	f := New()
-	value := f.Bothify("Hello ??#?")
+	value := f.Bothify("Hello ?%#?")
 	Expect(t, 10, len(value))
 	Expect(t, true, strings.Contains(value, "Hello"))
 	Expect(t, false, strings.Contains(value, "#"))
 	Expect(t, false, strings.Contains(value, "?"))
+	Expect(t, false, strings.Contains(value, "%"))
 }
 
 func TestAsciify(t *testing.T) {
@@ -1096,7 +1098,7 @@ func TestConcurrentStringGeneration(t *testing.T) {
 			defer wg.Done()
 			for j := 0; j < numOperations; j++ {
 				// Test various string generation methods that use sync.Pool
-				numerify := f.Numerify("####-####")
+				numerify := f.Numerify("####-###%")
 				if len(numerify) != 9 {
 					errors <- newTestError("Numerify length mismatch", id, j)
 					continue
@@ -1114,7 +1116,7 @@ func TestConcurrentStringGeneration(t *testing.T) {
 					continue
 				}
 
-				bothify := f.Bothify("??##-##??")
+				bothify := f.Bothify("??##-#%??")
 				if len(bothify) != 9 {
 					errors <- newTestError("Bothify length mismatch", id, j)
 					continue
