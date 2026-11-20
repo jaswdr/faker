@@ -8,8 +8,8 @@ var (
 	carCategories        = []string{"SUV", "Sedan", "Coupe", "Convertible", "Hatchback", "Pickup", "Van", "Minivan", "Wagon"}
 	carFuelTypes         = []string{"Bio Gas", "Diesel", "Eletric", "Ethanol", "Hybrid", "Petrol"}
 	carTransmissionGears = []string{"Automatic", "CVT", "Eletronic", "Manual", "Semi-auto", "Tiptronic"}
-	carSeries            = []string{"KР", "ВI", "ВO", "АA", "EА", "BА", "PЕ", "НA", "IB", "KА", "KK", "OМ", "АM", "TА", "HI", "ОA", "CК", "PВ", "КC", "CА", "TЕ", "XА", "XО", "XМ", "MА", "МK", "MО"}
-	countryRegions       = []string{"АK", "АB", "АC", "AЕ", "AН", "АM", "АO", "АP", "АT", "AА", "АI", "BА", "ВB", "BС", "ВE", "BН", "ВI", "BК", "СH", "ВM", "ВO", "АX", "ВT", "ВX", "CА", "CВ", "СE"}
+	carSeries            = []string{"KP", "BI", "BO", "AA", "EA", "BA", "PE", "HA", "IB", "KA", "KK", "OM", "AM", "TA", "HI", "OA", "CK", "PB", "KC", "CA", "TE", "XA", "XO", "XM", "MA", "MK", "MO"}
+	countryRegions       = []string{"AK", "AB", "AC", "AE", "AH", "AM", "AO", "AP", "AT", "AA", "AI", "BA", "BB", "BC", "BE", "BH", "BI", "BK", "CH", "BM", "BO", "AX", "BT", "BX", "CA", "CB", "CE"}
 )
 
 // Car is a faker struct for Car
